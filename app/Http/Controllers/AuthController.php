@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use App\Services\DefaultCategoryService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class AuthController extends Controller
 {
@@ -63,24 +66,36 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle an incoming registration request with an empty isolated financial workspace.
+     * Handle an incoming registration request with default categories in an atomic transaction.
      */
-    public function register(RegisterRequest $request): RedirectResponse
+    public function register(RegisterRequest $request, DefaultCategoryService $defaultCategoryService): RedirectResponse
     {
         $validated = $request->validated();
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => $validated['password'],
-        ]);
+        try {
+            $user = DB::transaction(function () use ($validated, $defaultCategoryService): User {
+                $newUser = User::create([
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                    'password' => $validated['password'],
+                ]);
+
+                $defaultCategoryService->createForUser($newUser);
+
+                return $newUser;
+            });
+        } catch (Throwable) {
+            return back()
+                ->withInput($request->except(['password', 'password_confirmation']))
+                ->with('error', 'Terjadi kesalahan saat menyiapkan akun dan kategori awal Anda. Silakan coba lagi.');
+        }
 
         Auth::login($user);
         $request->session()->regenerate();
 
         return redirect()
             ->route('dashboard')
-            ->with('success', 'Akun berhasil dibuat! Selamat datang di ruang keuangan pribadi Anda.');
+            ->with('success', 'Akun berhasil dibuat! Kategori pemasukan dan pengeluaran awal telah disiapkan untuk Anda.');
     }
 
     /**

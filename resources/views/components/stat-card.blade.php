@@ -38,17 +38,17 @@
     };
 @endphp
 
-<div class="rounded-xl border p-3 sm:p-4 shadow-2xs min-w-0 {{ $styles['card'] }}">
-    <div class="flex items-start justify-between gap-2">
-        <div class="space-y-0.5 min-w-0 flex-1">
-            <p class="text-[11px] font-semibold uppercase tracking-wide leading-tight truncate {{ $styles['title'] }}">{{ $title }}</p>
-            <p class="text-[20px] sm:text-2xl font-bold tracking-tight leading-snug break-words {{ $styles['value'] }}">{{ $value }}</p>
+<div class="rounded-xl lg:rounded-2xl border p-3 sm:p-4 lg:p-5 shadow-2xs min-w-0 {{ $styles['card'] }}">
+    <div class="flex items-start justify-between gap-2 lg:gap-3">
+        <div class="space-y-0.5 lg:space-y-1 min-w-0 flex-1">
+            <p class="text-[11px] lg:text-sm font-semibold uppercase tracking-wide leading-tight truncate {{ $styles['title'] }}">{{ $title }}</p>
+            <p class="text-[20px] sm:text-2xl lg:text-[30px] font-bold tracking-tight leading-snug break-words {{ $styles['value'] }}">{{ $value }}</p>
             @if ($subtitle)
-                <p class="text-[11px] leading-tight truncate {{ $styles['subtitle'] }} pt-0.5">{{ $subtitle }}</p>
+                <p class="text-[11px] lg:text-sm leading-tight truncate {{ $styles['subtitle'] }} pt-0.5">{{ $subtitle }}</p>
             @endif
         </div>
         @if (isset($icon))
-            <div class="w-8 h-8 rounded-lg hidden sm:flex items-center justify-center shrink-0 {{ $styles['badge'] }}">
+            <div class="w-8 h-8 lg:w-10 lg:h-10 rounded-lg lg:rounded-xl hidden sm:flex items-center justify-center shrink-0 {{ $styles['badge'] }}">
                 {{ $icon }}
             </div>
         @endif

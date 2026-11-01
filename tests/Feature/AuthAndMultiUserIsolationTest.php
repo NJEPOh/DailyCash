@@ -4,6 +4,7 @@ use App\Models\Account;
 use App\Models\Category;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Services\DefaultCategoryService;
 use Illuminate\Support\Facades\Hash;
 
 test('1. pengguna yang belum login diarahkan ke halaman login ketika membuka aplikasi', function () {
@@ -42,7 +43,7 @@ test('2. pengguna yang sudah login diarahkan ke dashboard saat membuka url utama
         ->assertRedirect(route('dashboard'));
 });
 
-test('3. registrasi pengguna baru berhasil dan membuat ruang data kosong', function () {
+test('3. registrasi pengguna baru otomatis membuat 7 kategori pemasukan dan 10 kategori pengeluaran default dengan rekening serta transaksi kosong', function () {
     $response = $this->post(route('register.store'), [
         'name' => 'Andi Pratama',
         'email' => 'andi@dailycash.test',
@@ -57,8 +58,17 @@ test('3. registrasi pengguna baru berhasil dan membuat ruang data kosong', funct
     expect($user->name)->toBe('Andi Pratama');
     expect(Hash::check('password123', $user->password))->toBeTrue();
 
-    // Pastikan tidak ada data dummy atau salinan data milik user lain
-    expect($user->categories()->count())->toBe(0);
+    // Pastikan 7 kategori pemasukan default dan 10 kategori pengeluaran default dibuat untuk user ini
+    $incomeCategories = $user->categories()->where('type', 'income')->pluck('name')->all();
+    $expenseCategories = $user->categories()->where('type', 'expense')->pluck('name')->all();
+
+    expect($incomeCategories)->toHaveCount(7);
+    expect($incomeCategories)->toEqualCanonicalizing(DefaultCategoryService::INCOME_CATEGORIES);
+
+    expect($expenseCategories)->toHaveCount(10);
+    expect($expenseCategories)->toEqualCanonicalizing(DefaultCategoryService::EXPENSE_CATEGORIES);
+
+    // Pastikan rekening, transaksi, dan anggaran tetap kosong
     expect($user->accounts()->count())->toBe(0);
     expect($user->transactions()->count())->toBe(0);
     expect($user->budgets()->count())->toBe(0);
@@ -121,7 +131,7 @@ test('7. logout mengakhiri session pengguna dan mengarahkan ke login', function 
     $this->assertGuest();
 });
 
-test('8. pengguna baru mendapatkan dashboard kosong dengan saldo Rp0 meskipun pengguna lain memiliki data', function () {
+test('8. pengguna baru mendapatkan kondisi awal saldo Rp0, rekening kosong, transaksi kosong, dan 17 kategori default siap pakai', function () {
     // Pengguna lama dengan banyak data
     $existingUser = User::factory()->create();
     $existingAccount = Account::factory()->for($existingUser)->withBalance(15000000)->create(['name' => 'BCA Prioritas']);
@@ -147,7 +157,7 @@ test('8. pengguna baru mendapatkan dashboard kosong dengan saldo Rp0 meskipun pe
     $dashboardResponse->assertSee('Rp0');
     $dashboardResponse->assertSee('Belum ada rekening. Tambahkan rekening pertama Anda.');
     $dashboardResponse->assertSee('Belum ada transaksi. Mulai catat pemasukan atau pengeluaran.');
-    $dashboardResponse->assertSee('Belum ada kategori. Buat kategori untuk mengelompokkan transaksi.');
+    $dashboardResponse->assertSee('17 kategori');
     $dashboardResponse->assertDontSee('BCA Prioritas');
     $dashboardResponse->assertDontSee('Rp15.000.000');
 });
@@ -410,4 +420,72 @@ test('14. seluruh proses CRUD kategori, rekening, dan transaksi berfungsi penuh 
         ->assertRedirect(route('transactions.index'));
 
     expect($account->fresh()->balance)->toBe(1000000);
+});
+
+test('15. login, logout, dan membuka dashboard berulang kali tidak menduplikasi kategori default serta kategori default dapat diubah, dihapus, dan ditambah', function () {
+    $this->post(route('register.store'), [
+        'name' => 'Rina Kusuma',
+        'email' => 'rina@dailycash.test',
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
+    ])->assertRedirect(route('dashboard'));
+
+    $user = User::query()->where('email', 'rina@dailycash.test')->firstOrFail();
+    expect($user->categories()->count())->toBe(17);
+
+    // Buka dashboard beberapa kali
+    $this->get(route('dashboard'))->assertOk();
+    $this->get(route('dashboard'))->assertOk();
+    expect($user->categories()->count())->toBe(17);
+
+    // Logout dan login kembali
+    $this->post(route('logout'))->assertRedirect(route('login'));
+    $this->post(route('login.attempt'), [
+        'email' => 'rina@dailycash.test',
+        'password' => 'password123',
+    ])->assertRedirect(route('dashboard'));
+    $this->get(route('dashboard'))->assertOk();
+
+    // Jumlah kategori tetap 17 (tidak bertambah saat login/dashboard)
+    expect($user->categories()->count())->toBe(17);
+
+    // Pengguna dapat mengubah nama kategori default
+    $hiburanCat = $user->categories()->where('name', 'Hiburan')->firstOrFail();
+    $this->put(route('categories.update', $hiburanCat), [
+        'name' => 'Hiburan & Rekreasi',
+        'type' => 'expense',
+    ])->assertRedirect(route('categories.index'));
+    expect($hiburanCat->fresh()->name)->toBe('Hiburan & Rekreasi');
+
+    // Pengguna dapat menghapus kategori default yang belum dipakai transaksi
+    $this->delete(route('categories.destroy', $hiburanCat))
+        ->assertRedirect(route('categories.index'));
+    expect($user->categories()->count())->toBe(16);
+
+    // Pengguna tetap dapat membuat kategori tambahan baru
+    $this->post(route('categories.store'), [
+        'name' => 'Royalti Buku',
+        'type' => 'income',
+    ])->assertRedirect(route('categories.index'));
+    expect($user->categories()->count())->toBe(17);
+});
+
+test('16. kegagalan pembuatan kategori default saat registrasi membatalkan transaksi pembuatan akun (atomic rollback)', function () {
+    $this->mock(DefaultCategoryService::class, function ($mock) {
+        $mock->shouldReceive('createForUser')
+            ->once()
+            ->andThrow(new RuntimeException('Simulasi gagal membuat kategori default'));
+    });
+
+    $response = $this->from(route('register'))->post(route('register.store'), [
+        'name' => 'Gagal Registrasi',
+        'email' => 'gagal@dailycash.test',
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
+    ]);
+
+    $response->assertRedirect(route('register'));
+    $response->assertSessionHas('error');
+    $this->assertGuest();
+    $this->assertDatabaseMissing('users', ['email' => 'gagal@dailycash.test']);
 });

@@ -8,8 +8,9 @@
 
 ### Autentikasi & Isolasi Data Multi-User
 - **Halaman Login sebagai Pintu Masuk Utama (`/`, `/login`)**: Pengguna yang belum login diarahkan otomatis ke halaman login saat membuka `/`, sedangkan pengguna yang sudah login diarahkan langsung ke `/dashboard`.
-- **Halaman Registrasi (`/register`)**: Pendaftaran akun pribadi dengan validasi Bahasa Indonesia dan ruang data keuangan awal yang benar-benar kosong (`Rp0` tanpa data dummy atau salinan data pengguna lain).
+- **Halaman Registrasi (`/register`)**: Pendaftaran akun pribadi dengan validasi Bahasa Indonesia. Di dalam satu `DB::transaction()` atomik, sistem membuat akun pengguna dengan saldo `Rp0` (rekening & transaksi kosong) serta menyiapkan **7 kategori pemasukan default** dan **10 kategori pengeluaran default** milik pribadi pengguna tersebut melalui `DefaultCategoryService`.
 - **Isolasi Kepemilikan Data (`user_id`)**: Pendekatan *shared database with user ownership* di mana setiap kategori, rekening/dompet, transaksi, bukti pembayaran, anggaran, dashboard, dan laporan difilter ketat berdasarkan `auth()->id()` serta dilindungi dari akses lintas pengguna (`403 Forbidden`).
+- **Tipografi Responsif (Desktop vs Mobile) & UI Final**: Seluruh tampilan wireframe telah diganti dengan UI produksi final yang mengadaptasi ukuran font **12px pada mobile** dan **16–18px pada desktop** secara proporsional.
 
 ### Fitur Wajib
 1. **CRUD Kategori Transaksi (`/categories`)**
@@ -43,8 +44,6 @@
 8. **Laporan Keuangan Periodik (`/reports`)**
    - Evaluasi keuangan berdasarkan periode **Bulanan**, **Tahunan**, atau **Rentang Tanggal Kustom**, serta filter per rekening.
    - Rekapitulasi pemasukan & pengeluaran per kategori beserta persentase proporsi.
-9. **Wireframe UI Low-Fidelity (`/wireframes`)**
-   - Dokumentasi interaktif rancangan *low-fidelity wireframe* untuk seluruh 8 halaman utama aplikasi sesuai spesifikasi tahap perancangan awal.
 
 ### Fitur Pengayaan Opsional
 - **Grafik Arus Kas 6 Bulan Terakhir** pada halaman Dashboard.
@@ -206,7 +205,7 @@ Aplikasi menggunakan pendekatan **shared database dengan user ownership (`user_i
 
 ## Menjalankan Pengujian (Testing)
 
-Proyek ini dilengkapi dengan **33 skenario pengujian otomatis** menggunakan **Pest PHP** (di dalam `tests/Feature/AuthAndMultiUserIsolationTest.php`, `tests/Feature/DailyCashTest.php`, `tests/Feature/ExampleTest.php`, dan `tests/Unit/ExampleTest.php`) yang berjalan menggunakan database SQLite `:memory:`.
+Proyek ini dilengkapi dengan **35 skenario pengujian otomatis** menggunakan **Pest PHP** (di dalam `tests/Feature/AuthAndMultiUserIsolationTest.php`, `tests/Feature/DailyCashTest.php`, `tests/Feature/ExampleTest.php`, dan `tests/Unit/ExampleTest.php`) yang berjalan menggunakan database SQLite `:memory:`.
 
 Jalankan seluruh pengujian dengan perintah:
 ```bash
@@ -234,20 +233,22 @@ php vendor/bin/pest
 14. Transaksi dengan bukti gambar valid berhasil disimpan dan file dibersihkan saat transaksi dihapus.
 15. Dashboard menampilkan metrik saldo, pemasukan, pengeluaran, dan peringatan anggaran.
 16. Halaman laporan periodik dan ekspor CSV berfungsi dengan benar.
-17. Seluruh halaman utama menerapkan layout mobile dua kolom dan tipografi compact secara konsisten.
+17. Seluruh halaman menggunakan UI final tanpa wireframe dan menerapkan tipografi responsif desktop 16–18px serta mobile 12px secara konsisten.
 
 ### Daftar Skenario Pengujian di `tests/Feature/AuthAndMultiUserIsolationTest.php`:
 1. Pengguna yang belum login diarahkan ke halaman login ketika membuka aplikasi.
 2. Pengguna yang sudah login diarahkan ke dashboard.
-3. Registrasi pengguna baru berhasil dan membuat ruang data kosong.
+3. Registrasi pengguna baru otomatis membuat 7 kategori pemasukan dan 10 kategori pengeluaran default dengan rekening serta transaksi kosong.
 4. Email yang sudah digunakan tidak dapat didaftarkan kembali.
 5. Login dengan kredensial benar berhasil dan mengarahkan ke dashboard.
 6. Login dengan kredensial salah ditolak dengan pesan kesalahan Bahasa Indonesia.
 7. Logout mengakhiri session pengguna dan mengarahkan ke halaman login.
-8. Pengguna baru mendapatkan dashboard kosong dengan saldo `Rp0` beserta *empty state* informatif.
+8. Pengguna baru mendapatkan kondisi awal saldo `Rp0`, rekening kosong, transaksi kosong, dan 17 kategori default siap pakai.
 9. Pengguna A tidak dapat melihat, mengubah, atau menghapus kategori milik Pengguna B (`403 Forbidden`).
 10. Pengguna A tidak dapat mengakses, mengubah, atau menghapus rekening milik Pengguna B (`403 Forbidden`).
 11. Pengguna A tidak dapat melihat, mengubah, atau menghapus transaksi maupun bukti pembayaran milik Pengguna B (`403 Forbidden`).
 12. Transaksi tidak dapat dibuat menggunakan kategori atau rekening milik pengguna lain.
 13. Perhitungan dashboard dan laporan hanya menggunakan data pengguna yang sedang login.
 14. Seluruh proses CRUD kategori, rekening, dan transaksi tetap berfungsi dengan pembatasan kepemilikan data.
+15. Login, logout, dan membuka dashboard berulang kali tidak menduplikasi kategori default, serta kategori default dapat diubah, dihapus, dan ditambah.
+16. Kegagalan pembuatan kategori default saat registrasi membatalkan transaksi pembuatan akun (*atomic rollback*).

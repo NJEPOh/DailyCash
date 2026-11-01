@@ -10,31 +10,31 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
 </head>
-<body class="min-h-full font-sans text-xs antialiased text-slate-800 bg-slate-50 flex flex-col justify-center py-6 px-3 sm:px-6 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
-        <div class="flex items-center justify-center gap-2.5">
-            <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center text-slate-950 font-bold text-sm shadow-xs shrink-0">
+<body class="min-h-full font-sans text-xs md:text-sm lg:text-base antialiased text-slate-800 bg-slate-50 flex flex-col justify-center py-6 lg:py-12 px-3 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md lg:max-w-lg">
+        <div class="flex items-center justify-center gap-2.5 lg:gap-3.5">
+            <div class="w-9 h-9 lg:w-12 lg:h-12 rounded-xl lg:rounded-2xl bg-emerald-500 flex items-center justify-center text-slate-950 font-bold text-sm lg:text-lg shadow-xs shrink-0">
                 Rp
             </div>
             <div>
-                <span class="text-[18px] sm:text-[20px] font-bold tracking-tight text-slate-900 block leading-none">DailyCash</span>
-                <span class="text-[11px] text-slate-500 block mt-0.5">Catatan Keuangan Harian Pribadi</span>
+                <span class="text-[18px] sm:text-xl lg:text-2xl font-bold tracking-tight text-slate-900 block leading-none">DailyCash</span>
+                <span class="text-[11px] lg:text-sm text-slate-500 block mt-0.5">Catatan Keuangan Harian Pribadi</span>
             </div>
         </div>
 
-        <div class="mt-5 bg-white py-5 px-4 sm:px-6 shadow-2xs rounded-xl border border-slate-200 space-y-4">
-            <div class="border-b border-slate-100 pb-3">
-                <h1 class="text-[18px] sm:text-[20px] font-bold text-slate-900 leading-tight">Registrasi Akun Baru</h1>
-                <p class="text-[11px] text-slate-500 mt-0.5">Buat akun pribadi untuk mulai mencatat keuangan dari nol dengan ruang data terisolasi.</p>
+        <div class="mt-5 lg:mt-7 bg-white py-5 px-4 sm:px-6 lg:py-7 lg:px-8 shadow-2xs rounded-xl lg:rounded-2xl border border-slate-200 space-y-4 lg:space-y-5">
+            <div class="border-b border-slate-100 pb-3 lg:pb-4">
+                <h1 class="text-[18px] sm:text-xl lg:text-[30px] font-bold text-slate-900 leading-tight">Registrasi Akun Baru</h1>
+                <p class="text-[11px] lg:text-sm text-slate-500 mt-1">Buat akun pribadi untuk mulai mencatat keuangan dengan 17 kategori default siap pakai.</p>
             </div>
 
             <x-alert />
 
-            <form action="{{ route('register.store') }}" method="POST" class="space-y-3.5" novalidate>
+            <form action="{{ route('register.store') }}" method="POST" class="space-y-3.5 lg:space-y-4" novalidate>
                 @csrf
 
                 <div>
-                    <label for="name" class="block text-[11px] font-semibold text-slate-700 mb-1">
+                    <label for="name" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-slate-700 mb-1 lg:mb-1.5">
                         Nama Lengkap <span class="text-rose-500">*</span>
                     </label>
                     <input
@@ -46,15 +46,15 @@
                         autofocus
                         autocomplete="name"
                         placeholder="Contoh: Budi Santoso"
-                        class="w-full rounded-lg border {{ $errors->has('name') ? 'border-rose-400 bg-rose-50/30' : 'border-slate-300' }} px-3 py-2 text-xs text-slate-900 focus:border-slate-900 focus:outline-none"
+                        class="w-full rounded-lg lg:rounded-xl border {{ $errors->has('name') ? 'border-rose-400 bg-rose-50/30' : 'border-slate-300' }} px-3 py-2 lg:px-3.5 lg:py-2.5 text-xs md:text-sm lg:text-base text-slate-900 focus:border-slate-900 focus:outline-none"
                     >
                     @error('name')
-                        <p class="mt-1 text-[11px] font-medium text-rose-600">{{ $message }}</p>
+                        <p class="mt-1 text-[11px] lg:text-sm font-medium text-rose-600">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div>
-                    <label for="email" class="block text-[11px] font-semibold text-slate-700 mb-1">
+                    <label for="email" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-slate-700 mb-1 lg:mb-1.5">
                         Alamat Email <span class="text-rose-500">*</span>
                     </label>
                     <input
@@ -65,16 +65,16 @@
                         required
                         autocomplete="email"
                         placeholder="nama@email.com"
-                        class="w-full rounded-lg border {{ $errors->has('email') ? 'border-rose-400 bg-rose-50/30' : 'border-slate-300' }} px-3 py-2 text-xs text-slate-900 focus:border-slate-900 focus:outline-none"
+                        class="w-full rounded-lg lg:rounded-xl border {{ $errors->has('email') ? 'border-rose-400 bg-rose-50/30' : 'border-slate-300' }} px-3 py-2 lg:px-3.5 lg:py-2.5 text-xs md:text-sm lg:text-base text-slate-900 focus:border-slate-900 focus:outline-none"
                     >
                     @error('email')
-                        <p class="mt-1 text-[11px] font-medium text-rose-600">{{ $message }}</p>
+                        <p class="mt-1 text-[11px] lg:text-sm font-medium text-rose-600">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="grid grid-cols-2 xs-single-col gap-2.5">
+                <div class="grid grid-cols-2 xs-single-col gap-2.5 lg:gap-3.5">
                     <div>
-                        <label for="password" class="block text-[11px] font-semibold text-slate-700 mb-1">
+                        <label for="password" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-slate-700 mb-1 lg:mb-1.5">
                             Password <span class="text-rose-500">*</span>
                         </label>
                         <input
@@ -84,12 +84,12 @@
                             required
                             autocomplete="new-password"
                             placeholder="Min. 8 karakter"
-                            class="w-full rounded-lg border {{ $errors->has('password') ? 'border-rose-400 bg-rose-50/30' : 'border-slate-300' }} px-3 py-2 text-xs text-slate-900 focus:border-slate-900 focus:outline-none"
+                            class="w-full rounded-lg lg:rounded-xl border {{ $errors->has('password') ? 'border-rose-400 bg-rose-50/30' : 'border-slate-300' }} px-3 py-2 lg:px-3.5 lg:py-2.5 text-xs md:text-sm lg:text-base text-slate-900 focus:border-slate-900 focus:outline-none"
                         >
                     </div>
 
                     <div>
-                        <label for="password_confirmation" class="block text-[11px] font-semibold text-slate-700 mb-1">
+                        <label for="password_confirmation" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-slate-700 mb-1 lg:mb-1.5">
                             Konfirmasi Password <span class="text-rose-500">*</span>
                         </label>
                         <input
@@ -99,32 +99,32 @@
                             required
                             autocomplete="new-password"
                             placeholder="Ulangi password"
-                            class="w-full rounded-lg border {{ $errors->has('password') ? 'border-rose-400 bg-rose-50/30' : 'border-slate-300' }} px-3 py-2 text-xs text-slate-900 focus:border-slate-900 focus:outline-none"
+                            class="w-full rounded-lg lg:rounded-xl border {{ $errors->has('password') ? 'border-rose-400 bg-rose-50/30' : 'border-slate-300' }} px-3 py-2 lg:px-3.5 lg:py-2.5 text-xs md:text-sm lg:text-base text-slate-900 focus:border-slate-900 focus:outline-none"
                         >
                     </div>
                 </div>
                 @error('password')
-                    <p class="-mt-2 text-[11px] font-medium text-rose-600">{{ $message }}</p>
+                    <p class="-mt-2 text-[11px] lg:text-sm font-medium text-rose-600">{{ $message }}</p>
                 @enderror
 
                 <div class="pt-1">
                     <button
                         type="submit"
-                        class="w-full flex justify-center items-center gap-1.5 py-2 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition shadow-2xs cursor-pointer"
+                        class="w-full flex justify-center items-center gap-1.5 py-2 lg:py-2.5 px-4 rounded-lg lg:rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs lg:text-sm font-semibold transition shadow-2xs cursor-pointer"
                     >
                         <span>Buat Akun Baru</span>
                     </button>
                 </div>
             </form>
 
-            <div class="pt-3 border-t border-slate-100 text-center">
-                <a href="{{ route('login') }}" class="text-xs font-semibold text-slate-700 hover:text-slate-900 hover:underline">
+            <div class="pt-3 lg:pt-4 border-t border-slate-100 text-center">
+                <a href="{{ route('login') }}" class="text-xs lg:text-sm font-semibold text-slate-700 hover:text-slate-900 hover:underline">
                     Sudah punya akun? Kembali ke halaman login
                 </a>
             </div>
         </div>
 
-        <p class="mt-4 text-center text-[11px] text-slate-400">
+        <p class="mt-4 lg:mt-5 text-center text-[11px] lg:text-sm text-slate-400">
             &copy; {{ date('Y') }} <strong>DailyCash</strong> &mdash; Ruang data keuangan baru dimulai dengan saldo Rp0.
         </p>
     </div>

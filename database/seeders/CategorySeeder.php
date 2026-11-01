@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
 use App\Models\User;
+use App\Services\DefaultCategoryService;
 use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
@@ -11,37 +11,13 @@ class CategorySeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run(DefaultCategoryService $defaultCategoryService): void
     {
         $user = User::first() ?? User::factory()->create([
             'name' => 'Pengguna Demo',
             'email' => 'demo@dailycash.test',
         ]);
 
-        $categories = [
-            ['name' => 'Gaji', 'type' => 'income'],
-            ['name' => 'Bonus', 'type' => 'income'],
-            ['name' => 'Penjualan', 'type' => 'income'],
-            ['name' => 'Freelance', 'type' => 'income'],
-            ['name' => 'Investasi', 'type' => 'income'],
-            ['name' => 'Makan & Minum', 'type' => 'expense'],
-            ['name' => 'Transportasi', 'type' => 'expense'],
-            ['name' => 'Listrik & Air', 'type' => 'expense'],
-            ['name' => 'Internet & Pulsa', 'type' => 'expense'],
-            ['name' => 'Belanja Bulanan', 'type' => 'expense'],
-            ['name' => 'Hiburan', 'type' => 'expense'],
-            ['name' => 'Kesehatan', 'type' => 'expense'],
-        ];
-
-        foreach ($categories as $category) {
-            Category::firstOrCreate(
-                [
-                    'user_id' => $user->id,
-                    'name' => $category['name'],
-                    'type' => $category['type'],
-                ],
-                $category + ['user_id' => $user->id]
-            );
-        }
+        $defaultCategoryService->createForUser($user);
     }
 }

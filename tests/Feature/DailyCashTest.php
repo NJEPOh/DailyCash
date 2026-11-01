@@ -378,7 +378,7 @@ test('16. halaman laporan periodik dan ekspor csv berfungsi dengan benar', funct
     $csvResponse->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
 });
 
-test('17. seluruh halaman utama menerapkan layout mobile dua kolom dan tipografi compact secara konsisten', function () {
+test('17. seluruh halaman menggunakan UI final tanpa wireframe dan menerapkan tipografi responsif desktop 16-18px serta mobile 12px secara konsisten', function () {
     $account = Account::factory()->withBalance(1500000)->create(['name' => 'Dompet Utama']);
     $category = Category::factory()->expense()->create(['name' => 'Konsumsi']);
     $transaction = Transaction::factory()->create([
@@ -409,7 +409,22 @@ test('17. seluruh halaman utama menerapkan layout mobile dua kolom dan tipografi
     foreach ($pages as $url) {
         $response = $this->get($url);
         $response->assertOk();
+        // Pastikan tidak ada elemen wireframe atau placeholder low-fidelity
+        $response->assertDontSee('WIREFRAME:');
+        $response->assertDontSee('[KARTU 1]');
+        $response->assertDontSee('Low-Fidelity');
+        // Pastikan tipografi responsif mobile (12px: text-xs) & desktop (16px: lg:text-base, judul halaman lg:text-[30px]) diterapkan
+        $response->assertSee('text-xs md:text-sm lg:text-base', false);
+        $response->assertSee('text-[18px] sm:text-xl lg:text-[30px]', false);
         $response->assertSee('grid-cols-2', false);
-        $response->assertSee('text-[18px]', false);
+    }
+
+    // Periksa juga halaman autentikasi (login & register) saat guest
+    auth()->logout();
+    foreach ([route('login'), route('register')] as $authUrl) {
+        $authResponse = $this->get($authUrl);
+        $authResponse->assertOk();
+        $authResponse->assertSee('text-xs md:text-sm lg:text-base', false);
+        $authResponse->assertSee('text-[18px] sm:text-xl lg:text-[30px]', false);
     }
 });

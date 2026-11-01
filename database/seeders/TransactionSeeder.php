@@ -34,13 +34,13 @@ class TransactionSeeder extends Seeder
         $catGaji = Category::where('user_id', $user->id)->where('name', 'Gaji')->where('type', 'income')->firstOrFail();
         $catBonus = Category::where('user_id', $user->id)->where('name', 'Bonus')->where('type', 'income')->firstOrFail();
         $catPenjualan = Category::where('user_id', $user->id)->where('name', 'Penjualan')->where('type', 'income')->firstOrFail();
-        $catFreelance = Category::where('user_id', $user->id)->where('name', 'Freelance')->where('type', 'income')->firstOrFail();
+        $catBisnis = Category::where('user_id', $user->id)->where('name', 'Bisnis')->where('type', 'income')->firstOrFail();
 
-        $catMakan = Category::where('user_id', $user->id)->where('name', 'Makan & Minum')->where('type', 'expense')->firstOrFail();
+        $catMakan = Category::where('user_id', $user->id)->where('name', 'Makanan dan Minuman')->where('type', 'expense')->firstOrFail();
         $catTransport = Category::where('user_id', $user->id)->where('name', 'Transportasi')->where('type', 'expense')->firstOrFail();
-        $catListrik = Category::where('user_id', $user->id)->where('name', 'Listrik & Air')->where('type', 'expense')->firstOrFail();
-        $catInternet = Category::where('user_id', $user->id)->where('name', 'Internet & Pulsa')->where('type', 'expense')->firstOrFail();
-        $catBelanja = Category::where('user_id', $user->id)->where('name', 'Belanja Bulanan')->where('type', 'expense')->firstOrFail();
+        $catTagihan = Category::where('user_id', $user->id)->where('name', 'Tagihan')->where('type', 'expense')->firstOrFail();
+        $catBelanja = Category::where('user_id', $user->id)->where('name', 'Belanja')->where('type', 'expense')->firstOrFail();
+        $catRumahTangga = Category::where('user_id', $user->id)->where('name', 'Kebutuhan Rumah Tangga')->where('type', 'expense')->firstOrFail();
         $catHiburan = Category::where('user_id', $user->id)->where('name', 'Hiburan')->where('type', 'expense')->firstOrFail();
 
         $now = now();
@@ -107,15 +107,15 @@ class TransactionSeeder extends Seeder
             ],
             [
                 'account' => $tunai,
-                'category' => $catFreelance,
+                'category' => $catBisnis,
                 'type' => 'income',
                 'amount' => 950000,
                 'date' => $now->copy()->startOfMonth()->addDays(4)->format('Y-m-d'),
-                'description' => 'Jasa desain dan konsultasi',
+                'description' => 'Jasa desain dan konsultasi bisnis',
             ],
             [
                 'account' => $bca,
-                'category' => $catListrik,
+                'category' => $catTagihan,
                 'type' => 'expense',
                 'amount' => 520000,
                 'date' => $now->copy()->startOfMonth()->addDays(5)->format('Y-m-d'),
@@ -123,7 +123,7 @@ class TransactionSeeder extends Seeder
             ],
             [
                 'account' => $bca,
-                'category' => $catInternet,
+                'category' => $catTagihan,
                 'type' => 'expense',
                 'amount' => 385000,
                 'date' => $now->copy()->startOfMonth()->addDays(6)->format('Y-m-d'),
@@ -131,11 +131,11 @@ class TransactionSeeder extends Seeder
             ],
             [
                 'account' => $bca,
-                'category' => $catBelanja,
+                'category' => $catRumahTangga,
                 'type' => 'expense',
                 'amount' => 1450000,
                 'date' => $now->copy()->startOfMonth()->addDays(8)->format('Y-m-d'),
-                'description' => 'Belanja supermarket bulanan',
+                'description' => 'Belanja kebutuhan rumah tangga bulanan',
             ],
             [
                 'account' => $dompet,
