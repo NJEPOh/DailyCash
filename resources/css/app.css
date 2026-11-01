@@ -5,19 +5,59 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+:root {
+    /* --- Colors (from css.md) --- */
+    --bg-main: #F4F5F9;
+    --bg-card: #FFFFFF;
+    --bg-sidebar: #5D56F3;
+    --bg-sidebar-hover: #4B45D3;
+
+    --text-main: #1A1D20;
+    --text-muted: #7E869E;
+    --text-light: #A3AABF;
+    --text-inverse: #FFFFFF;
+
+    --primary: #5D56F3;
+    --primary-light: #EEEDFE;
+    --accent-pink: #FF6B8B;
+    --accent-green: #2ED47A;
+    --accent-orange: #FFB800;
+
+    /* --- Typography --- */
+    --font-family: 'Plus Jakarta Sans', 'Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* --- Shadows (Soft Neomorphism / Layered Depth) --- */
+    --shadow-sm: 0 2px 8px rgba(93, 86, 243, 0.04);
+    --shadow-md: 0 10px 30px rgba(93, 86, 243, 0.08);
+    --shadow-lg: 0 20px 40px rgba(26, 29, 32, 0.06);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.03);
+
+    /* --- Border Radius --- */
+    --radius-sm: 12px;
+    --radius-md: 20px;
+    --radius-lg: 28px;
+    --radius-full: 9999px;
+}
+
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Plus Jakarta Sans', 'Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 @layer base {
+    * {
+        box-sizing: border-box;
+    }
+
     html {
         font-size: 16px;
         -webkit-text-size-adjust: 100%;
     }
 
     body {
-        font-size: 0.75rem; /* Mobile: 12px teks utama */
+        font-family: var(--font-family);
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        font-size: 0.75rem; /* Mobile: 12px */
         line-height: 1.5;
         overflow-x: hidden;
     }
@@ -31,10 +71,346 @@
 
     @media (min-width: 1024px) {
         body {
-            font-size: 1rem; /* Desktop: 16px (rentang 16-18px) */
+            font-size: 1rem; /* Desktop: 16px */
             line-height: 1.6;
+            height: 100vh;
+            overflow: hidden;
         }
     }
+}
+
+/* --- Dashboard Wrapper Layout (css.md) --- */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    padding: 12px;
+    gap: 14px;
+}
+
+@media (min-width: 640px) {
+    .dashboard-container {
+        padding: 16px;
+        gap: 18px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .dashboard-container {
+        flex-direction: row;
+        height: 100vh;
+        padding: 24px;
+        gap: 24px;
+        overflow: hidden;
+    }
+}
+
+/* --- Sidebar (css.md) --- */
+.sidebar {
+    width: 100%;
+    background: linear-gradient(180deg, #6B63FF 0%, #5D56F3 100%);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    padding: 12px 14px;
+    justify-content: space-between;
+    box-shadow: var(--shadow-md);
+    color: var(--text-inverse);
+    flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+    .sidebar {
+        width: 248px;
+        height: 100%;
+        border-radius: var(--radius-lg);
+        padding: 24px 18px;
+    }
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.sidebar-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.75);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+    .sidebar-icon {
+        width: 42px;
+        height: 42px;
+    }
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+    background: rgba(255, 255, 255, 0.18);
+    color: var(--text-inverse);
+}
+
+.sidebar-link:hover .sidebar-icon,
+.sidebar-link.active .sidebar-icon,
+.sidebar-icon:hover,
+.sidebar-icon.active {
+    background: rgba(255, 255, 255, 0.22);
+    color: var(--text-inverse);
+}
+
+/* --- Main Scrollable Viewport inside Dashboard Container --- */
+.dashboard-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 16px;
+}
+
+@media (min-width: 1024px) {
+    .dashboard-main {
+        height: 100%;
+        overflow-y: auto;
+        padding-right: 4px;
+        gap: 22px;
+    }
+}
+
+/* --- Cards (css.md) --- */
+.card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media (min-width: 1024px) {
+    .card {
+        padding: 24px;
+    }
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+/* Spesial Card: Premium / Upgrade CTA Card (css.md) */
+.card-premium {
+    background: linear-gradient(135deg, #6B63FF 0%, #4B45D3 100%);
+    color: var(--text-inverse);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media (min-width: 1024px) {
+    .card-premium {
+        padding: 24px;
+    }
+}
+
+/* --- Buttons (css.md) --- */
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--text-inverse);
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(93, 86, 243, 0.3);
+    transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+@media (min-width: 1024px) {
+    .btn-primary {
+        padding: 11px 22px;
+    }
+}
+
+.btn-primary:hover {
+    background-color: var(--bg-sidebar-hover);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.btn-secondary {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    border: 1px solid #E2E5F1;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+@media (min-width: 1024px) {
+    .btn-secondary {
+        padding: 11px 22px;
+    }
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border-color: rgba(93, 86, 243, 0.25);
+}
+
+.btn-danger {
+    background-color: var(--accent-pink);
+    color: var(--text-inverse);
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 107, 139, 0.3);
+    transition: opacity 0.2s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+@media (min-width: 1024px) {
+    .btn-danger {
+        padding: 11px 22px;
+    }
+}
+
+.btn-danger:hover {
+    opacity: 0.92;
+}
+
+/* --- Badges / Tags (css.md) --- */
+.badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 11px;
+    border-radius: var(--radius-full);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+@media (min-width: 1024px) {
+    .badge {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
+
+.badge-green {
+    background-color: rgba(46, 212, 122, 0.12);
+    color: var(--accent-green);
+}
+
+.badge-pink {
+    background-color: rgba(255, 107, 139, 0.12);
+    color: var(--accent-pink);
+}
+
+.badge-primary {
+    background-color: var(--primary-light);
+    color: var(--primary);
+}
+
+.badge-orange {
+    background-color: rgba(255, 184, 0, 0.14);
+    color: var(--accent-orange);
+}
+
+/* --- Progress Bars (css.md) --- */
+.progress-container {
+    width: 100%;
+    height: 8px;
+    background-color: var(--bg-main);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--primary);
+    border-radius: var(--radius-full);
+    transition: width 0.3s ease;
+}
+
+.progress-bar-green {
+    background-color: var(--accent-green);
+}
+
+.progress-bar-pink {
+    background-color: var(--accent-pink);
+}
+
+.progress-bar-orange {
+    background-color: var(--accent-orange);
+}
+
+/* --- Form Inputs --- */
+.input-field {
+    width: 100%;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    border: 1px solid #E2E5F1;
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+@media (min-width: 1024px) {
+    .input-field {
+        padding: 10px 14px;
+    }
+}
+
+.input-field:focus {
+    outline: none;
+    background-color: var(--bg-card);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(93, 86, 243, 0.12);
 }
 
 /* Fallback 1 kolom pada layar sangat sempit (< 330px) untuk menjaga keterbacaan */

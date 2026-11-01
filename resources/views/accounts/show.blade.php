@@ -5,10 +5,10 @@
         :backUrl="route('accounts.index')"
         backText="Kembali ke Rekening & Dompet"
     >
-        <a href="{{ route('accounts.edit', $account) }}" class="px-3 py-1.5 lg:px-4 lg:py-2 rounded-lg lg:rounded-xl border border-slate-300 bg-white text-xs lg:text-sm font-medium text-slate-700 hover:bg-slate-50">
+        <a href="{{ route('accounts.edit', $account) }}" class="btn-secondary text-xs lg:text-sm">
             Ubah Nama
         </a>
-        <a href="{{ route('transactions.create', ['account_id' => $account->id]) }}" class="px-3 py-1.5 lg:px-4 lg:py-2 rounded-lg lg:rounded-xl bg-slate-900 text-white text-xs lg:text-sm font-semibold hover:bg-slate-800">
+        <a href="{{ route('transactions.create', ['account_id' => $account->id]) }}" class="btn-primary text-xs lg:text-sm">
             + Transaksi Baru
         </a>
     </x-page-header>
@@ -41,8 +41,8 @@
         />
     </div>
 
-    <div class="bg-white rounded-xl lg:rounded-2xl border border-slate-200 p-3.5 sm:p-4 lg:p-6 shadow-2xs space-y-3 lg:space-y-4">
-        <h2 class="text-base sm:text-lg lg:text-2xl font-bold text-slate-900">Riwayat Mutasi Transaksi</h2>
+    <div class="card space-y-3 lg:space-y-4">
+        <h2 class="text-base sm:text-lg lg:text-2xl font-bold text-[#1A1D20]">Riwayat Mutasi Transaksi</h2>
 
         @if ($transactions->isEmpty())
             <x-empty-state
@@ -55,7 +55,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-200 text-[11px] lg:text-sm font-semibold uppercase tracking-wider text-slate-400">
+                        <tr class="border-b border-[#F4F5F9] text-[11px] lg:text-sm font-semibold uppercase tracking-wider text-[#A3AABF]">
                             <th class="py-2 lg:py-3 pr-2.5">Tanggal</th>
                             <th class="py-2 lg:py-3 px-2.5">Kategori</th>
                             <th class="py-2 lg:py-3 px-2.5">Deskripsi</th>
@@ -64,18 +64,18 @@
                             <th class="py-2 lg:py-3 pl-2.5 text-right">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100 text-xs md:text-sm lg:text-base">
+                    <tbody class="divide-y divide-[#F4F5F9] text-xs md:text-sm lg:text-base">
                         @foreach ($transactions as $tx)
-                            <tr class="hover:bg-slate-50/80">
-                                <td class="py-2 lg:py-3 pr-2.5 whitespace-nowrap text-[11px] lg:text-sm text-slate-500">{{ $tx->date->format('d/m/Y') }}</td>
-                                <td class="py-2 lg:py-3 px-2.5 font-semibold text-slate-900">{{ $tx->category?->name ?? '-' }}</td>
-                                <td class="py-2 lg:py-3 px-2.5 text-slate-600">{{ $tx->description ?: '-' }}</td>
+                            <tr class="hover:bg-[#F4F5F9]/60">
+                                <td class="py-2 lg:py-3 pr-2.5 whitespace-nowrap text-[11px] lg:text-sm text-[#7E869E]">{{ $tx->date->format('d/m/Y') }}</td>
+                                <td class="py-2 lg:py-3 px-2.5 font-semibold text-[#1A1D20]">{{ $tx->category?->name ?? '-' }}</td>
+                                <td class="py-2 lg:py-3 px-2.5 text-[#7E869E]">{{ $tx->description ?: '-' }}</td>
                                 <td class="py-2 lg:py-3 px-2.5"><x-badge-type :type="$tx->type" /></td>
-                                <td class="py-2 lg:py-3 px-2.5 text-right font-bold {{ $tx->type === 'income' ? 'text-emerald-600' : 'text-rose-600' }}">
+                                <td class="py-2 lg:py-3 px-2.5 text-right font-bold {{ $tx->type === 'income' ? 'text-[#2ED47A]' : 'text-[#FF6B8B]' }}">
                                     {{ $tx->type === 'income' ? '+' : '-' }}{{ $tx->formatted_amount }}
                                 </td>
                                 <td class="py-2 lg:py-3 pl-2.5 text-right whitespace-nowrap">
-                                    <a href="{{ route('transactions.show', $tx) }}" class="px-2 py-1 lg:px-3 lg:py-1.5 rounded border border-slate-200 text-xs lg:text-sm font-medium text-slate-700 hover:bg-slate-100">
+                                    <a href="{{ route('transactions.show', $tx) }}" class="px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full bg-[#EEEDFE] text-xs lg:text-sm font-medium text-[#5D56F3] hover:opacity-85">
                                         Detail
                                     </a>
                                 </td>

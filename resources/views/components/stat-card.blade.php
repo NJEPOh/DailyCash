@@ -8,37 +8,37 @@
 @php
     $styles = match ($variant) {
         'primary' => [
-            'card' => 'bg-slate-900 text-white border-slate-800',
-            'title' => 'text-slate-300',
+            'card' => 'card-premium',
+            'title' => 'text-white/80',
             'value' => 'text-white',
-            'subtitle' => 'text-emerald-400',
-            'badge' => 'bg-slate-800 text-emerald-400',
+            'subtitle' => 'text-[#2ED47A]',
+            'badge' => 'bg-white/20 text-white',
         ],
         'income' => [
-            'card' => 'bg-white text-slate-900 border-emerald-200',
-            'title' => 'text-slate-500',
-            'value' => 'text-emerald-600',
-            'subtitle' => 'text-slate-500',
-            'badge' => 'bg-emerald-50 text-emerald-600',
+            'card' => 'card',
+            'title' => 'text-[#7E869E]',
+            'value' => 'text-[#2ED47A]',
+            'subtitle' => 'text-[#A3AABF]',
+            'badge' => 'bg-[#2ED47A]/12 text-[#2ED47A]',
         ],
         'expense' => [
-            'card' => 'bg-white text-slate-900 border-rose-200',
-            'title' => 'text-slate-500',
-            'value' => 'text-rose-600',
-            'subtitle' => 'text-slate-500',
-            'badge' => 'bg-rose-50 text-rose-600',
+            'card' => 'card',
+            'title' => 'text-[#7E869E]',
+            'value' => 'text-[#FF6B8B]',
+            'subtitle' => 'text-[#A3AABF]',
+            'badge' => 'bg-[#FF6B8B]/12 text-[#FF6B8B]',
         ],
         default => [
-            'card' => 'bg-white text-slate-900 border-slate-200',
-            'title' => 'text-slate-500',
-            'value' => 'text-slate-900',
-            'subtitle' => 'text-slate-500',
-            'badge' => 'bg-slate-100 text-slate-700',
+            'card' => 'card',
+            'title' => 'text-[#7E869E]',
+            'value' => 'text-[#1A1D20]',
+            'subtitle' => 'text-[#A3AABF]',
+            'badge' => 'bg-[#EEEDFE] text-[#5D56F3]',
         ],
     };
 @endphp
 
-<div class="rounded-xl lg:rounded-2xl border p-3 sm:p-4 lg:p-5 shadow-2xs min-w-0 {{ $styles['card'] }}">
+<div class="min-w-0 {{ $styles['card'] }}">
     <div class="flex items-start justify-between gap-2 lg:gap-3">
         <div class="space-y-0.5 lg:space-y-1 min-w-0 flex-1">
             <p class="text-[11px] lg:text-sm font-semibold uppercase tracking-wide leading-tight truncate {{ $styles['title'] }}">{{ $title }}</p>
@@ -48,7 +48,7 @@
             @endif
         </div>
         @if (isset($icon))
-            <div class="w-8 h-8 lg:w-10 lg:h-10 rounded-lg lg:rounded-xl hidden sm:flex items-center justify-center shrink-0 {{ $styles['badge'] }}">
+            <div class="w-8 h-8 lg:w-10 lg:h-10 rounded-[12px] hidden sm:flex items-center justify-center shrink-0 {{ $styles['badge'] }}">
                 {{ $icon }}
             </div>
         @endif

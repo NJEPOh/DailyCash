@@ -3,7 +3,7 @@
         title="Laporan Keuangan Periodik"
         subtitle="Evaluasi pemasukan, pengeluaran, dan arus kas bersih berdasarkan periode ({{ $startDate }} s/d {{ $endDate }})."
     >
-        <a href="{{ route('reports.export', request()->query()) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 lg:px-4 lg:py-2 rounded-lg lg:rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs lg:text-sm font-semibold transition">
+        <a href="{{ route('reports.export', request()->query()) }}" class="btn-primary text-xs lg:text-sm">
             <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
             </svg>
@@ -12,16 +12,16 @@
     </x-page-header>
 
     {{-- Filter Periode Laporan (2 Kolom di Mobile) --}}
-    <div class="bg-white rounded-xl lg:rounded-2xl border border-slate-200 p-3.5 sm:p-4 lg:p-6 shadow-2xs">
+    <div class="card">
         <form action="{{ route('reports.index') }}" method="GET">
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 lg:gap-3.5 xs-single-col">
                 <div>
-                    <label for="period_type" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-slate-600 mb-1 lg:mb-1.5">Jenis Periode</label>
+                    <label for="period_type" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">Jenis Periode</label>
                     <select
                         id="period_type"
                         name="period_type"
                         onchange="toggleCustomPeriodFields(this.value)"
-                        class="w-full rounded-lg lg:rounded-xl border border-slate-300 px-2.5 py-1.5 lg:px-3.5 lg:py-2 text-xs md:text-sm lg:text-base bg-white focus:border-slate-900 focus:outline-none"
+                        class="input-field text-xs md:text-sm lg:text-base"
                     >
                         <option value="monthly" @selected($periodType === 'monthly')>Bulanan</option>
                         <option value="yearly" @selected($periodType === 'yearly')>Tahunan</option>
@@ -30,44 +30,44 @@
                 </div>
 
                 <div id="month_field" class="{{ $periodType === 'custom' ? 'hidden' : '' }}">
-                    <label for="month" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-slate-600 mb-1 lg:mb-1.5">Pilih Bulan / Tahun</label>
+                    <label for="month" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">Pilih Bulan / Tahun</label>
                     <input
                         type="month"
                         id="month"
                         name="month"
                         value="{{ $month }}"
-                        class="w-full rounded-lg lg:rounded-xl border border-slate-300 px-2.5 py-1.5 lg:px-3.5 lg:py-2 text-xs md:text-sm lg:text-base focus:border-slate-900 focus:outline-none"
+                        class="input-field text-xs md:text-sm lg:text-base"
                     >
                 </div>
 
                 <div id="start_date_field" class="{{ $periodType === 'custom' ? '' : 'hidden' }}">
-                    <label for="start_date" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-slate-600 mb-1 lg:mb-1.5">Dari Tanggal</label>
+                    <label for="start_date" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">Dari Tanggal</label>
                     <input
                         type="date"
                         id="start_date"
                         name="start_date"
                         value="{{ $startDate }}"
-                        class="w-full rounded-lg lg:rounded-xl border border-slate-300 px-2.5 py-1.5 lg:px-3.5 lg:py-2 text-xs md:text-sm lg:text-base focus:border-slate-900 focus:outline-none"
+                        class="input-field text-xs md:text-sm lg:text-base"
                     >
                 </div>
 
                 <div id="end_date_field" class="{{ $periodType === 'custom' ? '' : 'hidden' }}">
-                    <label for="end_date" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-slate-600 mb-1 lg:mb-1.5">Sampai Tanggal</label>
+                    <label for="end_date" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">Sampai Tanggal</label>
                     <input
                         type="date"
                         id="end_date"
                         name="end_date"
                         value="{{ $endDate }}"
-                        class="w-full rounded-lg lg:rounded-xl border border-slate-300 px-2.5 py-1.5 lg:px-3.5 lg:py-2 text-xs md:text-sm lg:text-base focus:border-slate-900 focus:outline-none"
+                        class="input-field text-xs md:text-sm lg:text-base"
                     >
                 </div>
 
                 <div>
-                    <label for="account_id" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-slate-600 mb-1 lg:mb-1.5">Rekening / Dompet</label>
+                    <label for="account_id" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">Rekening / Dompet</label>
                     <select
                         id="account_id"
                         name="account_id"
-                        class="w-full rounded-lg lg:rounded-xl border border-slate-300 px-2.5 py-1.5 lg:px-3.5 lg:py-2 text-xs md:text-sm lg:text-base bg-white focus:border-slate-900 focus:outline-none"
+                        class="input-field text-xs md:text-sm lg:text-base"
                     >
                         <option value="">Semua Rekening</option>
                         @foreach ($accounts as $account)
@@ -79,10 +79,10 @@
                 </div>
 
                 <div class="flex items-end gap-1.5 lg:gap-2">
-                    <button type="submit" class="w-full py-1.5 lg:py-2 px-3 rounded-lg lg:rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs lg:text-sm font-semibold transition cursor-pointer">
+                    <button type="submit" class="btn-primary w-full text-xs lg:text-sm">
                         Tampilkan
                     </button>
-                    <a href="{{ route('reports.index') }}" class="py-1.5 lg:py-2 px-2.5 lg:px-3.5 rounded-lg lg:rounded-xl border border-slate-300 text-xs lg:text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                    <a href="{{ route('reports.index') }}" class="btn-secondary text-xs lg:text-sm">
                         Reset
                     </a>
                 </div>
@@ -121,27 +121,27 @@
     {{-- Rekapitulasi per Kategori --}}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-4 lg:gap-6">
         {{-- Pemasukan per Kategori --}}
-        <div class="bg-white rounded-xl lg:rounded-2xl border border-slate-200 p-3.5 sm:p-4 lg:p-6 shadow-2xs space-y-3 lg:space-y-4">
+        <div class="card space-y-3 lg:space-y-4">
             <div class="flex items-center justify-between">
-                <h2 class="text-base sm:text-lg lg:text-2xl font-bold text-slate-900">Pemasukan per Kategori</h2>
-                <span class="text-xs md:text-sm lg:text-base font-bold text-emerald-600">Rp{{ number_format($totalIncome, 0, ',', '.') }}</span>
+                <h2 class="text-base sm:text-lg lg:text-2xl font-bold text-[#1A1D20]">Pemasukan per Kategori</h2>
+                <span class="text-xs md:text-sm lg:text-base font-bold text-[#2ED47A]">Rp{{ number_format($totalIncome, 0, ',', '.') }}</span>
             </div>
 
             @if ($incomeByCategory->isEmpty())
-                <p class="text-xs md:text-sm lg:text-base text-slate-500 py-4 text-center">Tidak ada pemasukan pada periode ini.</p>
+                <p class="text-xs md:text-sm lg:text-base text-[#7E869E] py-4 text-center">Tidak ada pemasukan pada periode ini.</p>
             @else
                 <div class="grid grid-cols-2 sm:grid-cols-1 gap-2 lg:gap-3 xs-single-col">
                     @foreach ($incomeByCategory as $item)
                         @php
                             $pct = $totalIncome > 0 ? round(((int) $item->total_amount / $totalIncome) * 100, 1) : 0;
                         @endphp
-                        <div class="p-2 sm:p-0 rounded-lg border sm:border-0 border-slate-100 space-y-1 lg:space-y-1.5 min-w-0">
+                        <div class="p-2.5 sm:p-0 rounded-[12px] sm:rounded-none bg-[#F4F5F9] sm:bg-transparent space-y-1.5 min-w-0">
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] lg:text-sm gap-0.5">
-                                <span class="font-semibold text-slate-800 truncate">{{ $item->category?->name ?? '-' }} ({{ $item->tx_count }}x)</span>
-                                <span class="font-bold text-emerald-600 shrink-0">Rp{{ number_format((int) $item->total_amount, 0, ',', '.') }} ({{ $pct }}%)</span>
+                                <span class="font-semibold text-[#1A1D20] truncate">{{ $item->category?->name ?? '-' }} ({{ $item->tx_count }}x)</span>
+                                <span class="font-bold text-[#2ED47A] shrink-0">Rp{{ number_format((int) $item->total_amount, 0, ',', '.') }} ({{ $pct }}%)</span>
                             </div>
-                            <div class="w-full h-1.5 lg:h-2 bg-slate-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-emerald-500 rounded-full" style="width: {{ min(100, $pct) }}%"></div>
+                            <div class="progress-container">
+                                <div class="progress-bar progress-bar-green" style="width: {{ min(100, $pct) }}%"></div>
                             </div>
                         </div>
                     @endforeach
@@ -150,27 +150,27 @@
         </div>
 
         {{-- Pengeluaran per Kategori --}}
-        <div class="bg-white rounded-xl lg:rounded-2xl border border-slate-200 p-3.5 sm:p-4 lg:p-6 shadow-2xs space-y-3 lg:space-y-4">
+        <div class="card space-y-3 lg:space-y-4">
             <div class="flex items-center justify-between">
-                <h2 class="text-base sm:text-lg lg:text-2xl font-bold text-slate-900">Pengeluaran per Kategori</h2>
-                <span class="text-xs md:text-sm lg:text-base font-bold text-rose-600">Rp{{ number_format($totalExpense, 0, ',', '.') }}</span>
+                <h2 class="text-base sm:text-lg lg:text-2xl font-bold text-[#1A1D20]">Pengeluaran per Kategori</h2>
+                <span class="text-xs md:text-sm lg:text-base font-bold text-[#FF6B8B]">Rp{{ number_format($totalExpense, 0, ',', '.') }}</span>
             </div>
 
             @if ($expenseByCategory->isEmpty())
-                <p class="text-xs md:text-sm lg:text-base text-slate-500 py-4 text-center">Tidak ada pengeluaran pada periode ini.</p>
+                <p class="text-xs md:text-sm lg:text-base text-[#7E869E] py-4 text-center">Tidak ada pengeluaran pada periode ini.</p>
             @else
                 <div class="grid grid-cols-2 sm:grid-cols-1 gap-2 lg:gap-3 xs-single-col">
                     @foreach ($expenseByCategory as $item)
                         @php
                             $pct = $totalExpense > 0 ? round(((int) $item->total_amount / $totalExpense) * 100, 1) : 0;
                         @endphp
-                        <div class="p-2 sm:p-0 rounded-lg border sm:border-0 border-slate-100 space-y-1 lg:space-y-1.5 min-w-0">
+                        <div class="p-2.5 sm:p-0 rounded-[12px] sm:rounded-none bg-[#F4F5F9] sm:bg-transparent space-y-1.5 min-w-0">
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] lg:text-sm gap-0.5">
-                                <span class="font-semibold text-slate-800 truncate">{{ $item->category?->name ?? '-' }} ({{ $item->tx_count }}x)</span>
-                                <span class="font-bold text-rose-600 shrink-0">Rp{{ number_format((int) $item->total_amount, 0, ',', '.') }} ({{ $pct }}%)</span>
+                                <span class="font-semibold text-[#1A1D20] truncate">{{ $item->category?->name ?? '-' }} ({{ $item->tx_count }}x)</span>
+                                <span class="font-bold text-[#FF6B8B] shrink-0">Rp{{ number_format((int) $item->total_amount, 0, ',', '.') }} ({{ $pct }}%)</span>
                             </div>
-                            <div class="w-full h-1.5 lg:h-2 bg-slate-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-rose-500 rounded-full" style="width: {{ min(100, $pct) }}%"></div>
+                            <div class="progress-container">
+                                <div class="progress-bar progress-bar-pink" style="width: {{ min(100, $pct) }}%"></div>
                             </div>
                         </div>
                     @endforeach
@@ -180,8 +180,8 @@
     </div>
 
     {{-- Tabel Transaksi Periode --}}
-    <div class="bg-white rounded-xl lg:rounded-2xl border border-slate-200 p-3.5 sm:p-4 lg:p-6 shadow-2xs space-y-3 lg:space-y-4">
-        <h2 class="text-base sm:text-lg lg:text-2xl font-bold text-slate-900">Daftar Transaksi pada Periode Ini</h2>
+    <div class="card space-y-3 lg:space-y-4">
+        <h2 class="text-base sm:text-lg lg:text-2xl font-bold text-[#1A1D20]">Daftar Transaksi pada Periode Ini</h2>
 
         @if ($transactions->isEmpty())
             <x-empty-state
@@ -192,7 +192,7 @@
             <div class="overflow-x-auto -mx-3.5 sm:mx-0 px-3.5 sm:px-0">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-200 text-[11px] lg:text-sm font-semibold uppercase tracking-wider text-slate-400">
+                        <tr class="border-b border-[#F4F5F9] text-[11px] lg:text-sm font-semibold uppercase tracking-wider text-[#A3AABF]">
                             <th class="py-2 lg:py-3 pr-2">Tanggal</th>
                             <th class="py-2 lg:py-3 px-2">Kategori</th>
                             <th class="py-2 lg:py-3 px-2 hidden sm:table-cell">Rekening</th>
@@ -201,19 +201,19 @@
                             <th class="py-2 lg:py-3 pl-2 text-right">Nominal</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100 text-xs md:text-sm lg:text-base">
+                    <tbody class="divide-y divide-[#F4F5F9] text-xs md:text-sm lg:text-base">
                         @foreach ($transactions as $tx)
-                            <tr class="hover:bg-slate-50/80">
-                                <td class="py-2 lg:py-3 pr-2 whitespace-nowrap text-[11px] lg:text-sm text-slate-500">{{ $tx->date->format('d/m/Y') }}</td>
-                                <td class="py-2 lg:py-3 px-2 font-semibold text-slate-900">{{ $tx->category?->name ?? '-' }}</td>
-                                <td class="py-2 lg:py-3 px-2 text-[11px] lg:text-sm font-medium text-slate-700 hidden sm:table-cell">{{ $tx->account?->name ?? '-' }}</td>
-                                <td class="py-2 lg:py-3 px-2 text-slate-600">
-                                    <a href="{{ route('transactions.show', $tx) }}" class="hover:underline">
+                            <tr class="hover:bg-[#F4F5F9]/60">
+                                <td class="py-2 lg:py-3 pr-2 whitespace-nowrap text-[11px] lg:text-sm text-[#7E869E]">{{ $tx->date->format('d/m/Y') }}</td>
+                                <td class="py-2 lg:py-3 px-2 font-semibold text-[#1A1D20]">{{ $tx->category?->name ?? '-' }}</td>
+                                <td class="py-2 lg:py-3 px-2 text-[11px] lg:text-sm font-medium text-[#1A1D20] hidden sm:table-cell">{{ $tx->account?->name ?? '-' }}</td>
+                                <td class="py-2 lg:py-3 px-2 text-[#7E869E]">
+                                    <a href="{{ route('transactions.show', $tx) }}" class="hover:text-[#5D56F3] hover:underline">
                                         {{ $tx->description ?: '-' }}
                                     </a>
                                 </td>
                                 <td class="py-2 lg:py-3 px-2"><x-badge-type :type="$tx->type" /></td>
-                                <td class="py-2 lg:py-3 pl-2 text-right font-bold {{ $tx->type === 'income' ? 'text-emerald-600' : 'text-rose-600' }}">
+                                <td class="py-2 lg:py-3 pl-2 text-right font-bold {{ $tx->type === 'income' ? 'text-[#2ED47A]' : 'text-[#FF6B8B]' }}">
                                     {{ $tx->type === 'income' ? '+' : '-' }}{{ $tx->formatted_amount }}
                                 </td>
                             </tr>

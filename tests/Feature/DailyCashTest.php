@@ -413,9 +413,15 @@ test('17. seluruh halaman menggunakan UI final tanpa wireframe dan menerapkan ti
         $response->assertDontSee('WIREFRAME:');
         $response->assertDontSee('[KARTU 1]');
         $response->assertDontSee('Low-Fidelity');
+        // Pastikan design system css.md (.dashboard-container, .sidebar, .sidebar-nav, .sidebar-icon, .card) diterapkan
+        $response->assertSee('dashboard-container', false);
+        $response->assertSee('sidebar-nav', false);
+        $response->assertSee('sidebar-icon', false);
+        $response->assertSee('card', false);
         // Pastikan tipografi responsif mobile (12px: text-xs) & desktop (16px: lg:text-base, judul halaman lg:text-[30px]) diterapkan
         $response->assertSee('text-xs md:text-sm lg:text-base', false);
         $response->assertSee('text-[18px] sm:text-xl lg:text-[30px]', false);
+        $response->assertSee('Plus+Jakarta+Sans', false);
         $response->assertSee('grid-cols-2', false);
     }
 
@@ -426,5 +432,6 @@ test('17. seluruh halaman menggunakan UI final tanpa wireframe dan menerapkan ti
         $authResponse->assertOk();
         $authResponse->assertSee('text-xs md:text-sm lg:text-base', false);
         $authResponse->assertSee('text-[18px] sm:text-xl lg:text-[30px]', false);
+        $authResponse->assertSee('Plus+Jakarta+Sans', false);
     }
 });
