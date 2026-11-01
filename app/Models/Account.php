@@ -5,6 +5,7 @@ namespace App\Models;
 use Database\Factories\AccountFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Account extends Model
@@ -16,6 +17,7 @@ class Account extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'user_id',
         'name',
         'balance',
     ];
@@ -30,6 +32,16 @@ class Account extends Model
         return [
             'balance' => 'integer',
         ];
+    }
+
+    /**
+     * Get the user that owns the account.
+     *
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**

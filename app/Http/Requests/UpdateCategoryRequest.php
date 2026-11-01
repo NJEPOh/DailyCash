@@ -14,7 +14,12 @@ class UpdateCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        /** @var Category|null $category */
+        $category = $this->route('category');
+
+        return $this->user() !== null
+            && $category !== null
+            && (int) $category->user_id === (int) $this->user()->id;
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Account;
 use App\Models\Category;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,8 +23,9 @@ class TransactionFactory extends Factory
         $type = 'income';
 
         return [
-            'account_id' => Account::factory(),
-            'category_id' => Category::factory()->state(['type' => $type]),
+            'user_id' => fn () => auth()->id() ?? User::factory(),
+            'account_id' => fn (array $attributes) => Account::factory()->state(['user_id' => $attributes['user_id']]),
+            'category_id' => fn (array $attributes) => Category::factory()->state(['user_id' => $attributes['user_id'], 'type' => $type]),
             'type' => $type,
             'amount' => fake()->numberBetween(10, 500) * 1000,
             'date' => fake()->dateTimeBetween('-30 days', 'now')->format('Y-m-d'),

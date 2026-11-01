@@ -4,31 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use App\Models\Budget;
+use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     /**
-     * Display the financial summary dashboard.
+     * Display the financial summary dashboard for the authenticated user.
      */
     public function index(): View
     {
+        $userId = (int) Auth::id();
         $now = Carbon::now();
         $startOfMonth = $now->copy()->startOfMonth()->toDateString();
         $endOfMonth = $now->copy()->endOfMonth()->toDateString();
         $currentMonthKey = $now->format('Y-m');
 
-        $totalBalance = (int) Account::sum('balance');
+        $totalBalance = (int) Account::where('user_id', $userId)->sum('balance');
 
         $monthlyIncome = (int) Transaction::query()
+            ->where('user_id', $userId)
             ->where('type', 'income')
             ->whereDate('date', '>=', $startOfMonth)
             ->whereDate('date', '<=', $endOfMonth)
             ->sum('amount');
 
         $monthlyExpense = (int) Transaction::query()
+            ->where('user_id', $userId)
             ->where('type', 'expense')
             ->whereDate('date', '>=', $startOfMonth)
             ->whereDate('date', '<=', $endOfMonth)
@@ -37,11 +42,15 @@ class DashboardController extends Controller
         $netCashflow = $monthlyIncome - $monthlyExpense;
 
         $accounts = Account::query()
+            ->where('user_id', $userId)
             ->withCount('transactions')
             ->orderByDesc('balance')
             ->get();
 
+        $categoriesCount = Category::where('user_id', $userId)->count();
+
         $recentTransactions = Transaction::query()
+            ->where('user_id', $userId)
             ->with(['account', 'category'])
             ->latest('date')
             ->latest('id')
@@ -49,6 +58,7 @@ class DashboardController extends Controller
             ->get();
 
         $topExpenseCategories = Transaction::query()
+            ->where('user_id', $userId)
             ->selectRaw('category_id, SUM(amount) as total_amount, COUNT(*) as tx_count')
             ->with('category')
             ->where('type', 'expense')
@@ -59,21 +69,25 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        $currentBudget = Budget::where('month', $currentMonthKey)->first();
+        $currentBudget = Budget::where('user_id', $userId)
+            ->where('month', $currentMonthKey)
+            ->first();
 
-        // Data grafik arus kas 6 bulan terakhir (Pengayaan Opsional 9.1)
+        // Data grafik arus kas 6 bulan terakhir (milik pengguna yang sedang login)
         $cashflowChart = [];
         for ($i = 5; $i >= 0; $i--) {
             $monthDate = $now->copy()->subMonths($i);
             $mStart = $monthDate->copy()->startOfMonth()->toDateString();
             $mEnd = $monthDate->copy()->endOfMonth()->toDateString();
 
-            $inc = (int) Transaction::where('type', 'income')
+            $inc = (int) Transaction::where('user_id', $userId)
+                ->where('type', 'income')
                 ->whereDate('date', '>=', $mStart)
                 ->whereDate('date', '<=', $mEnd)
                 ->sum('amount');
 
-            $exp = (int) Transaction::where('type', 'expense')
+            $exp = (int) Transaction::where('user_id', $userId)
+                ->where('type', 'expense')
                 ->whereDate('date', '>=', $mStart)
                 ->whereDate('date', '<=', $mEnd)
                 ->sum('amount');
@@ -91,6 +105,7 @@ class DashboardController extends Controller
             'monthlyExpense' => $monthlyExpense,
             'netCashflow' => $netCashflow,
             'accounts' => $accounts,
+            'categoriesCount' => $categoriesCount,
             'recentTransactions' => $recentTransactions,
             'topExpenseCategories' => $topExpenseCategories,
             'currentBudget' => $currentBudget,

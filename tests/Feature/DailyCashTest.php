@@ -4,8 +4,13 @@ use App\Models\Account;
 use App\Models\Budget;
 use App\Models\Category;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+
+beforeEach(function () {
+    $this->actingAs(User::factory()->create());
+});
 
 test('1. kategori pemasukan berhasil dibuat', function () {
     $response = $this->post(route('categories.store'), [
@@ -338,6 +343,7 @@ test('15. dashboard menampilkan metrik saldo, pemasukan, pengeluaran, dan pering
     ]);
 
     Budget::create([
+        'user_id' => auth()->id(),
         'month' => now()->format('Y-m'),
         'amount' => 1000000,
     ]);
@@ -370,4 +376,40 @@ test('16. halaman laporan periodik dan ekspor csv berfungsi dengan benar', funct
     $csvResponse = $this->get(route('reports.export'));
     $csvResponse->assertOk();
     $csvResponse->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
+});
+
+test('17. seluruh halaman utama menerapkan layout mobile dua kolom dan tipografi compact secara konsisten', function () {
+    $account = Account::factory()->withBalance(1500000)->create(['name' => 'Dompet Utama']);
+    $category = Category::factory()->expense()->create(['name' => 'Konsumsi']);
+    $transaction = Transaction::factory()->create([
+        'account_id' => $account->id,
+        'category_id' => $category->id,
+        'type' => 'expense',
+        'amount' => 50000,
+    ]);
+
+    $pages = [
+        route('dashboard'),
+        route('transactions.index'),
+        route('transactions.create'),
+        route('transactions.edit', $transaction),
+        route('transactions.show', $transaction),
+        route('categories.index'),
+        route('categories.create'),
+        route('categories.edit', $category),
+        route('categories.show', $category),
+        route('accounts.index'),
+        route('accounts.create'),
+        route('accounts.edit', $account),
+        route('accounts.show', $account),
+        route('reports.index'),
+        route('wireframes.index'),
+    ];
+
+    foreach ($pages as $url) {
+        $response = $this->get($url);
+        $response->assertOk();
+        $response->assertSee('grid-cols-2', false);
+        $response->assertSee('text-[18px]', false);
+    }
 });

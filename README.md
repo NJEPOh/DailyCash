@@ -6,19 +6,25 @@
 
 ## Daftar Fitur
 
+### Autentikasi & Isolasi Data Multi-User
+- **Halaman Login sebagai Pintu Masuk Utama (`/`, `/login`)**: Pengguna yang belum login diarahkan otomatis ke halaman login saat membuka `/`, sedangkan pengguna yang sudah login diarahkan langsung ke `/dashboard`.
+- **Halaman Registrasi (`/register`)**: Pendaftaran akun pribadi dengan validasi Bahasa Indonesia dan ruang data keuangan awal yang benar-benar kosong (`Rp0` tanpa data dummy atau salinan data pengguna lain).
+- **Isolasi Kepemilikan Data (`user_id`)**: Pendekatan *shared database with user ownership* di mana setiap kategori, rekening/dompet, transaksi, bukti pembayaran, anggaran, dashboard, dan laporan difilter ketat berdasarkan `auth()->id()` serta dilindungi dari akses lintas pengguna (`403 Forbidden`).
+
 ### Fitur Wajib
 1. **CRUD Kategori Transaksi (`/categories`)**
-   - Menampilkan daftar kategori beserta filter tipe (`income` / `expense`), jumlah transaksi, dan total akumulasi nominal.
+   - Menampilkan daftar kategori milik pengguna beserta filter tipe (`income` / `expense`), jumlah transaksi, dan total akumulasi nominal.
    - Menambahkan, melihat detail, mengubah, dan menghapus kategori.
    - Perlindungan relasi: kategori yang sudah digunakan oleh transaksi tidak dapat diubah tipenya atau dihapus secara sembarangan agar histori tetap konsisten.
 2. **CRUD Rekening / Dompet (`/accounts`)**
-   - Menampilkan daftar rekening/dompet beserta saldo saat ini, total dana masuk, dan total dana keluar.
+   - Menampilkan daftar rekening/dompet milik pengguna beserta saldo saat ini, total dana masuk, dan total dana keluar.
    - Menambahkan rekening/dompet baru (dengan nilai saldo awal bawaan `Rp0`), melihat detail mutasi rekening, mengubah nama rekening, dan menghapus rekening kosong.
    - Perlindungan relasi: rekening yang masih memiliki riwayat transaksi dilindungi dari penghapusan.
 3. **CRUD Transaksi Terpadu (`/transactions`)**
    - Satu tabel terpadu (`transactions`) untuk mencatat pemasukan (`income`) dan pengeluaran (`expense`).
    - Formulir lengkap: Tanggal, Tipe Transaksi, Nominal Rupiah, Kategori (otomatis difilter sesuai tipe), Rekening/Dompet, Deskripsi opsional, dan **Upload Bukti Pembayaran (gambar opsional)**.
-   - Manajemen file bukti pembayaran menggunakan Laravel Storage (`public` disk): validasi tipe gambar & ukuran (maks. 2MB), penghapusan file lama secara otomatis saat bukti diganti atau transaksi dihapus.
+   - Validasi kepemilikan *foreign key* memastikan `category_id` dan `account_id` yang dipilih benar-benar milik pengguna yang sedang login.
+   - Manajemen file bukti pembayaran menggunakan Laravel Storage (`public` disk) dan route terproteksi (`/transactions/{transaction}/proof`): validasi tipe gambar & ukuran (maks. 2MB), penghapusan file lama secara otomatis saat bukti diganti atau transaksi dihapus.
 4. **Perhitungan & Konsistensi Saldo Otomatis (`DB::transaction()`)**
    - Pemasukan menambah saldo rekening; pengeluaran mengurangi saldo rekening.
    - Validasi ketat agar pengeluaran tidak melebihi saldo rekening yang dipilih (mencegah saldo negatif).
@@ -28,12 +34,12 @@
    - Filter berdasarkan rentang tanggal (`start_date` & `end_date`), tipe transaksi, kategori, dan rekening/dompet secara bersamaan.
    - Mendukung tombol **Terapkan Filter** dan **Hapus Filter**, serta mempertahankan query filter saat berpindah halaman *pagination*.
 6. **Halaman Detail Transaksi dengan URI Dinamis (`/transactions/{id}`)**
-   - Menggunakan *Route Model Binding* (mengembalikan HTTP `404` jika ID tidak ditemukan).
+   - Menggunakan *Route Model Binding* (mengembalikan HTTP `404` jika ID tidak ditemukan dan `403` jika milik pengguna lain).
    - Menampilkan rincian lengkap transaksi beserta pratinjau gambar bukti pembayaran.
-7. **Dashboard Ringkasan Keuangan (`/`)**
-   - **Total Saldo Keseluruhan** (`SUM(accounts.balance)`).
+7. **Dashboard Ringkasan Keuangan (`/dashboard`)**
+   - **Total Saldo Keseluruhan** (`SUM(accounts.balance)` milik pengguna).
    - **Total Pemasukan Bulan Ini** dan **Total Pengeluaran Bulan Ini**.
-   - Ringkasan saldo per rekening/dompet, pengeluaran terbesar per kategori, dan daftar transaksi terbaru.
+   - Ringkasan saldo per rekening/dompet, pengeluaran terbesar per kategori, daftar transaksi terbaru, serta *empty state* informatif untuk pengguna baru (`Rp0`).
 8. **Laporan Keuangan Periodik (`/reports`)**
    - Evaluasi keuangan berdasarkan periode **Bulanan**, **Tahunan**, atau **Rentang Tanggal Kustom**, serta filter per rekening.
    - Rekapitulasi pemasukan & pengeluaran per kategori beserta persentase proporsi.
@@ -115,8 +121,11 @@ touch database/database.sqlite
 php artisan migrate:fresh --seed
 ```
 
-> **Catatan Konsistensi Saldo Data Awal (Seeder):**
-> `AccountSeeder` menginisialisasi 4 rekening (`Rekening BCA`, `Dompet Utama`, `OVO`, `Tunai`) dengan saldo awal `Rp0`. Selanjutnya `TransactionSeeder` menambahkan 14 transaksi contoh dan memperbarui saldo masing-masing rekening secara atomik di dalam `DB::transaction()`, sehingga saldo akhir setiap rekening dijamin 100% konsisten dengan selisih seluruh transaksi pemasukan dan pengeluaran.
+> **Akun Demo Seeder & Konsistensi Saldo:**
+> - **Email Demo:** `demo@dailycash.test`
+> - **Password Demo:** `password123`
+> - Pengguna baru yang mendaftar melalui `/register` akan mendapatkan ruang data keuangan pribadi yang **kosong (`Rp0`)** tanpa data contoh.
+> - Untuk akun demo hasil seeder, `AccountSeeder` menginisialisasi 4 rekening (`Rekening BCA`, `Dompet Utama`, `OVO`, `Tunai`) dengan saldo awal `Rp0`, lalu `TransactionSeeder` menambahkan 14 transaksi contoh dan memperbarui saldo masing-masing rekening secara atomik di dalam `DB::transaction()`.
 
 ### 5. Build Asset Frontend & Hubungkan Storage
 ```bash
@@ -134,28 +143,40 @@ Akses aplikasi melalui browser di: **http://127.0.0.1:8000**
 
 ## Struktur Database & Relasi
 
-Aplikasi memiliki 3 tabel inti yang saling berelasi ditambah 1 tabel pendukung anggaran bulanan:
+Aplikasi menggunakan pendekatan **shared database dengan user ownership (`user_id`)** pada seluruh tabel keuangan:
 
-### 1. Tabel `categories`
+### 1. Tabel `users`
+| Kolom | Tipe | Keterangan |
+|---|---|---|
+| `id` | `BIGINT` (PK) | ID pengguna |
+| `name` | `VARCHAR(100)` | Nama lengkap pengguna |
+| `email` | `VARCHAR(255)` (*unique*) | Alamat email login |
+| `password` | `VARCHAR` | Password ter-hash (bcrypt) |
+| `created_at` / `updated_at` | `TIMESTAMP` | Waktu pembuatan & pembaruan |
+
+### 2. Tabel `categories`
 | Kolom | Tipe | Keterangan |
 |---|---|---|
 | `id` | `BIGINT` (PK) | ID kategori |
-| `name` | `VARCHAR(50)` | Nama kategori |
+| `user_id` | `BIGINT` (FK) | Relasi ke `users.id` (`CASCADE ON DELETE`) |
+| `name` | `VARCHAR(50)` | Nama kategori (*unique* gabungan `[user_id, name, type]`) |
 | `type` | `ENUM('income', 'expense')` | Tipe kategori pemasukan atau pengeluaran |
 | `created_at` / `updated_at` | `TIMESTAMP` | Waktu pembuatan & pembaruan |
 
-### 2. Tabel `accounts`
+### 3. Tabel `accounts`
 | Kolom | Tipe | Keterangan |
 |---|---|---|
 | `id` | `BIGINT` (PK) | ID rekening/dompet |
-| `name` | `VARCHAR(50)` | Nama rekening/dompet |
+| `user_id` | `BIGINT` (FK) | Relasi ke `users.id` (`CASCADE ON DELETE`) |
+| `name` | `VARCHAR(50)` | Nama rekening/dompet (*unique* gabungan `[user_id, name]`) |
 | `balance` | `BIGINT` (Default `0`) | Saldo saat ini dalam satuan Rupiah penuh |
 | `created_at` / `updated_at` | `TIMESTAMP` | Waktu pembuatan & pembaruan |
 
-### 3. Tabel `transactions`
+### 4. Tabel `transactions`
 | Kolom | Tipe | Keterangan |
 |---|---|---|
 | `id` | `BIGINT` (PK) | ID transaksi |
+| `user_id` | `BIGINT` (FK) | Relasi ke `users.id` (`CASCADE ON DELETE`) |
 | `account_id` | `BIGINT` (FK) | Relasi ke `accounts.id` (`RESTRICT ON DELETE`) |
 | `category_id` | `BIGINT` (FK) | Relasi ke `categories.id` (`RESTRICT ON DELETE`) |
 | `type` | `ENUM('income', 'expense')` | Tipe transaksi (`income` / `expense`) |
@@ -165,25 +186,27 @@ Aplikasi memiliki 3 tabel inti yang saling berelasi ditambah 1 tabel pendukung a
 | `proof_image` | `VARCHAR`, *nullable* | Path file gambar bukti pembayaran di disk `public` |
 | `created_at` / `updated_at` | `TIMESTAMP` | Waktu pembuatan & pembaruan |
 
-### 4. Tabel `budgets` (Pengayaan Anggaran Bulanan)
+### 5. Tabel `budgets` (Pengayaan Anggaran Bulanan)
 | Kolom | Tipe | Keterangan |
 |---|---|---|
 | `id` | `BIGINT` (PK) | ID anggaran |
-| `month` | `VARCHAR(7)` (*unique*) | Periode bulan dalam format `YYYY-MM` |
+| `user_id` | `BIGINT` (FK) | Relasi ke `users.id` (`CASCADE ON DELETE`) |
+| `month` | `VARCHAR(7)` | Periode bulan dalam format `YYYY-MM` (*unique* gabungan `[user_id, month]`) |
 | `amount` | `BIGINT` | Batas anggaran pengeluaran bulanan (Rupiah) |
 | `created_at` / `updated_at` | `TIMESTAMP` | Waktu pembuatan & pembaruan |
 
 ### Relasi Eloquent
-- `Account` **hasMany** `Transaction` (`$account->transactions()`)
-- `Category` **hasMany** `Transaction` (`$category->transactions()`)
-- `Transaction` **belongsTo** `Account` (`$transaction->account()`)
-- `Transaction` **belongsTo** `Category` (`$transaction->category()`)
+- `User` **hasMany** `Category`, `Account`, `Transaction`, `Budget`
+- `Account` **belongsTo** `User` & **hasMany** `Transaction`
+- `Category` **belongsTo** `User` & **hasMany** `Transaction`
+- `Transaction` **belongsTo** `User`, `Account`, `Category`
+- `Budget` **belongsTo** `User`
 
 ---
 
 ## Menjalankan Pengujian (Testing)
 
-Proyek ini dilengkapi dengan **18 skenario pengujian otomatis** menggunakan **Pest PHP** (di dalam `tests/Feature/DailyCashTest.php`, `tests/Feature/ExampleTest.php`, dan `tests/Unit/ExampleTest.php`) yang berjalan menggunakan database SQLite `:memory:`.
+Proyek ini dilengkapi dengan **33 skenario pengujian otomatis** menggunakan **Pest PHP** (di dalam `tests/Feature/AuthAndMultiUserIsolationTest.php`, `tests/Feature/DailyCashTest.php`, `tests/Feature/ExampleTest.php`, dan `tests/Unit/ExampleTest.php`) yang berjalan menggunakan database SQLite `:memory:`.
 
 Jalankan seluruh pengujian dengan perintah:
 ```bash
@@ -211,3 +234,20 @@ php vendor/bin/pest
 14. Transaksi dengan bukti gambar valid berhasil disimpan dan file dibersihkan saat transaksi dihapus.
 15. Dashboard menampilkan metrik saldo, pemasukan, pengeluaran, dan peringatan anggaran.
 16. Halaman laporan periodik dan ekspor CSV berfungsi dengan benar.
+17. Seluruh halaman utama menerapkan layout mobile dua kolom dan tipografi compact secara konsisten.
+
+### Daftar Skenario Pengujian di `tests/Feature/AuthAndMultiUserIsolationTest.php`:
+1. Pengguna yang belum login diarahkan ke halaman login ketika membuka aplikasi.
+2. Pengguna yang sudah login diarahkan ke dashboard.
+3. Registrasi pengguna baru berhasil dan membuat ruang data kosong.
+4. Email yang sudah digunakan tidak dapat didaftarkan kembali.
+5. Login dengan kredensial benar berhasil dan mengarahkan ke dashboard.
+6. Login dengan kredensial salah ditolak dengan pesan kesalahan Bahasa Indonesia.
+7. Logout mengakhiri session pengguna dan mengarahkan ke halaman login.
+8. Pengguna baru mendapatkan dashboard kosong dengan saldo `Rp0` beserta *empty state* informatif.
+9. Pengguna A tidak dapat melihat, mengubah, atau menghapus kategori milik Pengguna B (`403 Forbidden`).
+10. Pengguna A tidak dapat mengakses, mengubah, atau menghapus rekening milik Pengguna B (`403 Forbidden`).
+11. Pengguna A tidak dapat melihat, mengubah, atau menghapus transaksi maupun bukti pembayaran milik Pengguna B (`403 Forbidden`).
+12. Transaksi tidak dapat dibuat menggunakan kategori atau rekening milik pengguna lain.
+13. Perhitungan dashboard dan laporan hanya menggunakan data pengguna yang sedang login.
+14. Seluruh proses CRUD kategori, rekening, dan transaksi tetap berfungsi dengan pembatasan kepemilikan data.

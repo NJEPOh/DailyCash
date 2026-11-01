@@ -7,15 +7,19 @@ use App\Http\Requests\UpdateAccountRequest;
 use App\Models\Account;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class AccountController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource owned by the authenticated user.
      */
     public function index(): View
     {
+        $userId = (int) Auth::id();
+
         $accounts = Account::query()
+            ->where('user_id', $userId)
             ->withCount('transactions')
             ->withSum(['transactions as total_income' => fn ($query) => $query->where('type', 'income')], 'amount')
             ->withSum(['transactions as total_expense' => fn ($query) => $query->where('type', 'expense')], 'amount')
@@ -47,6 +51,7 @@ class AccountController extends Controller
         $validated = $request->validated();
 
         Account::create([
+            'user_id' => (int) Auth::id(),
             'name' => $validated['name'],
             'balance' => (int) ($validated['balance'] ?? 0),
         ]);
@@ -61,6 +66,8 @@ class AccountController extends Controller
      */
     public function show(Account $account): View
     {
+        $this->authorizeOwnership($account);
+
         $account->loadCount('transactions');
         $totalIncome = (int) $account->transactions()->where('type', 'income')->sum('amount');
         $totalExpense = (int) $account->transactions()->where('type', 'expense')->sum('amount');
@@ -84,6 +91,8 @@ class AccountController extends Controller
      */
     public function edit(Account $account): View
     {
+        $this->authorizeOwnership($account);
+
         return view('accounts.edit', [
             'account' => $account,
         ]);
@@ -94,6 +103,8 @@ class AccountController extends Controller
      */
     public function update(UpdateAccountRequest $request, Account $account): RedirectResponse
     {
+        $this->authorizeOwnership($account);
+
         $account->update([
             'name' => $request->validated('name'),
         ]);
@@ -108,6 +119,8 @@ class AccountController extends Controller
      */
     public function destroy(Account $account): RedirectResponse
     {
+        $this->authorizeOwnership($account);
+
         if ($account->transactions()->exists()) {
             return redirect()
                 ->route('accounts.index')
@@ -119,5 +132,13 @@ class AccountController extends Controller
         return redirect()
             ->route('accounts.index')
             ->with('success', 'Rekening/dompet berhasil dihapus.');
+    }
+
+    /**
+     * Ensure the account belongs to the authenticated user.
+     */
+    private function authorizeOwnership(Account $account): void
+    {
+        abort_if((int) $account->user_id !== (int) Auth::id(), 403);
     }
 }

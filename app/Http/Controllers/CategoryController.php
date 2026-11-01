@@ -8,17 +8,20 @@ use App\Models\Category;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource owned by the authenticated user.
      */
     public function index(Request $request): View
     {
+        $userId = (int) Auth::id();
         $typeFilter = $request->query('type');
 
         $categoriesQuery = Category::query()
+            ->where('user_id', $userId)
             ->withCount('transactions')
             ->withSum('transactions', 'amount')
             ->orderBy('type')
@@ -29,8 +32,8 @@ class CategoryController extends Controller
         }
 
         $categories = $categoriesQuery->get();
-        $incomeCount = Category::where('type', 'income')->count();
-        $expenseCount = Category::where('type', 'expense')->count();
+        $incomeCount = Category::where('user_id', $userId)->where('type', 'income')->count();
+        $expenseCount = Category::where('user_id', $userId)->where('type', 'expense')->count();
 
         return view('categories.index', [
             'categories' => $categories,
@@ -53,7 +56,10 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request): RedirectResponse
     {
-        Category::create($request->validated());
+        Category::create([
+            'user_id' => (int) Auth::id(),
+            ...$request->validated(),
+        ]);
 
         return redirect()
             ->route('categories.index')
@@ -65,6 +71,8 @@ class CategoryController extends Controller
      */
     public function show(Category $category): View
     {
+        $this->authorizeOwnership($category);
+
         $category->loadCount('transactions');
         $totalAmount = (int) $category->transactions()->sum('amount');
         $transactions = $category->transactions()
@@ -85,6 +93,8 @@ class CategoryController extends Controller
      */
     public function edit(Category $category): View
     {
+        $this->authorizeOwnership($category);
+
         $category->loadCount('transactions');
 
         return view('categories.edit', [
@@ -97,6 +107,8 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category): RedirectResponse
     {
+        $this->authorizeOwnership($category);
+
         $category->update($request->validated());
 
         return redirect()
@@ -109,6 +121,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): RedirectResponse
     {
+        $this->authorizeOwnership($category);
+
         if ($category->transactions()->exists()) {
             return redirect()
                 ->route('categories.index')
@@ -120,5 +134,13 @@ class CategoryController extends Controller
         return redirect()
             ->route('categories.index')
             ->with('success', 'Kategori berhasil dihapus.');
+    }
+
+    /**
+     * Ensure the category belongs to the authenticated user.
+     */
+    private function authorizeOwnership(Category $category): void
+    {
+        abort_if((int) $category->user_id !== (int) Auth::id(), 403);
     }
 }

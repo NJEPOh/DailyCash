@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Account;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,7 @@ class AccountFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => fn () => auth()->id() ?? User::factory(),
             'name' => fake()->randomElement(['Dompet Utama', 'Rekening BCA', 'OVO', 'Tunai', 'GoPay', 'Rekening Mandiri']).' '.fake()->numerify('##'),
             'balance' => 0,
         ];

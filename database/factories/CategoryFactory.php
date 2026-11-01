@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,6 +21,7 @@ class CategoryFactory extends Factory
         $type = fake()->randomElement(['income', 'expense']);
 
         return [
+            'user_id' => fn () => auth()->id() ?? User::factory(),
             'name' => ucfirst(fake()->words(2, true)),
             'type' => $type,
         ];

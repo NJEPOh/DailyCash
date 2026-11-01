@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\Budget;
 use App\Models\Category;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,26 +17,31 @@ class TransactionSeeder extends Seeder
      */
     public function run(): void
     {
-        if (Transaction::count() > 0) {
+        $user = User::first() ?? User::factory()->create([
+            'name' => 'Pengguna Demo',
+            'email' => 'demo@dailycash.test',
+        ]);
+
+        if (Transaction::where('user_id', $user->id)->count() > 0) {
             return;
         }
 
-        $bca = Account::where('name', 'Rekening BCA')->firstOrFail();
-        $dompet = Account::where('name', 'Dompet Utama')->firstOrFail();
-        $ovo = Account::where('name', 'OVO')->firstOrFail();
-        $tunai = Account::where('name', 'Tunai')->firstOrFail();
+        $bca = Account::where('user_id', $user->id)->where('name', 'Rekening BCA')->firstOrFail();
+        $dompet = Account::where('user_id', $user->id)->where('name', 'Dompet Utama')->firstOrFail();
+        $ovo = Account::where('user_id', $user->id)->where('name', 'OVO')->firstOrFail();
+        $tunai = Account::where('user_id', $user->id)->where('name', 'Tunai')->firstOrFail();
 
-        $catGaji = Category::where('name', 'Gaji')->where('type', 'income')->firstOrFail();
-        $catBonus = Category::where('name', 'Bonus')->where('type', 'income')->firstOrFail();
-        $catPenjualan = Category::where('name', 'Penjualan')->where('type', 'income')->firstOrFail();
-        $catFreelance = Category::where('name', 'Freelance')->where('type', 'income')->firstOrFail();
+        $catGaji = Category::where('user_id', $user->id)->where('name', 'Gaji')->where('type', 'income')->firstOrFail();
+        $catBonus = Category::where('user_id', $user->id)->where('name', 'Bonus')->where('type', 'income')->firstOrFail();
+        $catPenjualan = Category::where('user_id', $user->id)->where('name', 'Penjualan')->where('type', 'income')->firstOrFail();
+        $catFreelance = Category::where('user_id', $user->id)->where('name', 'Freelance')->where('type', 'income')->firstOrFail();
 
-        $catMakan = Category::where('name', 'Makan & Minum')->where('type', 'expense')->firstOrFail();
-        $catTransport = Category::where('name', 'Transportasi')->where('type', 'expense')->firstOrFail();
-        $catListrik = Category::where('name', 'Listrik & Air')->where('type', 'expense')->firstOrFail();
-        $catInternet = Category::where('name', 'Internet & Pulsa')->where('type', 'expense')->firstOrFail();
-        $catBelanja = Category::where('name', 'Belanja Bulanan')->where('type', 'expense')->firstOrFail();
-        $catHiburan = Category::where('name', 'Hiburan')->where('type', 'expense')->firstOrFail();
+        $catMakan = Category::where('user_id', $user->id)->where('name', 'Makan & Minum')->where('type', 'expense')->firstOrFail();
+        $catTransport = Category::where('user_id', $user->id)->where('name', 'Transportasi')->where('type', 'expense')->firstOrFail();
+        $catListrik = Category::where('user_id', $user->id)->where('name', 'Listrik & Air')->where('type', 'expense')->firstOrFail();
+        $catInternet = Category::where('user_id', $user->id)->where('name', 'Internet & Pulsa')->where('type', 'expense')->firstOrFail();
+        $catBelanja = Category::where('user_id', $user->id)->where('name', 'Belanja Bulanan')->where('type', 'expense')->firstOrFail();
+        $catHiburan = Category::where('user_id', $user->id)->where('name', 'Hiburan')->where('type', 'expense')->firstOrFail();
 
         $now = now();
         $lastMonth = $now->copy()->subMonth();
@@ -157,7 +163,7 @@ class TransactionSeeder extends Seeder
             ],
         ];
 
-        DB::transaction(function () use ($entries): void {
+        DB::transaction(function () use ($entries, $user): void {
             foreach ($entries as $entry) {
                 /** @var Account $account */
                 $account = $entry['account'];
@@ -165,6 +171,7 @@ class TransactionSeeder extends Seeder
                 $category = $entry['category'];
 
                 Transaction::create([
+                    'user_id' => $user->id,
                     'account_id' => $account->id,
                     'category_id' => $category->id,
                     'type' => $entry['type'],
@@ -182,7 +189,7 @@ class TransactionSeeder extends Seeder
         });
 
         Budget::updateOrCreate(
-            ['month' => $now->format('Y-m')],
+            ['user_id' => $user->id, 'month' => $now->format('Y-m')],
             ['amount' => 5000000]
         );
     }

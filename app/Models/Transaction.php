@@ -17,6 +17,7 @@ class Transaction extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'user_id',
         'account_id',
         'category_id',
         'type',
@@ -37,6 +38,16 @@ class Transaction extends Model
             'amount' => 'integer',
             'date' => 'date',
         ];
+    }
+
+    /**
+     * Get the user that owns the transaction.
+     *
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**

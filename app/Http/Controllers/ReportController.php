@@ -8,18 +8,21 @@ use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ReportController extends Controller
 {
     /**
-     * Display the periodic financial report.
+     * Display the periodic financial report for the authenticated user.
      */
     public function index(Request $request): View
     {
+        $userId = (int) Auth::id();
         [$startDate, $endDate, $periodType, $month, $accountId] = $this->resolvePeriodParameters($request);
 
         $baseQuery = Transaction::query()
+            ->where('user_id', $userId)
             ->whereDate('date', '>=', $startDate)
             ->whereDate('date', '<=', $endDate)
             ->when($accountId, fn ($q) => $q->where('account_id', $accountId));
@@ -58,8 +61,8 @@ class ReportController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        $accounts = Account::orderBy('name')->get();
-        $budget = Budget::where('month', substr($startDate, 0, 7))->first();
+        $accounts = Account::where('user_id', $userId)->orderBy('name')->get();
+        $budget = Budget::where('user_id', $userId)->where('month', substr($startDate, 0, 7))->first();
 
         return view('reports.index', [
             'startDate' => $startDate,
@@ -81,13 +84,15 @@ class ReportController extends Controller
     }
 
     /**
-     * Export the periodic report as CSV (Optional Enrichment 9.4).
+     * Export the periodic report as CSV for the authenticated user.
      */
     public function exportCsv(Request $request): StreamedResponse
     {
+        $userId = (int) Auth::id();
         [$startDate, $endDate, , , $accountId] = $this->resolvePeriodParameters($request);
 
         $transactions = Transaction::query()
+            ->where('user_id', $userId)
             ->with(['account', 'category'])
             ->whereDate('date', '>=', $startDate)
             ->whereDate('date', '<=', $endDate)

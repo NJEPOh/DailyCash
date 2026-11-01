@@ -5,11 +5,11 @@
     $selectedDate = old('date', isset($transaction) ? $transaction->date->format('Y-m-d') : now()->format('Y-m-d'));
 @endphp
 
-<div class="space-y-5">
-    {{-- Pilihan Tipe Transaksi --}}
+<div class="space-y-3.5">
+    {{-- Pilihan Tipe Transaksi (2 Kolom di Mobile) --}}
     <div>
-        <label class="block text-sm font-semibold text-slate-700 mb-2">Tipe Transaksi <span class="text-rose-500">*</span></label>
-        <div class="grid grid-cols-2 gap-3">
+        <label class="block text-[11px] font-semibold text-slate-700 mb-1.5">Tipe Transaksi <span class="text-rose-500">*</span></label>
+        <div class="grid grid-cols-2 gap-2.5 xs-single-col">
             <label class="cursor-pointer">
                 <input
                     type="radio"
@@ -19,9 +19,9 @@
                     @checked($selectedType === 'income')
                     onchange="filterCategoriesByType(this.value)"
                 >
-                <div class="p-3.5 rounded-xl border-2 border-slate-200 peer-checked:border-emerald-500 peer-checked:bg-emerald-50/70 text-center transition">
-                    <span class="block text-sm font-bold text-slate-900 peer-checked:text-emerald-700">+ Pemasukan (Income)</span>
-                    <span class="text-xs text-slate-500">Menambah saldo rekening</span>
+                <div class="p-2.5 rounded-lg border-2 border-slate-200 peer-checked:border-emerald-500 peer-checked:bg-emerald-50/70 text-center transition">
+                    <span class="block text-xs font-bold text-slate-900 peer-checked:text-emerald-700">+ Pemasukan (Income)</span>
+                    <span class="text-[11px] text-slate-500">Menambah saldo</span>
                 </div>
             </label>
 
@@ -34,36 +34,36 @@
                     @checked($selectedType === 'expense')
                     onchange="filterCategoriesByType(this.value)"
                 >
-                <div class="p-3.5 rounded-xl border-2 border-slate-200 peer-checked:border-rose-500 peer-checked:bg-rose-50/70 text-center transition">
-                    <span class="block text-sm font-bold text-slate-900 peer-checked:text-rose-700">- Pengeluaran (Expense)</span>
-                    <span class="text-xs text-slate-500">Mengurangi saldo rekening</span>
+                <div class="p-2.5 rounded-lg border-2 border-slate-200 peer-checked:border-rose-500 peer-checked:bg-rose-50/70 text-center transition">
+                    <span class="block text-xs font-bold text-slate-900 peer-checked:text-rose-700">- Pengeluaran (Expense)</span>
+                    <span class="text-[11px] text-slate-500">Mengurangi saldo</span>
                 </div>
             </label>
         </div>
         @error('type')
-            <p class="text-xs text-rose-600 mt-1">{{ $message }}</p>
+            <p class="text-[11px] text-rose-600 mt-1">{{ $message }}</p>
         @enderror
     </div>
 
-    {{-- Tanggal & Nominal --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    {{-- Tanggal & Nominal (2 Kolom di Mobile) --}}
+    <div class="grid grid-cols-2 gap-2.5 sm:gap-3.5 xs-single-col">
         <div>
-            <label for="date" class="block text-sm font-semibold text-slate-700 mb-1.5">Tanggal Transaksi <span class="text-rose-500">*</span></label>
+            <label for="date" class="block text-[11px] font-semibold text-slate-700 mb-1">Tanggal Transaksi <span class="text-rose-500">*</span></label>
             <input
                 type="date"
                 id="date"
                 name="date"
                 required
                 value="{{ $selectedDate }}"
-                class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-slate-900 focus:outline-none"
+                class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs focus:border-slate-900 focus:outline-none"
             >
             @error('date')
-                <p class="text-xs text-rose-600 mt-1">{{ $message }}</p>
+                <p class="text-[11px] text-rose-600 mt-1">{{ $message }}</p>
             @enderror
         </div>
 
         <div>
-            <label for="amount" class="block text-sm font-semibold text-slate-700 mb-1.5">Nominal Transaksi (Rp) <span class="text-rose-500">*</span></label>
+            <label for="amount" class="block text-[11px] font-semibold text-slate-700 mb-1">Nominal (Rp) <span class="text-rose-500">*</span></label>
             <input
                 type="number"
                 id="amount"
@@ -73,23 +73,23 @@
                 required
                 value="{{ old('amount', $transaction->amount ?? '') }}"
                 placeholder="Contoh: 150000"
-                class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-slate-900 focus:outline-none"
+                class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs focus:border-slate-900 focus:outline-none"
             >
             @error('amount')
-                <p class="text-xs text-rose-600 mt-1">{{ $message }}</p>
+                <p class="text-[11px] text-rose-600 mt-1">{{ $message }}</p>
             @enderror
         </div>
     </div>
 
-    {{-- Kategori & Rekening/Dompet --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    {{-- Kategori & Rekening/Dompet (2 Kolom di Mobile) --}}
+    <div class="grid grid-cols-2 gap-2.5 sm:gap-3.5 xs-single-col">
         <div>
-            <label for="category_id" class="block text-sm font-semibold text-slate-700 mb-1.5">Kategori <span class="text-rose-500">*</span></label>
+            <label for="category_id" class="block text-[11px] font-semibold text-slate-700 mb-1">Kategori <span class="text-rose-500">*</span></label>
             <select
                 id="category_id"
                 name="category_id"
                 required
-                class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm bg-white focus:border-slate-900 focus:outline-none"
+                class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs bg-white focus:border-slate-900 focus:outline-none"
             >
                 <option value="">-- Pilih Kategori --</option>
                 @foreach ($categories as $category)
@@ -102,66 +102,66 @@
                     </option>
                 @endforeach
             </select>
-            <p class="text-xs text-slate-500 mt-1">Pilih kategori yang sesuai dengan tipe transaksi.</p>
+            <p class="text-[11px] text-slate-500 mt-0.5">Sesuai tipe transaksi.</p>
             @error('category_id')
-                <p class="text-xs text-rose-600 mt-1">{{ $message }}</p>
+                <p class="text-[11px] text-rose-600 mt-1">{{ $message }}</p>
             @enderror
         </div>
 
         <div>
-            <label for="account_id" class="block text-sm font-semibold text-slate-700 mb-1.5">Rekening / Dompet <span class="text-rose-500">*</span></label>
+            <label for="account_id" class="block text-[11px] font-semibold text-slate-700 mb-1">Rekening / Dompet <span class="text-rose-500">*</span></label>
             <select
                 id="account_id"
                 name="account_id"
                 required
-                class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm bg-white focus:border-slate-900 focus:outline-none"
+                class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs bg-white focus:border-slate-900 focus:outline-none"
             >
-                <option value="">-- Pilih Rekening / Dompet --</option>
+                <option value="">-- Pilih Rekening --</option>
                 @foreach ($accounts as $account)
                     <option value="{{ $account->id }}" @selected((string) $selectedAccountId === (string) $account->id)>
-                        {{ $account->name }} (Saldo: {{ $account->formatted_balance }})
+                        {{ $account->name }} ({{ $account->formatted_balance }})
                     </option>
                 @endforeach
             </select>
-            <p class="text-xs text-slate-500 mt-1">Pengeluaran tidak boleh melebihi saldo rekening yang dipilih.</p>
+            <p class="text-[11px] text-slate-500 mt-0.5">Saldo tidak boleh minus.</p>
             @error('account_id')
-                <p class="text-xs text-rose-600 mt-1">{{ $message }}</p>
+                <p class="text-[11px] text-rose-600 mt-1">{{ $message }}</p>
             @enderror
         </div>
     </div>
 
-    {{-- Deskripsi Opsional --}}
+    {{-- Deskripsi Opsional (Lebar Penuh) --}}
     <div>
-        <label for="description" class="block text-sm font-semibold text-slate-700 mb-1.5">Deskripsi / Catatan (Opsional)</label>
+        <label for="description" class="block text-[11px] font-semibold text-slate-700 mb-1">Deskripsi / Catatan (Opsional)</label>
         <textarea
             id="description"
             name="description"
-            rows="3"
+            rows="2"
             maxlength="255"
             placeholder="Tambahkan keterangan transaksi (maksimal 255 karakter)"
-            class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-slate-900 focus:outline-none"
+            class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs focus:border-slate-900 focus:outline-none"
         >{{ old('description', $transaction->description ?? '') }}</textarea>
         @error('description')
-            <p class="text-xs text-rose-600 mt-1">{{ $message }}</p>
+            <p class="text-[11px] text-rose-600 mt-1">{{ $message }}</p>
         @enderror
     </div>
 
-    {{-- Bukti Pembayaran Opsional --}}
+    {{-- Bukti Pembayaran Opsional (Lebar Penuh) --}}
     <div>
-        <label for="proof_image" class="block text-sm font-semibold text-slate-700 mb-1.5">Bukti Pembayaran / Struk Gambar (Opsional)</label>
+        <label for="proof_image" class="block text-[11px] font-semibold text-slate-700 mb-1">Bukti Pembayaran / Struk Gambar (Opsional)</label>
 
         @if (isset($transaction) && $transaction->proof_image)
-            <div class="mb-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <img src="{{ route('transactions.proof', $transaction) }}" alt="Bukti Transaksi" class="w-16 h-16 object-cover rounded-lg border border-slate-300">
-                    <div class="text-xs">
-                        <p class="font-semibold text-slate-800">Bukti pembayaran saat ini tersedia</p>
-                        <p class="text-slate-500">Unggah gambar baru di bawah jika ingin mengganti bukti lama.</p>
+            <div class="mb-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5">
+                    <img src="{{ route('transactions.proof', $transaction) }}" alt="Bukti Transaksi" class="w-12 h-12 object-cover rounded border border-slate-300">
+                    <div class="text-[11px]">
+                        <p class="font-semibold text-slate-800">Bukti pembayaran tersedia</p>
+                        <p class="text-slate-500">Unggah gambar baru jika ingin mengganti bukti lama.</p>
                     </div>
                 </div>
-                <label class="inline-flex items-center gap-2 text-xs font-medium text-rose-600 cursor-pointer">
+                <label class="inline-flex items-center gap-1.5 text-[11px] font-medium text-rose-600 cursor-pointer">
                     <input type="checkbox" name="remove_proof_image" value="1" class="rounded border-slate-300 text-rose-600">
-                    <span>Hapus bukti saat ini</span>
+                    <span>Hapus bukti</span>
                 </label>
             </div>
         @endif
@@ -171,11 +171,11 @@
             id="proof_image"
             name="proof_image"
             accept="image/jpeg,image/png,image/webp,image/gif"
-            class="w-full rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-600 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-900 file:text-white hover:file:bg-slate-800"
+            class="w-full rounded-lg border border-dashed border-slate-300 bg-slate-50 px-3 py-2 text-xs text-slate-600 file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[11px] file:font-semibold file:bg-slate-900 file:text-white hover:file:bg-slate-800"
         >
-        <p class="text-xs text-slate-500 mt-1">Boleh dikosongkan. Format yang didukung: JPG, JPEG, PNG, WEBP, GIF (Maks. 2MB).</p>
+        <p class="text-[11px] text-slate-500 mt-0.5">Boleh dikosongkan. Format: JPG, JPEG, PNG, WEBP, GIF (Maks. 2MB).</p>
         @error('proof_image')
-            <p class="text-xs text-rose-600 mt-1">{{ $message }}</p>
+            <p class="text-[11px] text-rose-600 mt-1">{{ $message }}</p>
         @enderror
     </div>
 </div>

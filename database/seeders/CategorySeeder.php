@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
@@ -12,6 +13,11 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
+        $user = User::first() ?? User::factory()->create([
+            'name' => 'Pengguna Demo',
+            'email' => 'demo@dailycash.test',
+        ]);
+
         $categories = [
             ['name' => 'Gaji', 'type' => 'income'],
             ['name' => 'Bonus', 'type' => 'income'],
@@ -29,8 +35,12 @@ class CategorySeeder extends Seeder
 
         foreach ($categories as $category) {
             Category::firstOrCreate(
-                ['name' => $category['name'], 'type' => $category['type']],
-                $category
+                [
+                    'user_id' => $user->id,
+                    'name' => $category['name'],
+                    'type' => $category['type'],
+                ],
+                $category + ['user_id' => $user->id]
             );
         }
     }

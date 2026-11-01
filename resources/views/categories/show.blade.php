@@ -5,32 +5,32 @@
         :backUrl="route('categories.index')"
         backText="Kembali ke Daftar Kategori"
     >
-        <a href="{{ route('categories.edit', $category) }}" class="px-4 py-2 rounded-xl border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50">
+        <a href="{{ route('categories.edit', $category) }}" class="px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50">
             Edit Kategori
         </a>
     </x-page-header>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Tipe Kategori</p>
-            <div class="mt-2">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-3.5 xs-single-col">
+        <div class="bg-white rounded-xl border border-slate-200 p-3 sm:p-4 shadow-2xs">
+            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Tipe Kategori</p>
+            <div class="mt-1.5">
                 <x-badge-type :type="$category->type" />
             </div>
         </div>
-        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Jumlah Transaksi</p>
-            <p class="text-2xl font-bold text-slate-900 mt-1">{{ $category->transactions_count }} Transaksi</p>
+        <div class="bg-white rounded-xl border border-slate-200 p-3 sm:p-4 shadow-2xs">
+            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Jumlah Transaksi</p>
+            <p class="text-[20px] sm:text-2xl font-bold text-slate-900 mt-0.5">{{ $category->transactions_count }} Tx</p>
         </div>
-        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Akumulasi Nominal</p>
-            <p class="text-2xl font-bold {{ $category->type === 'income' ? 'text-emerald-600' : 'text-rose-600' }} mt-1">
+        <div class="col-span-2 md:col-span-1 bg-white rounded-xl border border-slate-200 p-3 sm:p-4 shadow-2xs">
+            <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Total Akumulasi Nominal</p>
+            <p class="text-[20px] sm:text-2xl font-bold {{ $category->type === 'income' ? 'text-emerald-600' : 'text-rose-600' }} mt-0.5">
                 Rp{{ number_format($totalAmount, 0, ',', '.') }}
             </p>
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
-        <h2 class="text-base font-bold text-slate-900">Riwayat Transaksi Kategori Ini</h2>
+    <div class="bg-white rounded-xl border border-slate-200 p-3.5 sm:p-4 shadow-2xs space-y-3">
+        <h2 class="text-sm sm:text-base font-bold text-slate-900">Riwayat Transaksi Kategori Ini</h2>
 
         @if ($transactions->isEmpty())
             <x-empty-state
@@ -44,23 +44,23 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-slate-200 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                            <th class="py-3 pr-3">Tanggal</th>
-                            <th class="py-3 px-3">Rekening</th>
-                            <th class="py-3 px-3">Deskripsi</th>
-                            <th class="py-3 pl-3 text-right">Nominal</th>
+                            <th class="py-2 pr-2.5">Tanggal</th>
+                            <th class="py-2 px-2.5">Rekening</th>
+                            <th class="py-2 px-2.5">Deskripsi</th>
+                            <th class="py-2 pl-2.5 text-right">Nominal</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100 text-sm">
+                    <tbody class="divide-y divide-slate-100 text-xs">
                         @foreach ($transactions as $tx)
                             <tr class="hover:bg-slate-50/80">
-                                <td class="py-3 pr-3 whitespace-nowrap text-xs text-slate-500">{{ $tx->date->format('d/m/Y') }}</td>
-                                <td class="py-3 px-3 font-medium text-slate-800">{{ $tx->account?->name ?? '-' }}</td>
-                                <td class="py-3 px-3 text-slate-600">
+                                <td class="py-2 pr-2.5 whitespace-nowrap text-[11px] text-slate-500">{{ $tx->date->format('d/m/Y') }}</td>
+                                <td class="py-2 px-2.5 font-medium text-slate-800">{{ $tx->account?->name ?? '-' }}</td>
+                                <td class="py-2 px-2.5 text-slate-600">
                                     <a href="{{ route('transactions.show', $tx) }}" class="hover:underline">
                                         {{ $tx->description ?: 'Tanpa deskripsi' }}
                                     </a>
                                 </td>
-                                <td class="py-3 pl-3 text-right font-bold {{ $tx->type === 'income' ? 'text-emerald-600' : 'text-rose-600' }}">
+                                <td class="py-2 pl-2.5 text-right font-bold {{ $tx->type === 'income' ? 'text-emerald-600' : 'text-rose-600' }}">
                                     {{ $tx->formatted_amount }}
                                 </td>
                             </tr>
@@ -68,7 +68,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="pt-4">
+            <div class="pt-3">
                 {{ $transactions->links() }}
             </div>
         @endif

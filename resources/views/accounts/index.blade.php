@@ -3,20 +3,25 @@
         title="Rekening & Dompet"
         subtitle="Kelola sumber dana dan pantau saldo setiap rekening atau dompet secara real-time."
     >
-        <a href="{{ route('accounts.create') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition">
-            <span>+ Tambah Rekening/Dompet</span>
+        <a href="{{ route('accounts.create') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition">
+            <span>+ Tambah Rekening</span>
         </a>
     </x-page-header>
 
-    <div class="rounded-2xl bg-slate-900 text-white p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Saldo Seluruh Rekening</p>
-            <p class="text-3xl font-bold tracking-tight mt-1">Rp{{ number_format($totalBalance, 0, ',', '.') }}</p>
-            <p class="text-xs text-emerald-400 mt-1">Terdiri dari {{ $accounts->count() }} rekening/dompet</p>
-        </div>
-        <a href="{{ route('transactions.create') }}" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition">
-            + Catat Transaksi Baru
-        </a>
+    {{-- Statistik Ringkas 2 Kolom di Mobile --}}
+    <div class="grid grid-cols-2 gap-2.5 sm:gap-3.5 xs-single-col">
+        <x-stat-card
+            title="Total Saldo Seluruh Rekening"
+            :value="'Rp' . number_format($totalBalance, 0, ',', '.')"
+            subtitle="Dana tersedia saat ini"
+            variant="primary"
+        />
+        <x-stat-card
+            title="Jumlah Akun Aktif"
+            :value="$accounts->count() . ' Rekening'"
+            subtitle="Bank, E-Wallet, & Kas Tunai"
+            variant="default"
+        />
     </div>
 
     @if ($accounts->isEmpty())
@@ -27,51 +32,49 @@
             actionText="+ Tambah Rekening Pertama"
         />
     @else
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {{-- Grid 2 Kolom pada Mobile, 3 Kolom pada Tablet, 4 Kolom pada Desktop --}}
+        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-3.5 xs-single-col">
             @foreach ($accounts as $account)
-                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between space-y-5">
-                    <div class="space-y-3">
-                        <div class="flex items-start justify-between gap-2">
-                            <div>
-                                <a href="{{ route('accounts.show', $account) }}" class="text-base font-bold text-slate-900 hover:text-emerald-600 transition">
+                <div class="bg-white rounded-xl border border-slate-200 p-3 sm:p-4 shadow-2xs flex flex-col justify-between space-y-3 min-w-0">
+                    <div class="space-y-2 min-w-0">
+                        <div class="flex items-start justify-between gap-1.5">
+                            <div class="min-w-0">
+                                <a href="{{ route('accounts.show', $account) }}" class="text-sm font-bold text-slate-900 hover:text-emerald-600 transition block truncate">
                                     {{ $account->name }}
                                 </a>
-                                <p class="text-xs text-slate-400">{{ $account->transactions_count }} transaksi tercatat</p>
+                                <p class="text-[11px] text-slate-400">{{ $account->transactions_count }} transaksi</p>
                             </div>
-                            <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-semibold">
-                                Aktif
-                            </span>
                         </div>
 
-                        <div class="pt-2">
-                            <p class="text-xs text-slate-500">Saldo Saat Ini</p>
-                            <p class="text-2xl font-bold text-slate-900 mt-0.5">{{ $account->formatted_balance }}</p>
+                        <div class="pt-1">
+                            <p class="text-[11px] text-slate-500">Saldo Saat Ini</p>
+                            <p class="text-[20px] sm:text-2xl font-bold text-slate-900 leading-snug break-words">{{ $account->formatted_balance }}</p>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-2 pt-3 border-t border-slate-100 text-xs">
-                            <div>
-                                <span class="text-slate-400 block">Total Masuk</span>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 pt-2 border-t border-slate-100 text-[11px]">
+                            <div class="truncate">
+                                <span class="text-slate-400">Masuk: </span>
                                 <span class="font-semibold text-emerald-600">+Rp{{ number_format((int) ($account->total_income ?? 0), 0, ',', '.') }}</span>
                             </div>
-                            <div>
-                                <span class="text-slate-400 block">Total Keluar</span>
+                            <div class="truncate">
+                                <span class="text-slate-400">Keluar: </span>
                                 <span class="font-semibold text-rose-600">-Rp{{ number_format((int) ($account->total_expense ?? 0), 0, ',', '.') }}</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-between gap-2 pt-3 border-t border-slate-100">
-                        <a href="{{ route('accounts.show', $account) }}" class="text-xs font-semibold text-slate-700 hover:text-slate-900">
-                            Lihat Riwayat &rarr;
+                    <div class="flex flex-wrap items-center justify-between gap-1.5 pt-2.5 border-t border-slate-100">
+                        <a href="{{ route('accounts.show', $account) }}" class="text-[11px] font-semibold text-slate-700 hover:text-slate-900">
+                            Detail &rarr;
                         </a>
-                        <div class="flex items-center gap-1.5">
-                            <a href="{{ route('accounts.edit', $account) }}" class="px-2.5 py-1 rounded-lg border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50">
-                                Ubah Nama
+                        <div class="flex items-center gap-1">
+                            <a href="{{ route('accounts.edit', $account) }}" class="px-2 py-1 rounded border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50">
+                                Ubah
                             </a>
-                            <form action="{{ route('accounts.destroy', $account) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus rekening {{ addslashes($account->name) }}?');">
+                            <form action="{{ route('accounts.destroy', $account) }}" method="POST" class="inline" onsubmit="return confirm('Hapus rekening {{ addslashes($account->name) }}?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="px-2.5 py-1 rounded-lg border border-rose-200 text-xs font-medium text-rose-600 hover:bg-rose-50">
+                                <button type="submit" class="px-2 py-1 rounded border border-rose-200 text-[11px] font-medium text-rose-600 hover:bg-rose-50">
                                     Hapus
                                 </button>
                             </form>

@@ -10,6 +10,7 @@ use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -17,10 +18,12 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class TransactionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource owned by the authenticated user.
      */
     public function index(Request $request): View
     {
+        $userId = (int) Auth::id();
+
         $filters = [
             'start_date' => $request->query('start_date'),
             'end_date' => $request->query('end_date'),
@@ -29,7 +32,9 @@ class TransactionController extends Controller
             'account_id' => $request->query('account_id'),
         ];
 
-        $baseQuery = Transaction::query()->filter($filters);
+        $baseQuery = Transaction::query()
+            ->where('user_id', $userId)
+            ->filter($filters);
 
         $filteredIncome = (int) (clone $baseQuery)->where('type', 'income')->sum('amount');
         $filteredExpense = (int) (clone $baseQuery)->where('type', 'expense')->sum('amount');
@@ -42,8 +47,8 @@ class TransactionController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $categories = Category::orderBy('type')->orderBy('name')->get();
-        $accounts = Account::orderBy('name')->get();
+        $categories = Category::where('user_id', $userId)->orderBy('type')->orderBy('name')->get();
+        $accounts = Account::where('user_id', $userId)->orderBy('name')->get();
 
         return view('transactions.index', [
             'transactions' => $transactions,
@@ -61,8 +66,9 @@ class TransactionController extends Controller
      */
     public function create(Request $request): View
     {
-        $categories = Category::orderBy('type')->orderBy('name')->get();
-        $accounts = Account::orderBy('name')->get();
+        $userId = (int) Auth::id();
+        $categories = Category::where('user_id', $userId)->orderBy('type')->orderBy('name')->get();
+        $accounts = Account::where('user_id', $userId)->orderBy('name')->get();
         $defaultType = in_array($request->query('type'), ['income', 'expense'], true)
             ? $request->query('type')
             : 'expense';
@@ -80,6 +86,7 @@ class TransactionController extends Controller
      */
     public function store(StoreTransactionRequest $request): RedirectResponse
     {
+        $userId = (int) Auth::id();
         $validated = $request->validated();
         $proofPath = null;
 
@@ -87,11 +94,14 @@ class TransactionController extends Controller
             $proofPath = $request->file('proof_image')->store('proofs', 'public');
         }
 
-        DB::transaction(function () use ($validated, $proofPath): void {
-            $account = Account::lockForUpdate()->findOrFail($validated['account_id']);
+        DB::transaction(function () use ($userId, $validated, $proofPath): void {
+            $account = Account::where('user_id', $userId)
+                ->lockForUpdate()
+                ->findOrFail($validated['account_id']);
             $amount = (int) $validated['amount'];
 
             Transaction::create([
+                'user_id' => $userId,
                 'account_id' => $account->id,
                 'category_id' => $validated['category_id'],
                 'type' => $validated['type'],
@@ -118,6 +128,8 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction): View
     {
+        $this->authorizeOwnership($transaction);
+
         $transaction->load(['account', 'category']);
 
         return view('transactions.show', [
@@ -130,9 +142,12 @@ class TransactionController extends Controller
      */
     public function edit(Transaction $transaction): View
     {
+        $this->authorizeOwnership($transaction);
+
+        $userId = (int) Auth::id();
         $transaction->load(['account', 'category']);
-        $categories = Category::orderBy('type')->orderBy('name')->get();
-        $accounts = Account::orderBy('name')->get();
+        $categories = Category::where('user_id', $userId)->orderBy('type')->orderBy('name')->get();
+        $accounts = Account::where('user_id', $userId)->orderBy('name')->get();
 
         return view('transactions.edit', [
             'transaction' => $transaction,
@@ -146,10 +161,15 @@ class TransactionController extends Controller
      */
     public function update(UpdateTransactionRequest $request, Transaction $transaction): RedirectResponse
     {
+        $this->authorizeOwnership($transaction);
+
+        $userId = (int) Auth::id();
         $validated = $request->validated();
 
-        DB::transaction(function () use ($request, $validated, $transaction): void {
-            $oldAccount = Account::lockForUpdate()->findOrFail($transaction->account_id);
+        DB::transaction(function () use ($request, $userId, $validated, $transaction): void {
+            $oldAccount = Account::where('user_id', $userId)
+                ->lockForUpdate()
+                ->findOrFail($transaction->account_id);
 
             if ($transaction->type === 'income') {
                 $oldAccount->decrement('balance', $transaction->amount);
@@ -157,7 +177,9 @@ class TransactionController extends Controller
                 $oldAccount->increment('balance', $transaction->amount);
             }
 
-            $newAccount = Account::lockForUpdate()->findOrFail($validated['account_id']);
+            $newAccount = Account::where('user_id', $userId)
+                ->lockForUpdate()
+                ->findOrFail($validated['account_id']);
             $newAmount = (int) $validated['amount'];
 
             if ($validated['type'] === 'income') {
@@ -201,7 +223,10 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction): RedirectResponse
     {
-        $account = Account::findOrFail($transaction->account_id);
+        $this->authorizeOwnership($transaction);
+
+        $userId = (int) Auth::id();
+        $account = Account::where('user_id', $userId)->findOrFail($transaction->account_id);
 
         if ($transaction->type === 'income' && $account->balance < $transaction->amount) {
             return redirect()
@@ -209,8 +234,10 @@ class TransactionController extends Controller
                 ->with('error', 'Transaksi pemasukan ini tidak dapat dihapus karena saldo rekening telah terpakai dan akan menjadi negatif.');
         }
 
-        DB::transaction(function () use ($transaction): void {
-            $lockedAccount = Account::lockForUpdate()->findOrFail($transaction->account_id);
+        DB::transaction(function () use ($userId, $transaction): void {
+            $lockedAccount = Account::where('user_id', $userId)
+                ->lockForUpdate()
+                ->findOrFail($transaction->account_id);
 
             if ($transaction->type === 'income') {
                 $lockedAccount->decrement('balance', $transaction->amount);
@@ -232,15 +259,25 @@ class TransactionController extends Controller
     }
 
     /**
-     * Stream the proof image file from public storage.
+     * Stream the proof image file from public storage for its owner only.
      */
     public function proof(Transaction $transaction): StreamedResponse
     {
+        $this->authorizeOwnership($transaction);
+
         abort_if(
             ! $transaction->proof_image || ! Storage::disk('public')->exists($transaction->proof_image),
             404
         );
 
         return Storage::disk('public')->response($transaction->proof_image);
+    }
+
+    /**
+     * Ensure the transaction belongs to the authenticated user.
+     */
+    private function authorizeOwnership(Transaction $transaction): void
+    {
+        abort_if((int) $transaction->user_id !== (int) Auth::id(), 403);
     }
 }

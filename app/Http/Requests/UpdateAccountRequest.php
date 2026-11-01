@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Account;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,7 +13,12 @@ class UpdateAccountRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        /** @var Account|null $account */
+        $account = $this->route('account');
+
+        return $this->user() !== null
+            && $account !== null
+            && (int) $account->user_id === (int) $this->user()->id;
     }
 
     /**
