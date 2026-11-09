@@ -911,3 +911,310 @@ body,
         animation: none !important;
     }
 }
+
+/* =========================================================
+   DAILY CASH - TRANSACTION PAGE READABILITY + ACTION COLORS
+   Final refinements for Transactions, tables, filters and buttons
+   ========================================================= */
+
+/* 1. Improve muted text contrast on every light glass card */
+.card:not(.card-premium) .text-gray-300,
+.card:not(.card-premium) .text-gray-400,
+.card:not(.card-premium) .text-gray-500,
+.card:not(.card-premium) .text-gray-600,
+.card:not(.card-premium) .text-slate-300,
+.card:not(.card-premium) .text-slate-400,
+.card:not(.card-premium) .text-slate-500,
+.card:not(.card-premium) .text-slate-600,
+.card:not(.card-premium) .text-zinc-400,
+.card:not(.card-premium) .text-zinc-500 {
+    color: #405D4E !important;
+}
+
+/* Explicitly improve date, description, helper and pagination text */
+.card:not(.card-premium) td,
+.card:not(.card-premium) td span,
+.card:not(.card-premium) td p,
+.card:not(.card-premium) small,
+.card:not(.card-premium) .text-xs,
+.card:not(.card-premium) .text-sm {
+    text-shadow: none;
+}
+
+.card:not(.card-premium) td .text-gray-400,
+.card:not(.card-premium) td .text-gray-500,
+.card:not(.card-premium) td .text-slate-400,
+.card:not(.card-premium) td .text-slate-500,
+.card:not(.card-premium) td span:not(.badge):not([class*="text-emerald"]):not([class*="text-rose"]):not([class*="text-red"]),
+.card:not(.card-premium) td p:not([class*="text-emerald"]):not([class*="text-rose"]):not([class*="text-red"]) {
+    color: #405D4E;
+}
+
+/* Table headings and main row text: deep forest green */
+.card:not(.card-premium) table thead th {
+    color: #173D2D !important;
+    font-weight: 750;
+}
+
+.card:not(.card-premium) table tbody td {
+    color: #244A38;
+}
+
+.card:not(.card-premium) table tbody tr {
+    border-color: rgba(22, 101, 52, 0.20);
+}
+
+.card:not(.card-premium) table tbody tr:hover {
+    background-color: rgba(209, 250, 229, 0.42);
+}
+
+/* Filter labels, helper copy and result counter */
+.card:not(.card-premium) label,
+.card:not(.card-premium) .form-label,
+.card:not(.card-premium) .text-muted {
+    color: #244A38 !important;
+}
+
+/* Header subtitles on non-dashboard pages stay readable on the dark background */
+.dashboard-main main h1 + p,
+.dashboard-main main h1 ~ p:first-of-type {
+    color: #C9F5DF !important;
+}
+
+/* 2. Replace leftover blue / indigo text accents with emerald */
+.text-indigo-500,
+.text-indigo-600,
+.text-blue-500,
+.text-blue-600,
+.text-violet-500,
+.text-violet-600 {
+    color: #087F5B !important;
+}
+
+/* Replace blue / indigo decorative surfaces with a warm champagne tone */
+.bg-indigo-50,
+.bg-blue-50,
+.bg-violet-50 {
+    background-color: #F8F0D8 !important;
+}
+
+/* Keep blue outlines from appearing on interactive controls */
+.border-indigo-100,
+.border-indigo-200,
+.border-blue-100,
+.border-blue-200 {
+    border-color: rgba(198, 156, 67, 0.48) !important;
+}
+
+/* 3. Edit action: champagne gold instead of purple / blue */
+a[class*="bg-indigo-50"],
+button[class*="bg-indigo-50"],
+a[class*="bg-blue-50"],
+button[class*="bg-blue-50"],
+a[class*="bg-violet-50"],
+button[class*="bg-violet-50"],
+a[class*="text-indigo-600"][class*="rounded"],
+button[class*="text-indigo-600"][class*="rounded"],
+a[class*="text-blue-600"][class*="rounded"],
+button[class*="text-blue-600"][class*="rounded"] {
+    background: #F8F0D8 !important;
+    color: #805D20 !important;
+    border: 1px solid rgba(198, 156, 67, 0.40) !important;
+    box-shadow: 0 2px 7px rgba(120, 87, 30, 0.08);
+    transition: background-color 0.2s ease, color 0.2s ease,
+                border-color 0.2s ease, transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+a[class*="bg-indigo-50"]:hover,
+button[class*="bg-indigo-50"]:hover,
+a[class*="bg-blue-50"]:hover,
+button[class*="bg-blue-50"]:hover,
+a[class*="bg-violet-50"]:hover,
+button[class*="bg-violet-50"]:hover,
+a[class*="text-indigo-600"][class*="rounded"]:hover,
+button[class*="text-indigo-600"][class*="rounded"]:hover,
+a[class*="text-blue-600"][class*="rounded"]:hover,
+button[class*="text-blue-600"][class*="rounded"]:hover {
+    background: #EBD79F !important;
+    color: #5D4318 !important;
+    border-color: rgba(154, 112, 37, 0.60) !important;
+    box-shadow: 0 5px 14px rgba(120, 87, 30, 0.16);
+    transform: translateY(-1px);
+}
+
+/* Generic blue edit links without a colored background */
+a[class*="text-indigo-600"],
+button[class*="text-indigo-600"],
+a[class*="text-blue-600"],
+button[class*="text-blue-600"] {
+    color: #087F5B;
+}
+
+/* 4. Keep income green and expense coral distinct from the new gold edit action */
+.text-emerald-500,
+.text-emerald-600,
+.text-green-600 {
+    color: #047857 !important;
+}
+
+.text-rose-500,
+.text-rose-600,
+.text-red-600 {
+    color: #BE123C !important;
+}
+
+/* 5. Make all form controls on the transaction filter card readable */
+.card:not(.card-premium) input,
+.card:not(.card-premium) select,
+.card:not(.card-premium) textarea {
+    color: #173D2D;
+    background-color: rgba(255, 255, 255, 0.86);
+    border-color: rgba(22, 101, 52, 0.20);
+}
+
+.card:not(.card-premium) input::placeholder,
+.card:not(.card-premium) textarea::placeholder {
+    color: #64796C;
+    opacity: 1;
+}
+
+.card:not(.card-premium) input:focus,
+.card:not(.card-premium) select:focus,
+.card:not(.card-premium) textarea:focus {
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    outline: none;
+}
+
+/* 6. Improve the light emerald summary card's secondary text */
+.card:not(.card-premium) [class*="bg-emerald-600"] .text-emerald-100,
+.card:not(.card-premium) [class*="bg-emerald-700"] .text-emerald-100,
+[class*="bg-emerald-600"] .text-emerald-300,
+[class*="bg-emerald-700"] .text-emerald-300 {
+    color: #D1FAE5 !important;
+}
+
+/* 7. Keyboard focus remains visible and aligned with Emerald + Gold */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid #C69C43;
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   DAILY CASH - REPORT PAGE POLISH
+   Emerald + Champagne Gold
+   - Remove link underlines (including hover)
+   - Improve report table hierarchy and hover states
+   ========================================================= */
+
+/* Report/table text links: no browser/Tailwind underline */
+.dashboard-main main table a,
+.dashboard-main main a.underline,
+.dashboard-main main a[class~="underline"] {
+    color: #087F5B !important;
+    text-decoration: none !important;
+    text-decoration-line: none !important;
+    border-bottom: 0 !important;
+    font-weight: 600;
+    transition:
+        color 180ms ease,
+        background-color 180ms ease,
+        text-shadow 180ms ease;
+}
+
+.dashboard-main main table a:hover,
+.dashboard-main main a.underline:hover,
+.dashboard-main main a[class~="underline"]:hover {
+    color: #946B22 !important;
+    text-decoration: none !important;
+    text-decoration-line: none !important;
+    border-bottom: 0 !important;
+    background: rgba(198, 156, 67, 0.13);
+    border-radius: 5px;
+    text-shadow: 0 1px 10px rgba(198, 156, 67, 0.16);
+}
+
+/* Keep link labels inside buttons looking like buttons */
+.dashboard-main main a.btn-primary,
+.dashboard-main main a.btn-secondary,
+.dashboard-main main a[class*="rounded-full"],
+.dashboard-main main a[class*="inline-flex"] {
+    text-decoration: none !important;
+    border-bottom: 0 !important;
+}
+
+/* Report headings */
+.dashboard-main main h1,
+.dashboard-main main h2,
+.dashboard-main main h3 {
+    color: #153F30;
+}
+
+/* Table header: stronger contrast and a cleaner report look */
+.dashboard-main main table thead th {
+    color: #164B38 !important;
+    font-weight: 800;
+    letter-spacing: 0.045em;
+    border-bottom: 1px solid rgba(8, 127, 91, 0.28) !important;
+}
+
+/* Report table rows */
+.dashboard-main main table tbody tr {
+    transition: background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.dashboard-main main table tbody tr:hover {
+    background-color: rgba(198, 156, 67, 0.10) !important;
+    box-shadow: inset 3px 0 0 rgba(198, 156, 67, 0.72);
+}
+
+.dashboard-main main table tbody td {
+    border-bottom-color: rgba(22, 101, 72, 0.16) !important;
+}
+
+/* Secondary report text: darker but still visually secondary */
+.dashboard-main main .text-gray-400,
+.dashboard-main main .text-gray-500,
+.dashboard-main main .text-slate-400,
+.dashboard-main main .text-slate-500 {
+    color: #587568 !important;
+}
+
+/* Report section cards: refined border and depth */
+.dashboard-main main .card:not(.card-premium) {
+    border-color: rgba(209, 250, 229, 0.66) !important;
+    box-shadow:
+        0 10px 28px rgba(0, 35, 24, 0.10),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+/* Summary links and report actions: emerald base, gold hover */
+.dashboard-main main a:not(.btn-primary):not(.btn-secondary):not([class*="rounded-full"]) {
+    text-decoration: none !important;
+    text-decoration-line: none !important;
+}
+
+.dashboard-main main a:not(.btn-primary):not(.btn-secondary):not([class*="rounded-full"]):hover {
+    color: #946B22 !important;
+}
+
+/* Clear keyboard focus without adding a permanent underline */
+.dashboard-main main a:focus-visible {
+    outline: 2px solid #C69C43;
+    outline-offset: 3px;
+    border-radius: 4px;
+    text-decoration: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dashboard-main main table tbody tr,
+    .dashboard-main main table a {
+        transition: none !important;
+    }
+}
