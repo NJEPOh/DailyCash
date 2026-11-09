@@ -5,6 +5,14 @@
 <!DOCTYPE html>
 <html lang="id" class="h-full">
 <head>
+    <style>
+    
+    html, body {
+        background: linear-gradient(135deg, #dbeafe 0%, #ede9fe 50%, #fae8ff 100%) !important;
+        background-attachment: fixed !important;
+        min-height: 100vh !important;
+    }
+</style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -219,4 +227,23 @@
         </div>
     </div>
 </body>
+<!-- Skrip Paksa Ubah Background -->
+    <!-- Skrip Paksa Ubah Background Total -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Ubah background utama jadi gradasi ungu-biru soft yang pekat (menghilangkan putih total)
+            document.body.style.setProperty("background", "linear-gradient(135deg, #dbeafe 0%, #ede9fe 50%, #fae8ff 100%)", "important");
+            document.body.style.setProperty("background-attachment", "fixed", "important");
+
+            // Bikin semua kartu (card) jadi semi-transparan kaca (glassmorphism) biar background-nya nembus
+            const cards = document.querySelectorAll(".card");
+            cards.forEach(card => {
+                card.style.setProperty("background-color", "rgba(255, 255, 255, 0.7)", "important");
+                card.style.setProperty("backdrop-filter", "blur(12px)", "important");
+                card.style.setProperty("border", "1px solid rgba(255, 255, 255, 0.6)", "important");
+            });
+        });
+    </script>
+</html>
+</html>
 </html>

@@ -7,7 +7,7 @@
 
 :root {
     /* --- Colors (from css.md) --- */
-    --bg-main: #F4F5F9;
+    --bg-main: #003cff;
     --bg-card: #FFFFFF;
     --bg-sidebar: #5D56F3;
     --bg-sidebar-hover: #4B45D3;
@@ -54,13 +54,15 @@
     }
 
     body {
+        body {
         font-family: var(--font-family);
-        /* BACKGROUND COLOR ASLI DIHAPUS BIAR TRANSPARAN */
-        background-color: transparent !important;
+        background: linear-gradient(135deg, #006af5 0%, #f70101 50%, #000000 100%) !important;
+        background-attachment: fixed !important;
         color: var(--text-main);
         font-size: 0.75rem; /* Mobile: 12px */
         line-height: 1.5;
         overflow-x: hidden;
+    }
     }
 
     @media (min-width: 768px) {
