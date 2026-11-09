@@ -1,7 +1,6 @@
 @props([
     'title' => 'DailyCash',
 ])
-
 <!DOCTYPE html>
 <html lang="id" class="h-full">
 <head>
@@ -9,61 +8,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title }} — {{ config('app.name', 'DailyCash') }}</title>
-
     @fonts
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
-
-    <!-- TEMA UI/UX: Floating Aura Animations -->
-    <style>
-        body {
-            background-color: #f4f6fb !important; /* Base color agak kebiruan */
-        }
-        
-        /* Bola cahaya animasi 1 (Ungu/Biru) */
-        .aura-1 {
-            position: fixed; width: 600px; height: 600px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(93, 86, 243, 0.15) 0%, rgba(93, 86, 243, 0) 70%);
-            top: -150px; left: -100px; z-index: -1;
-            animation: float-aura1 12s infinite ease-in-out alternate;
-        }
-        
-        /* Bola cahaya animasi 2 (Cyan/Hijau pastel) */
-        .aura-2 {
-            position: fixed; width: 700px; height: 700px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(46, 212, 122, 0.12) 0%, rgba(46, 212, 122, 0) 70%);
-            bottom: -200px; right: -150px; z-index: -1;
-            animation: float-aura2 15s infinite ease-in-out alternate-reverse;
-        }
-
-        @keyframes float-aura1 {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 30px) scale(1.1); }
-        }
-        @keyframes float-aura2 {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(-40px, -40px) scale(1.15); }
-        }
-
-        /* INI KUNCI UTAMANYA: Paksa background bawaan Maul jadi transparan biar animasinya tembus! */
-        .dashboard-container, .dashboard-main {
-            background-color: transparent !important; 
-            background: transparent !important;
-        }
-    </style>
+    
+    <!-- TEMA UI/UX: Gradasi Pastel & Floating Aura Animations -->
 </head>
 <body class="min-h-full font-sans text-xs md:text-sm lg:text-base antialiased overflow-x-hidden relative">
-    
+   
     <!-- Animasi Background Aura -->
     <div class="aura-1"></div>
     <div class="aura-2"></div>
-
+    
     <div class="dashboard-container">
+        <!-- (Sisa kode sidebar dan konten biarkan seperti semula) -->
         <!-- Floating Neomorphic-Glassmorphic Sidebar (css.md) -->
         <aside class="sidebar">
             <div class="w-full">

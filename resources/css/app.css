@@ -7,21 +7,21 @@
 
 :root {
     /* --- Colors (from css.md) --- */
-    --bg-main: #F4F5F9;
-    --bg-card: #FFFFFF;
-    --bg-sidebar: #5D56F3;
-    --bg-sidebar-hover: #4B45D3;
+    --bg-main: #06271D;
+    --bg-card: #ECFDF5;
+    --bg-sidebar: #087F5B;
+    --bg-sidebar-hover: #066B4A;
 
-    --text-main: #1A1D20;
-    --text-muted: #7E869E;
-    --text-light: #A3AABF;
+    --text-main: #14251D;
+    --text-muted: #64756B;
+    --text-light: #8A9B90;
     --text-inverse: #FFFFFF;
 
-    --primary: #5D56F3;
-    --primary-light: #EEEDFE;
-    --accent-pink: #FF6B8B;
-    --accent-green: #2ED47A;
-    --accent-orange: #FFB800;
+    --primary: #059669;
+    --primary-light: #D1FAE5;
+    --accent-pink: #F43F5E;
+    --accent-green: #10B981;
+    --accent-orange: #F59E0B;
 
     /* --- Typography --- */
     --font-family: 'Plus Jakarta Sans', 'Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -43,6 +43,7 @@
     --font-sans: 'Plus Jakarta Sans', 'Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+
 @layer base {
     * {
         box-sizing: border-box;
@@ -50,35 +51,53 @@
 
     html {
         font-size: 16px;
+        min-height: 100%;
         -webkit-text-size-adjust: 100%;
     }
 
     body {
+        position: relative;
+        isolation: isolate;
+        min-height: 100vh;
+        margin: 0;
+
         font-family: var(--font-family);
-        /* BACKGROUND COLOR ASLI DIHAPUS BIAR TRANSPARAN */
-        background-color: transparent !important;
         color: var(--text-main);
-        font-size: 0.75rem; /* Mobile: 12px */
+
+        /* Emerald Finance base background (animated in the theme section below) */
+        background-color: #06271D;
+        background-image: linear-gradient(
+            125deg,
+            #041A14 0%,
+            #063D2E 42%,
+            #075B43 72%,
+            #062B29 100%
+        );
+        background-size: 300% 300%;
+        background-attachment: fixed;
+
+        font-size: 0.75rem;
         line-height: 1.5;
         overflow-x: hidden;
     }
 
     @media (min-width: 768px) {
         body {
-            font-size: 0.875rem; /* Tablet: 14px */
+            font-size: 0.875rem;
             line-height: 1.55;
         }
     }
 
     @media (min-width: 1024px) {
         body {
-            font-size: 1rem; /* Desktop: 16px */
+            font-size: 1rem;
             line-height: 1.6;
             height: 100vh;
             overflow: hidden;
         }
     }
 }
+
 
 /* --- Dashboard Wrapper Layout (css.md) --- */
 .dashboard-container {
@@ -206,13 +225,14 @@
 
 /* --- Cards (css.md) --- */
 .card {
-    /* UBAH BACKGROUND KARTU JADI AGAK TRANSPARAN (GLASSMORPHISM) */
-    background-color: rgba(255, 255, 255, 0.85) !important;
-    backdrop-filter: blur(12px);
+    /* Light glass cards remain readable over the dark background */
+    background-color: rgba(236, 253, 245, 0.91) !important;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     border-radius: var(--radius-md);
     padding: 16px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Bayangan lebih halus */
-    border: 1px solid rgba(255,255,255,0.4);
+    border: 1px solid rgba(209, 250, 229, 0.72);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -223,7 +243,7 @@
 }
 
 .card:hover {
-    box-shadow: 0 8px 25px rgba(93, 86, 243, 0.15); /* Hover glow ungu tipis */
+    box-shadow: 0 8px 25px rgba(5, 150, 105, 0.16); /* Emerald hover glow */
 }
 
 /* Spesial Card: Premium / Upgrade CTA Card (css.md) */
@@ -253,7 +273,7 @@
     border-radius: var(--radius-full);
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(93, 86, 243, 0.4); /* Bayangan tombol dipoles */
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.30); /* Emerald button shadow */
     transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
     display: inline-flex;
     align-items: center;
@@ -269,7 +289,7 @@
 
 .btn-primary:hover {
     background-color: var(--bg-sidebar-hover);
-    box-shadow: 0 6px 16px rgba(93, 86, 243, 0.5);
+    box-shadow: 0 6px 16px rgba(5, 150, 105, 0.40);
     transform: translateY(-1px);
 }
 
@@ -303,8 +323,8 @@
 .btn-secondary:hover {
     background-color: var(--primary-light);
     color: var(--primary);
-    border-color: rgba(93, 86, 243, 0.35);
-    box-shadow: 0 4px 12px rgba(93, 86, 243, 0.15);
+    border-color: rgba(5, 150, 105, 0.35);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.14);
 }
 
 .btn-danger {
@@ -423,12 +443,471 @@
     outline: none;
     background-color: var(--bg-card);
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(93, 86, 243, 0.12);
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.14);
 }
 
 /* Fallback 1 kolom pada layar sangat sempit (< 330px) untuk menjaga keterbacaan */
 @media (max-width: 330px) {
     .xs-single-col {
         grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    }
+}
+
+/* =========================================================
+   DAILY CASH - EMERALD FINANCE: BUSIER SEAMLESS LOOP
+   Animated green gradient, Rupiah motifs, grid, particles, aurora
+========================================================= */
+
+/* Deep emerald base with a continuous gradient loop */
+body {
+    background-color: #041A14 !important;
+    background-image: linear-gradient(
+        125deg,
+        #031A13 0%,
+        #06432F 28%,
+        #075B43 52%,
+        #063B38 76%,
+        #031A13 100%
+    ) !important;
+    background-size: 300% 300%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    animation: dc-green-background 24s ease-in-out infinite;
+}
+
+@keyframes dc-green-background {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/*
+ * Moving background pattern:
+ * - fine technology grid
+ * - outlined Rupiah coins and Rp symbols
+ * - small upward finance arrows / chart lines
+ * - subtle floating dots
+ * All pattern positions travel by exactly one tile, so the loop is seamless.
+ */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+
+    background-image:
+        linear-gradient(rgba(167, 243, 208, 0.085) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(167, 243, 208, 0.085) 1px, transparent 1px),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='420' viewBox='0 0 520 420'%3E%3Cg fill='none' stroke='%2386EFAC' stroke-opacity='.62' stroke-width='2.2'%3E%3Ccircle cx='76' cy='82' r='27'/%3E%3Ccircle cx='76' cy='82' r='21'/%3E%3Ccircle cx='360' cy='142' r='31'/%3E%3Ccircle cx='360' cy='142' r='24'/%3E%3Ccircle cx='205' cy='330' r='23'/%3E%3Ccircle cx='205' cy='330' r='17'/%3E%3Cpath d='M145 195l28-28 23 17 37-43' stroke='%2334D399' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M220 141h13v13' stroke='%2334D399' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M425 285v-30m-10 10 10-10 10 10' stroke='%2386EFAC' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M35 275h34m-8-8 8 8-8 8' stroke='%2386EFAC' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/g%3E%3Cg fill='%23D1FAE5' fill-opacity='.78' font-family='Arial,sans-serif' font-size='16' font-weight='700' text-anchor='middle'%3E%3Ctext x='76' y='88'%3ERp%3C/text%3E%3Ctext x='360' y='148'%3ERp%3C/text%3E%3Ctext x='205' y='336' font-size='13'%3ERp%3C/text%3E%3C/g%3E%3C/svg%3E"),
+        radial-gradient(circle, rgba(167, 243, 208, 0.30) 1.2px, transparent 1.9px);
+
+    background-repeat: repeat, repeat, repeat, repeat;
+    background-size: 72px 72px, 72px 72px, 520px 420px, 180px 180px;
+    background-position: 0 0, 0 0, 0 0, 0 0;
+    opacity: 0.58;
+    animation: dc-money-pattern-loop 34s linear infinite;
+}
+
+@keyframes dc-money-pattern-loop {
+    from {
+        background-position: 0 0, 0 0, 0 0, 0 0;
+    }
+    to {
+        background-position: 144px 144px, 144px 144px, 520px 420px, 180px 180px;
+    }
+}
+
+/* Moving emerald / mint / lime aurora */
+body::after {
+    content: "";
+    position: fixed;
+    inset: -25%;
+    z-index: 0;
+    pointer-events: none;
+
+    background:
+        radial-gradient(ellipse at 18% 25%, rgba(16, 185, 129, 0.42), transparent 38%),
+        radial-gradient(ellipse at 78% 60%, rgba(20, 184, 166, 0.36), transparent 38%),
+        radial-gradient(ellipse at 48% 90%, rgba(163, 230, 53, 0.22), transparent 38%),
+        radial-gradient(ellipse at 88% 18%, rgba(52, 211, 153, 0.20), transparent 30%);
+
+    filter: blur(42px);
+    opacity: 0.95;
+    will-change: transform;
+    animation: dc-emerald-aurora-loop 22s ease-in-out infinite;
+}
+
+@keyframes dc-emerald-aurora-loop {
+    0%, 100% { transform: translate3d(-3%, -2%, 0) scale(1); }
+    25% { transform: translate3d(2%, 1%, 0) scale(1.07); }
+    50% { transform: translate3d(3%, 3%, 0) scale(1.12); }
+    75% { transform: translate3d(-1%, 4%, 0) scale(1.06); }
+}
+
+/* Floating emerald light — uses .aura-1 already present in app.blade.php */
+.aura-1 {
+    position: fixed !important;
+    width: 680px;
+    height: 680px;
+    top: -190px;
+    left: -190px;
+    z-index: 1 !important;
+    pointer-events: none;
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle,
+        rgba(16, 185, 129, 0.52) 0%,
+        rgba(16, 185, 129, 0.19) 43%,
+        transparent 72%
+    );
+
+    filter: blur(48px);
+    will-change: transform;
+    animation: dc-emerald-float-loop 18s ease-in-out infinite;
+}
+
+@keyframes dc-emerald-float-loop {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(0.94); }
+    25% { transform: translate3d(65px, 35px, 0) scale(1.07); }
+    50% { transform: translate3d(125px, 95px, 0) scale(1.16); }
+    75% { transform: translate3d(45px, 115px, 0) scale(1.06); }
+}
+
+/* Floating mint / lime light — uses .aura-2 already present in app.blade.php */
+.aura-2 {
+    position: fixed !important;
+    width: 720px;
+    height: 720px;
+    right: -210px;
+    bottom: -250px;
+    z-index: 1 !important;
+    pointer-events: none;
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle,
+        rgba(45, 212, 191, 0.43) 0%,
+        rgba(132, 204, 22, 0.18) 44%,
+        transparent 72%
+    );
+
+    filter: blur(50px);
+    will-change: transform;
+    animation: dc-mint-float-loop 21s ease-in-out infinite;
+}
+
+@keyframes dc-mint-float-loop {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(0.93); }
+    25% { transform: translate3d(-55px, -45px, 0) scale(1.06); }
+    50% { transform: translate3d(-130px, -105px, 0) scale(1.17); }
+    75% { transform: translate3d(-75px, -125px, 0) scale(1.08); }
+}
+
+/* Keep page content above background decoration */
+.dashboard-container {
+    position: relative;
+    z-index: 2;
+    background: transparent !important;
+}
+
+.dashboard-main,
+.dashboard-main main {
+    background: transparent !important;
+}
+
+/* Page title remains readable over the dark emerald background */
+.dashboard-main main h1 {
+    color: #F0FDF4 !important;
+    text-shadow: 0 2px 18px rgba(16, 185, 129, 0.20);
+}
+
+.dashboard-main main h1 + p {
+    color: rgba(220, 252, 231, 0.82) !important;
+}
+
+/* Semi-transparent green glass: lets the moving pattern show through */
+.card:not(.card-premium) {
+    background-color: rgba(236, 253, 245, 0.74) !important;
+    backdrop-filter: blur(13px);
+    -webkit-backdrop-filter: blur(13px);
+    border: 1px solid rgba(209, 250, 229, 0.58);
+
+    box-shadow:
+        0 10px 35px rgba(0, 20, 12, 0.15),
+        0 0 24px rgba(16, 185, 129, 0.09);
+}
+
+.card:not(.card-premium):hover {
+    box-shadow:
+        0 15px 40px rgba(0, 20, 12, 0.18),
+        0 0 30px rgba(16, 185, 129, 0.17);
+}
+
+/* Reduce animation workload on narrow screens */
+@media (max-width: 767px) {
+    .aura-1 {
+        width: 420px;
+        height: 420px;
+    }
+
+    .aura-2 {
+        width: 460px;
+        height: 460px;
+    }
+
+    body::after {
+        filter: blur(28px);
+    }
+}
+
+/* Respect accessibility settings */
+@media (prefers-reduced-motion: reduce) {
+    body,
+    body::before,
+    body::after,
+    .aura-1,
+    .aura-2 {
+        animation: none !important;
+    }
+}
+
+/* =========================================================
+   DAILY CASH - EMERALD + CHAMPAGNE GOLD ACCENTS
+   Overrides for remaining purple / indigo Tailwind classes
+   ========================================================= */
+
+:root {
+    --primary: #059669;
+    --primary-light: #D1FAE5;
+    --bg-sidebar: #087F5B;
+    --bg-sidebar-hover: #066B4A;
+    --accent-gold: #C69C43;
+    --accent-gold-light: #F8F0D8;
+}
+
+/* Total Saldo: replace the leftover purple gradient with emerald */
+.dashboard-main main [class*="from-[#6366F1]"] {
+    background: linear-gradient(135deg, #10B981 0%, #07845F 58%, #056B50 100%) !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(167, 243, 208, 0.58) !important;
+    box-shadow:
+        0 12px 30px rgba(4, 120, 87, 0.24),
+        0 0 24px rgba(16, 185, 129, 0.14) !important;
+}
+
+.dashboard-main main [class*="from-[#6366F1]"]:hover {
+    box-shadow:
+        0 16px 36px rgba(4, 120, 87, 0.30),
+        0 0 30px rgba(16, 185, 129, 0.20) !important;
+}
+
+/* Budget progress: replace indigo with an emerald gradient */
+.dashboard-main main [class~="bg-indigo-600"] {
+    background: linear-gradient(90deg, #10B981, #047857) !important;
+}
+
+/* Remaining indigo labels / percentage accents become emerald */
+.dashboard-main main [class~="text-indigo-600"] {
+    color: #047857 !important;
+}
+
+/* Cashflow / savings icon: warm champagne gold complements emerald */
+.dashboard-main main [class~="bg-indigo-50"] {
+    background-color: var(--accent-gold-light) !important;
+    color: #9A7025 !important;
+}
+
+.dashboard-main main [class~="bg-indigo-50"] [class~="text-indigo-600"],
+.dashboard-main main [class~="bg-indigo-50"] svg {
+    color: #9A7025 !important;
+}
+
+/* Report links: purple becomes deep emerald */
+.dashboard-main main [class*="text-[#6366F1]"] {
+    color: #047857 !important;
+}
+
+.dashboard-main main [class*="hover:text-[#4F46E5]"]:hover {
+    color: #065F46 !important;
+}
+
+/* Brand Rp icon and quick transaction button in sidebar */
+.sidebar [class*="text-[#5D56F3]"] {
+    color: #047857 !important;
+}
+
+/* Keep secondary buttons neutral, but align their hover state with emerald */
+.btn-secondary:hover {
+    background-color: #D1FAE5 !important;
+    color: #047857 !important;
+    border-color: rgba(5, 150, 105, 0.38) !important;
+}
+
+/* Preserve amber budget warnings and coral expense indicators. */
+
+/* =========================================================
+   DAILY CASH - READABLE TEXT + PREMIUM COIN SCROLLBAR
+   Append-only refinements: keeps the existing Emerald + Gold theme
+   ========================================================= */
+
+/* 1. Stronger text contrast inside light glass cards */
+.card:not(.card-premium) {
+    color: #17382B;
+}
+
+.card:not(.card-premium) h1,
+.card:not(.card-premium) h2,
+.card:not(.card-premium) h3,
+.card:not(.card-premium) h4,
+.card:not(.card-premium) label,
+.card:not(.card-premium) th {
+    color: #17382B;
+}
+
+.card:not(.card-premium) .text-gray-300,
+.card:not(.card-premium) .text-gray-400,
+.card:not(.card-premium) .text-gray-500,
+.card:not(.card-premium) .text-gray-600,
+.card:not(.card-premium) .text-slate-400,
+.card:not(.card-premium) .text-slate-500,
+.card:not(.card-premium) .text-\[\#7E869E\],
+.card:not(.card-premium) .text-\[\#A3AABF\] {
+    color: #52685C !important;
+}
+
+/* Slightly stronger chart labels, helper text and table secondary text */
+.card:not(.card-premium) p,
+.card:not(.card-premium) small,
+.card:not(.card-premium) td {
+    text-shadow: none;
+}
+
+.card:not(.card-premium) .text-emerald-500,
+.card:not(.card-premium) .text-emerald-600,
+.card:not(.card-premium) .text-green-600 {
+    color: #047857 !important;
+}
+
+.card:not(.card-premium) .text-rose-500,
+.card:not(.card-premium) .text-rose-600,
+.card:not(.card-premium) .text-red-600 {
+    color: #BE123C !important;
+}
+
+/* Header date was muted too much on the pale glass header */
+.dashboard-main > header.card .text-\[\#7E869E\],
+.dashboard-main > header.card .text-gray-400,
+.dashboard-main > header.card .text-gray-500 {
+    color: #52685C !important;
+}
+
+/* Make card descriptions and budget labels readable without making them harsh */
+.card:not(.card-premium) .font-medium.text-gray-400,
+.card:not(.card-premium) .font-medium.text-gray-500 {
+    color: #52685C !important;
+}
+
+/* 2. Premium emerald scrollbar with subtle coin pattern */
+html,
+body,
+.dashboard-main,
+.dashboard-container,
+.overflow-y-auto,
+.overflow-auto,
+.overflow-x-auto {
+    scroll-behavior: smooth;
+}
+
+/* Firefox fallback. Chromium/Edge use the detailed coin thumb below. */
+@supports not selector(::-webkit-scrollbar) {
+    html,
+    body,
+    .dashboard-main,
+    .dashboard-container,
+    .overflow-y-auto,
+    .overflow-auto,
+    .overflow-x-auto {
+        scrollbar-width: thin;
+        scrollbar-color: #C69C43 #063D2E;
+    }
+}
+
+/* Chromium / Edge / Safari scrollbar */
+::-webkit-scrollbar {
+    width: 16px;
+    height: 12px;
+}
+
+/* Dark emerald rail with a quiet repeating coin-ring pattern */
+::-webkit-scrollbar-track {
+    border-radius: 999px;
+    background:
+        radial-gradient(circle at 50% 20px, rgba(198, 156, 67, 0.22) 0 2px, transparent 2.8px),
+        radial-gradient(circle at 50% 20px, transparent 0 5px, rgba(198, 156, 67, 0.22) 5.5px 6.5px, transparent 7px),
+        linear-gradient(180deg, #052D22 0%, #064633 48%, #052D22 100%);
+    background-size: 100% 58px, 100% 58px, 100% 100%;
+    background-repeat: repeat-y, repeat-y, no-repeat;
+    border: 1px solid rgba(167, 243, 208, 0.15);
+}
+
+/* The moving thumb carries tiny gold Rp coins */
+::-webkit-scrollbar-thumb {
+    min-height: 64px;
+    border: 2px solid #064331;
+    border-radius: 999px;
+    background-color: #C69C43;
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='34' viewBox='0 0 12 34'%3E%3Ccircle cx='6' cy='17' r='5.1' fill='%23F4DFA8' stroke='%23FFF4D2' stroke-width='.8'/%3E%3Ccircle cx='6' cy='17' r='3.8' fill='none' stroke='%23A77B2F' stroke-width='.6'/%3E%3Ctext x='6' y='19' text-anchor='middle' font-family='Arial,sans-serif' font-size='5.2' font-weight='700' fill='%23064331'%3ERp%3C/text%3E%3C/svg%3E"),
+        linear-gradient(180deg, #E5CB83 0%, #C69C43 48%, #A77B2F 100%);
+    background-size: 12px 34px, 100% 100%;
+    background-repeat: repeat-y, no-repeat;
+    background-position: center 0, 0 0;
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 248, 220, 0.28),
+        0 0 8px rgba(198, 156, 67, 0.16);
+    animation: dc-scroll-coin-loop 3.2s linear infinite;
+}
+
+@keyframes dc-scroll-coin-loop {
+    from { background-position: center 0, 0 0; }
+    to { background-position: center 34px, 0 0; }
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #E0B957;
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 248, 220, 0.48),
+        0 0 12px rgba(198, 156, 67, 0.32);
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+::-webkit-scrollbar-corner {
+    background: #063D2E;
+}
+
+/* 3. Keep scroll surfaces visually integrated with the green theme */
+.dashboard-main {
+    scrollbar-gutter: stable;
+}
+
+/* 4. Reduced-motion preference also stops scrollbar animation */
+@media (prefers-reduced-motion: reduce) {
+    html,
+    body,
+    .dashboard-main,
+    .overflow-y-auto,
+    .overflow-auto,
+    .overflow-x-auto {
+        scroll-behavior: auto;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        animation: none !important;
     }
 }
