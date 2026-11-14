@@ -30,10 +30,10 @@
         ],
         default => [
             'card' => 'card',
-            'title' => 'text-[#7E869E]',
-            'value' => 'text-[#1A1D20]',
-            'subtitle' => 'text-[#A3AABF]',
-            'badge' => 'bg-[#EEEDFE] text-[#5D56F3]',
+            'title' => 'text-[#64756B]',
+            'value' => 'text-[#14251D]',
+            'subtitle' => 'text-[#8A9B90]',
+            'badge' => 'bg-[#D1FAE5] text-[#059669]',
         ],
     };
 @endphp

@@ -304,7 +304,7 @@
     font-weight: 600;
     padding: 8px 18px;
     border-radius: var(--radius-full);
-    border: 1px solid #D5D9EB;
+    border: 1px solid rgba(5, 150, 105, 0.25);
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     transition: all 0.2s ease;
@@ -732,9 +732,24 @@ body::after {
     color: #065F46 !important;
 }
 
-/* Brand Rp icon and quick transaction button in sidebar */
-.sidebar [class*="text-[#5D56F3]"] {
-    color: #047857 !important;
+/* Brand Rp icon and quick transaction button in sidebar + global purple fallbacks */
+.sidebar [class*="text-[#5D56F3]"],
+[class*="text-[#5D56F3]"] {
+    color: #059669 !important;
+}
+
+[class*="hover:text-[#5D56F3]"]:hover,
+[class*="hover:text-[#4B45D3]"]:hover {
+    color: #066B4A !important;
+}
+
+[class*="bg-[#5D56F3]"] {
+    background-color: #059669 !important;
+}
+
+[class*="bg-[#EEEDFE]"],
+[class*="hover:bg-[#EEEDFE]"]:hover {
+    background-color: #D1FAE5 !important;
 }
 
 /* Keep secondary buttons neutral, but align their hover state with emerald */

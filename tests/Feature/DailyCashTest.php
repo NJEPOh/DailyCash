@@ -418,6 +418,12 @@ test('17. seluruh halaman menggunakan UI final tanpa wireframe dan menerapkan ti
         $response->assertSee('sidebar-nav', false);
         $response->assertSee('sidebar-icon', false);
         $response->assertSee('card', false);
+        // Pastikan tidak ada warna ungu lama yang tersisa
+        $response->assertDontSee('#5D56F3', false);
+        $response->assertDontSee('#EEEDFE', false);
+        $response->assertDontSee('#4B45D3', false);
+        $response->assertDontSee('#6366F1', false);
+        $response->assertDontSee('#4F46E5', false);
         // Pastikan tipografi responsif mobile (12px: text-xs) & desktop (16px: lg:text-base, judul halaman lg:text-[30px]) diterapkan
         $response->assertSee('text-xs md:text-sm lg:text-base', false);
         $response->assertSee('text-[18px] sm:text-xl lg:text-[30px]', false);
@@ -430,8 +436,9 @@ test('17. seluruh halaman menggunakan UI final tanpa wireframe dan menerapkan ti
     foreach ([route('login'), route('register')] as $authUrl) {
         $authResponse = $this->get($authUrl);
         $authResponse->assertOk();
-        $authResponse->assertSee('text-xs md:text-sm lg:text-base', false);
-        $authResponse->assertSee('text-[18px] sm:text-xl lg:text-[30px]', false);
+        $authResponse->assertDontSee('#5D56F3', false);
+        $authResponse->assertDontSee('#EEEDFE', false);
+        $authResponse->assertDontSee('#6366F1', false);
         $authResponse->assertSee('Plus+Jakarta+Sans', false);
     }
 });

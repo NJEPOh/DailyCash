@@ -75,7 +75,7 @@
                                     {{ $tx->type === 'income' ? '+' : '-' }}{{ $tx->formatted_amount }}
                                 </td>
                                 <td class="py-2 lg:py-3 pl-2.5 text-right whitespace-nowrap">
-                                    <a href="{{ route('transactions.show', $tx) }}" class="px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full bg-[#EEEDFE] text-xs lg:text-sm font-medium text-[#5D56F3] hover:opacity-85">
+                                    <a href="{{ route('transactions.show', $tx) }}" class="px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full bg-[#D1FAE5] text-xs lg:text-sm font-medium text-[#059669] hover:opacity-85">
                                         Detail
                                     </a>
                                 </td>

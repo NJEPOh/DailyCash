@@ -18,12 +18,12 @@
 <body class="min-h-full font-sans text-xs md:text-sm lg:text-base antialiased flex flex-col justify-center py-6 lg:py-12 px-3 sm:px-6 lg:px-8 overflow-y-auto">
     <div class="sm:mx-auto sm:w-full sm:max-w-md lg:max-w-lg">
         <div class="flex items-center justify-center gap-3">
-            <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-[14px] bg-[#5D56F3] flex items-center justify-center text-white font-extrabold text-sm lg:text-lg shadow-md shrink-0">
+            <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-[14px] bg-[#059669] border border-[#D1FAE5]/60 flex items-center justify-center text-white font-extrabold text-sm lg:text-lg shadow-md shrink-0">
                 Rp
             </div>
             <div>
-                <span class="text-[18px] sm:text-xl lg:text-2xl font-bold tracking-tight text-[#1A1D20] block leading-none">DailyCash</span>
-                <span class="text-[11px] lg:text-sm text-[#7E869E] block mt-0.5">Catatan Keuangan Harian Pribadi</span>
+                <span class="text-[18px] sm:text-xl lg:text-2xl font-bold tracking-tight text-white block leading-none">DailyCash</span>
+                <span class="text-[11px] lg:text-sm text-[#D1FAE5] block mt-0.5">Catatan Keuangan Harian Pribadi</span>
             </div>
         </div>
 
@@ -122,15 +122,15 @@
                 </div>
             </form>
 
-            <div class="pt-3 lg:pt-4 border-t border-[#F4F5F9] text-center">
-                <a href="{{ route('login') }}" class="text-xs lg:text-sm font-semibold text-[#7E869E] hover:text-[#5D56F3] hover:underline">
+            <div class="pt-3 lg:pt-4 border-t border-[#D1FAE5] text-center">
+                <a href="{{ route('login') }}" class="text-xs lg:text-sm font-semibold text-[#64756B] hover:text-[#059669] hover:underline">
                     Sudah punya akun? Kembali ke halaman login
                 </a>
             </div>
         </div>
 
-        <p class="mt-4 lg:mt-5 text-center text-[11px] lg:text-sm text-[#7E869E]">
-            &copy; {{ date('Y') }} <strong class="text-[#1A1D20]">DailyCash</strong> &mdash; Ruang data keuangan baru dimulai dengan saldo Rp0.
+        <p class="mt-4 lg:mt-5 text-center text-[11px] lg:text-sm text-[#D1FAE5]">
+            &copy; {{ date('Y') }} <strong class="text-white">DailyCash</strong> &mdash; Ruang data keuangan baru dimulai dengan saldo Rp0.
         </p>
     </div>
 </body>

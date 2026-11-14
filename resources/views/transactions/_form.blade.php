@@ -171,7 +171,7 @@
             id="proof_image"
             name="proof_image"
             accept="image/jpeg,image/png,image/webp,image/gif"
-            class="w-full rounded-[12px] border border-dashed border-[#A3AABF] bg-[#F4F5F9] px-3 py-2 lg:px-3.5 lg:py-2.5 text-xs md:text-sm lg:text-base text-[#7E869E] file:mr-3 file:py-1 lg:file:py-1.5 file:px-3 lg:file:px-4 file:rounded-full file:border-0 file:text-[11px] lg:file:text-sm file:font-semibold file:bg-[#5D56F3] file:text-white hover:file:bg-[#4B45D3]"
+            class="w-full rounded-[12px] border border-dashed border-[#059669]/40 bg-[#ECFDF5] px-3 py-2 lg:px-3.5 lg:py-2.5 text-xs md:text-sm lg:text-base text-[#64756B] file:mr-3 file:py-1 lg:file:py-1.5 file:px-3 lg:file:px-4 file:rounded-full file:border-0 file:text-[11px] lg:file:text-sm file:font-semibold file:bg-[#059669] file:text-white hover:file:bg-[#066B4A]"
         >
         <p class="text-[11px] lg:text-sm text-[#7E869E] mt-0.5">Boleh dikosongkan. Format: JPG, JPEG, PNG, WEBP, GIF (Maks. 2MB).</p>
         @error('proof_image')

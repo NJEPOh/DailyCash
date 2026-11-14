@@ -27,14 +27,14 @@
                 @enderror
             </div>
 
-            <div class="grid grid-cols-2 gap-2.5 lg:gap-4 text-[11px] lg:text-sm text-[#7E869E] xs-single-col">
-                <div class="p-3 lg:p-3.5 rounded-[12px] bg-[#F4F5F9]">
-                    <span class="text-[#A3AABF] block">Saldo Saat Ini</span>
-                    <strong class="text-xs md:text-sm lg:text-base text-[#5D56F3]">{{ $account->formatted_balance }}</strong>
+            <div class="grid grid-cols-2 gap-2.5 lg:gap-4 text-[11px] lg:text-sm text-[#64756B] xs-single-col">
+                <div class="p-3 lg:p-3.5 rounded-[12px] bg-[#ECFDF5]">
+                    <span class="text-[#64756B] block">Saldo Saat Ini</span>
+                    <strong class="text-xs md:text-sm lg:text-base text-[#059669]">{{ $account->formatted_balance }}</strong>
                 </div>
-                <div class="p-3 lg:p-3.5 rounded-[12px] bg-[#F4F5F9]">
-                    <span class="text-[#A3AABF] block">Kebijakan Saldo</span>
-                    <span class="text-[#1A1D20]">Otomatis dari transaksi</span>
+                <div class="p-3 lg:p-3.5 rounded-[12px] bg-[#ECFDF5]">
+                    <span class="text-[#64756B] block">Kebijakan Saldo</span>
+                    <span class="text-[#14251D]">Otomatis dari transaksi</span>
                 </div>
             </div>
 

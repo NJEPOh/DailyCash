@@ -33,16 +33,16 @@
             </div>
 
             <dl class="grid grid-cols-2 gap-2.5 sm:gap-3.5 lg:gap-4 text-xs md:text-sm lg:text-base xs-single-col">
-                <div class="p-3 lg:p-4 rounded-[12px] bg-[#F4F5F9] min-w-0">
+                <div class="p-3 lg:p-4 rounded-[12px] bg-[#ECFDF5] min-w-0">
                     <dt class="text-[11px] lg:text-sm font-semibold uppercase tracking-wide text-[#7E869E]">Tanggal Transaksi</dt>
                     <dd class="font-semibold text-[#1A1D20] mt-0.5">{{ $transaction->date->translatedFormat('d M Y') }} ({{ $transaction->date->format('Y-m-d') }})</dd>
                 </div>
 
-                <div class="p-3 lg:p-4 rounded-[12px] bg-[#F4F5F9] min-w-0">
+                <div class="p-3 lg:p-4 rounded-[12px] bg-[#ECFDF5] min-w-0">
                     <dt class="text-[11px] lg:text-sm font-semibold uppercase tracking-wide text-[#7E869E]">Kategori</dt>
                     <dd class="font-semibold text-[#1A1D20] mt-0.5 truncate">
                         @if ($transaction->category)
-                            <a href="{{ route('categories.show', $transaction->category) }}" class="hover:text-[#5D56F3] underline underline-offset-2">
+                            <a href="{{ route('categories.show', $transaction->category) }}" class="hover:text-[#059669] underline underline-offset-2">
                                 {{ $transaction->category->name }}
                             </a>
                         @else
@@ -51,11 +51,11 @@
                     </dd>
                 </div>
 
-                <div class="p-3 lg:p-4 rounded-[12px] bg-[#F4F5F9] min-w-0">
+                <div class="p-3 lg:p-4 rounded-[12px] bg-[#ECFDF5] min-w-0">
                     <dt class="text-[11px] lg:text-sm font-semibold uppercase tracking-wide text-[#7E869E]">Rekening / Dompet</dt>
                     <dd class="font-semibold text-[#1A1D20] mt-0.5 truncate">
                         @if ($transaction->account)
-                            <a href="{{ route('accounts.show', $transaction->account) }}" class="hover:text-[#5D56F3] underline underline-offset-2">
+                            <a href="{{ route('accounts.show', $transaction->account) }}" class="hover:text-[#059669] underline underline-offset-2">
                                 {{ $transaction->account->name }}
                             </a>
                             <span class="block text-[11px] lg:text-sm text-[#7E869E] font-normal mt-0.5 truncate">Saldo: {{ $transaction->account->formatted_balance }}</span>
@@ -65,13 +65,13 @@
                     </dd>
                 </div>
 
-                <div class="p-3 lg:p-4 rounded-[12px] bg-[#F4F5F9] min-w-0">
+                <div class="p-3 lg:p-4 rounded-[12px] bg-[#ECFDF5] min-w-0">
                     <dt class="text-[11px] lg:text-sm font-semibold uppercase tracking-wide text-[#7E869E]">Waktu Pencatatan</dt>
                     <dd class="font-semibold text-[#1A1D20] mt-0.5">{{ $transaction->created_at?->format('d/m/Y H:i') }}</dd>
                     <dd class="text-[11px] lg:text-sm text-[#7E869E] mt-0.5">Update: {{ $transaction->updated_at?->format('d/m/Y H:i') }}</dd>
                 </div>
 
-                <div class="col-span-2 p-3 lg:p-4 rounded-[12px] bg-[#F4F5F9]">
+                <div class="col-span-2 p-3 lg:p-4 rounded-[12px] bg-[#ECFDF5]">
                     <dt class="text-[11px] lg:text-sm font-semibold uppercase tracking-wide text-[#7E869E]">Deskripsi / Keterangan</dt>
                     <dd class="text-[#1A1D20] mt-1 whitespace-pre-line break-words">{{ $transaction->description ?: 'Tidak ada deskripsi tambahan.' }}</dd>
                 </div>

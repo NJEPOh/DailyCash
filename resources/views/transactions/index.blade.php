@@ -151,7 +151,7 @@
                                     {{ $transaction->date->format('d/m/Y') }}
                                 </td>
                                 <td class="py-2.5 lg:py-3.5 px-2 min-w-0">
-                                    <a href="{{ route('transactions.show', $transaction) }}" class="font-semibold text-[#1A1D20] hover:text-[#5D56F3] block">
+                                    <a href="{{ route('transactions.show', $transaction) }}" class="font-semibold text-[#1A1D20] hover:text-[#059669] block">
                                         {{ $transaction->category?->name ?? '-' }}
                                     </a>
                                     <span class="text-[11px] lg:text-sm text-[#7E869E] line-clamp-1">
@@ -178,10 +178,10 @@
                                 </td>
                                 <td class="py-2.5 lg:py-3.5 pl-2 whitespace-nowrap text-right">
                                     <div class="inline-flex items-center gap-1 lg:gap-1.5">
-                                        <a href="{{ route('transactions.show', $transaction) }}" class="px-2.5 py-1 lg:px-3 lg:py-1.5 rounded-full bg-[#F4F5F9] hover:bg-[#EEEDFE] text-xs lg:text-sm font-medium text-[#1A1D20] hover:text-[#5D56F3]">
+                                        <a href="{{ route('transactions.show', $transaction) }}" class="px-2.5 py-1 lg:px-3 lg:py-1.5 rounded-full bg-[#ECFDF5] hover:bg-[#D1FAE5] text-xs lg:text-sm font-medium text-[#14251D] hover:text-[#059669]">
                                             Detail
                                         </a>
-                                        <a href="{{ route('transactions.edit', $transaction) }}" class="px-2.5 py-1 lg:px-3 lg:py-1.5 rounded-full bg-[#EEEDFE] text-xs lg:text-sm font-medium text-[#5D56F3] hover:opacity-85">
+                                        <a href="{{ route('transactions.edit', $transaction) }}" class="px-2.5 py-1 lg:px-3 lg:py-1.5 rounded-full bg-[#D1FAE5] text-xs lg:text-sm font-medium text-[#059669] hover:opacity-85">
                                             Edit
                                         </a>
                                         <form action="{{ route('transactions.destroy', $transaction) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus transaksi ini? Dampak transaksi terhadap saldo rekening akan dibalikkan.');">

@@ -56,7 +56,7 @@
                                 <td class="py-2 lg:py-3 pr-2.5 whitespace-nowrap text-[11px] lg:text-sm text-[#7E869E]">{{ $tx->date->format('d/m/Y') }}</td>
                                 <td class="py-2 lg:py-3 px-2.5 font-medium text-[#1A1D20]">{{ $tx->account?->name ?? '-' }}</td>
                                 <td class="py-2 lg:py-3 px-2.5 text-[#7E869E]">
-                                    <a href="{{ route('transactions.show', $tx) }}" class="hover:text-[#5D56F3] hover:underline">
+                                    <a href="{{ route('transactions.show', $tx) }}" class="hover:text-[#059669] hover:underline">
                                         {{ $tx->description ?: 'Tanpa deskripsi' }}
                                     </a>
                                 </td>

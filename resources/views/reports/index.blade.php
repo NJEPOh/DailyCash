@@ -208,7 +208,7 @@
                                 <td class="py-2 lg:py-3 px-2 font-semibold text-[#1A1D20]">{{ $tx->category?->name ?? '-' }}</td>
                                 <td class="py-2 lg:py-3 px-2 text-[11px] lg:text-sm font-medium text-[#1A1D20] hidden sm:table-cell">{{ $tx->account?->name ?? '-' }}</td>
                                 <td class="py-2 lg:py-3 px-2 text-[#7E869E]">
-                                    <a href="{{ route('transactions.show', $tx) }}" class="hover:text-[#5D56F3] hover:underline">
+                                    <a href="{{ route('transactions.show', $tx) }}" class="hover:text-[#059669] hover:underline">
                                         {{ $tx->description ?: '-' }}
                                     </a>
                                 </td>

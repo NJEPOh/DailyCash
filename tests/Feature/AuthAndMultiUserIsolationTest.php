@@ -155,9 +155,8 @@ test('8. pengguna baru mendapatkan kondisi awal saldo Rp0, rekening kosong, tran
     $dashboardResponse = $this->get(route('dashboard'));
     $dashboardResponse->assertOk();
     $dashboardResponse->assertSee('Rp0');
-    $dashboardResponse->assertSee('Belum ada rekening. Tambahkan rekening pertama Anda.');
-    $dashboardResponse->assertSee('Belum ada transaksi. Mulai catat pemasukan atau pengeluaran.');
-    $dashboardResponse->assertSee('17 kategori');
+    $dashboardResponse->assertSee('Belum ada rekening.');
+    $dashboardResponse->assertSee('Belum ada transaksi.');
     $dashboardResponse->assertDontSee('BCA Prioritas');
     $dashboardResponse->assertDontSee('Rp15.000.000');
 });

@@ -31,7 +31,7 @@
             <div class="w-full">
                 <div class="flex items-center justify-between lg:pb-4 lg:mb-4 lg:border-b lg:border-white/15">
                     <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 lg:gap-3 min-w-0">
-                        <div class="w-10 h-10 lg:w-11 lg:h-11 rounded-[12px] bg-white text-[#5D56F3] flex items-center justify-center font-extrabold text-xs lg:text-base shadow-sm shrink-0 hover:scale-105 transition-transform duration-300">
+                        <div class="w-10 h-10 lg:w-11 lg:h-11 rounded-[12px] bg-white text-[#059669] flex items-center justify-center font-extrabold text-xs lg:text-base shadow-sm shrink-0 hover:scale-105 transition-transform duration-300">
                             Rp
                         </div>
                         <div class="min-w-0">
@@ -41,7 +41,7 @@
                     </a>
 
                     <div class="flex items-center gap-1.5 lg:hidden">
-                        <a href="{{ route('transactions.create') }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white text-[#5D56F3] font-semibold text-xs shadow-xs">
+                        <a href="{{ route('transactions.create') }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white text-[#059669] font-semibold text-xs shadow-xs">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
                             </svg>
@@ -57,7 +57,7 @@
 
                 <div id="mobile-nav" class="hidden lg:flex lg:flex-col w-full pt-3 lg:pt-0 space-y-3">
                     <div class="hidden lg:block pb-2">
-                        <a href="{{ route('transactions.create') }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-white hover:bg-white/95 text-[#5D56F3] font-bold text-xs lg:text-sm transition shadow-sm">
+                        <a href="{{ route('transactions.create') }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-white hover:bg-white/95 text-[#059669] font-bold text-xs lg:text-sm transition shadow-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
                             </svg>

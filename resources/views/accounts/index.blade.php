@@ -39,36 +39,36 @@
                     <div class="space-y-2 min-w-0">
                         <div class="flex items-start justify-between gap-1.5">
                             <div class="min-w-0">
-                                <a href="{{ route('accounts.show', $account) }}" class="text-sm sm:text-base lg:text-xl font-bold text-[#1A1D20] hover:text-[#5D56F3] transition block truncate">
+                                <a href="{{ route('accounts.show', $account) }}" class="text-sm sm:text-base lg:text-xl font-bold text-[#14251D] hover:text-[#059669] transition block truncate">
                                     {{ $account->name }}
                                 </a>
-                                <p class="text-[11px] lg:text-sm text-[#7E869E]">{{ $account->transactions_count }} transaksi</p>
+                                <p class="text-[11px] lg:text-sm text-[#64756B]">{{ $account->transactions_count }} transaksi</p>
                             </div>
                         </div>
 
                         <div class="pt-1">
-                            <p class="text-[11px] lg:text-sm text-[#7E869E]">Saldo Saat Ini</p>
-                            <p class="text-[20px] sm:text-2xl lg:text-[28px] font-bold text-[#5D56F3] leading-snug break-words">{{ $account->formatted_balance }}</p>
+                            <p class="text-[11px] lg:text-sm text-[#64756B]">Saldo Saat Ini</p>
+                            <p class="text-[20px] sm:text-2xl lg:text-[28px] font-bold text-[#059669] leading-snug break-words">{{ $account->formatted_balance }}</p>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 pt-2 border-t border-[#F4F5F9] text-[11px] lg:text-sm">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 pt-2 border-t border-[#D1FAE5] text-[11px] lg:text-sm">
                             <div class="truncate">
-                                <span class="text-[#A3AABF]">Masuk: </span>
+                                <span class="text-[#64756B]">Masuk: </span>
                                 <span class="font-semibold text-[#2ED47A]">+Rp{{ number_format((int) ($account->total_income ?? 0), 0, ',', '.') }}</span>
                             </div>
                             <div class="truncate">
-                                <span class="text-[#A3AABF]">Keluar: </span>
+                                <span class="text-[#64756B]">Keluar: </span>
                                 <span class="font-semibold text-[#FF6B8B]">-Rp{{ number_format((int) ($account->total_expense ?? 0), 0, ',', '.') }}</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex flex-wrap items-center justify-between gap-1.5 pt-2.5 border-t border-[#F4F5F9]">
-                        <a href="{{ route('accounts.show', $account) }}" class="text-xs lg:text-sm font-semibold text-[#5D56F3] hover:text-[#4B45D3]">
+                    <div class="flex flex-wrap items-center justify-between gap-1.5 pt-2.5 border-t border-[#D1FAE5]">
+                        <a href="{{ route('accounts.show', $account) }}" class="text-xs lg:text-sm font-semibold text-[#059669] hover:text-[#066B4A]">
                             Detail &rarr;
                         </a>
                         <div class="flex items-center gap-1 lg:gap-1.5">
-                            <a href="{{ route('accounts.edit', $account) }}" class="px-2.5 py-1 lg:px-3 lg:py-1.5 rounded-full bg-[#EEEDFE] text-xs lg:text-sm font-medium text-[#5D56F3] hover:opacity-85">
+                            <a href="{{ route('accounts.edit', $account) }}" class="px-2.5 py-1 lg:px-3 lg:py-1.5 rounded-full bg-[#D1FAE5] text-xs lg:text-sm font-medium text-[#059669] hover:opacity-85">
                                 Ubah
                             </a>
                             <form action="{{ route('accounts.destroy', $account) }}" method="POST" class="inline" onsubmit="return confirm('Hapus rekening {{ addslashes($account->name) }}?');">

@@ -85,17 +85,17 @@
                     <p class="text-[11px] lg:text-sm text-[#7E869E]">{{ $incomeCount }} Pemasukan &bull; {{ $expenseCount }} Pengeluaran</p>
                 </div>
 
-                <div class="inline-flex rounded-full bg-[#F4F5F9] p-1 text-xs lg:text-sm font-semibold">
+                <div class="inline-flex rounded-full bg-[#ECFDF5] p-1 text-xs lg:text-sm font-semibold">
                     <a href="{{ route('categories.index') }}"
-                       class="px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full transition {{ ! $typeFilter ? 'bg-[#5D56F3] text-white shadow-xs' : 'text-[#7E869E] hover:text-[#1A1D20]' }}">
+                       class="px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full transition {{ ! $typeFilter ? 'bg-[#059669] text-white shadow-xs' : 'text-[#64756B] hover:text-[#14251D]' }}">
                         Semua
                     </a>
                     <a href="{{ route('categories.index', ['type' => 'income']) }}"
-                       class="px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full transition {{ $typeFilter === 'income' ? 'bg-[#2ED47A] text-white shadow-xs' : 'text-[#7E869E] hover:text-[#1A1D20]' }}">
+                       class="px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full transition {{ $typeFilter === 'income' ? 'bg-[#2ED47A] text-white shadow-xs' : 'text-[#64756B] hover:text-[#14251D]' }}">
                         Pemasukan
                     </a>
                     <a href="{{ route('categories.index', ['type' => 'expense']) }}"
-                       class="px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full transition {{ $typeFilter === 'expense' ? 'bg-[#FF6B8B] text-white shadow-xs' : 'text-[#7E869E] hover:text-[#1A1D20]' }}">
+                       class="px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full transition {{ $typeFilter === 'expense' ? 'bg-[#FF6B8B] text-white shadow-xs' : 'text-[#64756B] hover:text-[#14251D]' }}">
                         Pengeluaran
                     </a>
                 </div>
@@ -112,23 +112,23 @@
                 {{-- Tampilan Mobile: Grid 2 Kolom Card Compact --}}
                 <div class="grid grid-cols-2 gap-2.5 md:hidden xs-single-col">
                     @foreach ($categories as $category)
-                        <div class="rounded-[12px] p-3 flex flex-col justify-between space-y-2 bg-[#F4F5F9] min-w-0">
+                        <div class="rounded-[12px] p-3 flex flex-col justify-between space-y-2 bg-[#ECFDF5] min-w-0">
                             <div class="space-y-1 min-w-0">
                                 <div class="flex items-start justify-between gap-1">
-                                    <a href="{{ route('categories.show', $category) }}" class="text-xs font-bold text-[#1A1D20] hover:text-[#5D56F3] truncate block">
+                                    <a href="{{ route('categories.show', $category) }}" class="text-xs font-bold text-[#14251D] hover:text-[#059669] truncate block">
                                         {{ $category->name }}
                                     </a>
                                 </div>
                                 <x-badge-type :type="$category->type" />
-                                <p class="text-[11px] text-[#7E869E] pt-0.5">
+                                <p class="text-[11px] text-[#64756B] pt-0.5">
                                     {{ $category->transactions_count }} transaksi
                                 </p>
-                                <p class="text-xs font-bold text-[#1A1D20] truncate">
+                                <p class="text-xs font-bold text-[#14251D] truncate">
                                     Rp{{ number_format((int) ($category->transactions_sum_amount ?? 0), 0, ',', '.') }}
                                 </p>
                             </div>
                             <div class="flex items-center justify-between gap-1 pt-2 border-t border-white">
-                                <a href="{{ route('categories.edit', $category) }}" class="px-2.5 py-1 rounded-full bg-white text-xs font-medium text-[#5D56F3] hover:bg-[#EEEDFE]">
+                                <a href="{{ route('categories.edit', $category) }}" class="px-2.5 py-1 rounded-full bg-white text-xs font-medium text-[#059669] hover:bg-[#D1FAE5]">
                                     Edit
                                 </a>
                                 <form action="{{ route('categories.destroy', $category) }}" method="POST" class="inline" onsubmit="return confirm('Hapus kategori {{ addslashes($category->name) }}?');">
@@ -147,7 +147,7 @@
                 <div class="hidden md:block overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="border-b border-[#F4F5F9] text-[11px] lg:text-sm font-semibold uppercase tracking-wider text-[#A3AABF]">
+                            <tr class="border-b border-[#D1FAE5] text-[11px] lg:text-sm font-semibold uppercase tracking-wider text-[#64756B]">
                                 <th class="py-2 lg:py-3 pr-2.5">Nama Kategori</th>
                                 <th class="py-2 lg:py-3 px-2.5">Tipe</th>
                                 <th class="py-2 lg:py-3 px-2.5 text-center">Transaksi</th>
@@ -155,29 +155,29 @@
                                 <th class="py-2 lg:py-3 pl-2.5 text-right">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-[#F4F5F9] text-xs md:text-sm lg:text-base">
+                        <tbody class="divide-y divide-[#D1FAE5] text-xs md:text-sm lg:text-base">
                             @foreach ($categories as $category)
-                                <tr class="hover:bg-[#F4F5F9]/60 transition">
-                                    <td class="py-2.5 lg:py-3.5 pr-2.5 font-semibold text-[#1A1D20]">
-                                        <a href="{{ route('categories.show', $category) }}" class="hover:text-[#5D56F3]">
+                                <tr class="hover:bg-[#ECFDF5]/60 transition">
+                                    <td class="py-2.5 lg:py-3.5 pr-2.5 font-semibold text-[#14251D]">
+                                        <a href="{{ route('categories.show', $category) }}" class="hover:text-[#059669]">
                                             {{ $category->name }}
                                         </a>
                                     </td>
                                     <td class="py-2.5 lg:py-3.5 px-2.5">
                                         <x-badge-type :type="$category->type" />
                                     </td>
-                                    <td class="py-2.5 lg:py-3.5 px-2.5 text-center text-[11px] lg:text-sm text-[#7E869E]">
+                                    <td class="py-2.5 lg:py-3.5 px-2.5 text-center text-[11px] lg:text-sm text-[#64756B]">
                                         {{ $category->transactions_count }}
                                     </td>
-                                    <td class="py-2.5 lg:py-3.5 px-2.5 text-right font-semibold text-[#1A1D20]">
+                                    <td class="py-2.5 lg:py-3.5 px-2.5 text-right font-semibold text-[#14251D]">
                                         Rp{{ number_format((int) ($category->transactions_sum_amount ?? 0), 0, ',', '.') }}
                                     </td>
                                     <td class="py-2.5 lg:py-3.5 pl-2.5 text-right whitespace-nowrap">
                                         <div class="inline-flex items-center gap-1.5">
-                                            <a href="{{ route('categories.show', $category) }}" class="px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full bg-[#F4F5F9] hover:bg-[#EEEDFE] text-xs lg:text-sm font-medium text-[#1A1D20] hover:text-[#5D56F3] transition">
+                                            <a href="{{ route('categories.show', $category) }}" class="px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full bg-[#ECFDF5] hover:bg-[#D1FAE5] text-xs lg:text-sm font-medium text-[#14251D] hover:text-[#059669] transition">
                                                 Detail
                                             </a>
-                                            <a href="{{ route('categories.edit', $category) }}" class="px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full bg-[#EEEDFE] text-xs lg:text-sm font-medium text-[#5D56F3] hover:opacity-85 transition">
+                                            <a href="{{ route('categories.edit', $category) }}" class="px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full bg-[#D1FAE5] text-xs lg:text-sm font-medium text-[#059669] hover:opacity-85 transition">
                                                 Edit
                                             </a>
                                             <form action="{{ route('categories.destroy', $category) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori {{ addslashes($category->name) }}?');">

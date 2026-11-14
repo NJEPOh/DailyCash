@@ -56,17 +56,17 @@
     {{-- Kartu Statistik Utama (Modern FinTech Style) --}}
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5">
         {{-- Total Saldo --}}
-        <div class="card bg-gradient-to-br from-[#6366F1] to-[#4F46E5] text-white shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between p-4 lg:p-5">
+        <div class="card bg-white border border-gray-100 text-[#1A1D20] shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between p-4 lg:p-5">
             <div class="flex items-center justify-between">
-                <span class="text-[11px] lg:text-xs font-semibold uppercase tracking-wider text-white/80">Total Saldo</span>
-                <div class="p-2 bg-white/15 backdrop-blur-md rounded-xl">
-                    <svg class="w-4 h-4 lg:w-5 lg:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                <span class="text-[11px] lg:text-xs font-semibold uppercase tracking-wider text-[#1A1D20]">Total Saldo</span>
+                <div class="p-2 bg-[#D1FAE5] text-[#059669] rounded-xl">
+                    <svg class="w-4 h-4 lg:w-5 lg:h-5 text-[#059669]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                 </div>
             </div>
             <div class="my-3">
-                <p class="text-lg sm:text-xl lg:text-2xl font-black tracking-tight truncate">Rp{{ number_format($totalBalance, 0, ',', '.') }}</p>
+                <p class="text-lg sm:text-xl lg:text-2xl font-black tracking-tight text-[#1A1D20] truncate">Rp{{ number_format($totalBalance, 0, ',', '.') }}</p>
             </div>
-            <div class="text-[11px] lg:text-xs text-white/80 font-medium">
+            <div class="text-[11px] lg:text-xs text-[#1A1D20] font-medium">
                 {{ $accounts->count() }} rekening/dompet aktif
             </div>
         </div>
@@ -107,7 +107,7 @@
         <div class="card bg-white border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between p-4 lg:p-5">
             <div class="flex items-center justify-between">
                 <span class="text-[11px] lg:text-xs font-semibold uppercase tracking-wider text-gray-400">Selisih Arus Kas</span>
-                <div class="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
+                <div class="p-2 bg-[#D1FAE5] text-[#059669] rounded-xl">
                     <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10"/></svg>
                 </div>
             </div>
@@ -178,7 +178,7 @@
                         {{ $netCashflow >= 0 ? '+' : '-' }}Rp{{ number_format(abs($netCashflow), 0, ',', '.') }}
                     </span>
                 </div>
-                <a href="{{ route('reports.index', ['period_type' => 'monthly', 'month' => $currentMonthKey]) }}" class="font-bold text-[#6366F1] hover:text-[#4F46E5] transition-colors">
+                <a href="{{ route('reports.index', ['period_type' => 'monthly', 'month' => $currentMonthKey]) }}" class="font-bold text-[#059669] hover:text-[#066B4A] transition-colors">
                     Lihat Laporan Detail &rarr;
                 </a>
             </div>
@@ -194,12 +194,12 @@
                     @php
                         $pct = $currentBudget->amount > 0 ? min(100, round(($monthlyExpense / $currentBudget->amount) * 100)) : 0;
                         $rawPct = $currentBudget->amount > 0 ? round(($monthlyExpense / $currentBudget->amount) * 100, 1) : 0;
-                        $barColor = $rawPct > 100 ? 'bg-rose-500' : ($rawPct >= 80 ? 'bg-amber-500' : 'bg-indigo-600');
+                        $barColor = $rawPct > 100 ? 'bg-rose-500' : ($rawPct >= 80 ? 'bg-amber-500' : 'bg-[#059669]');
                     @endphp
                     <div class="mt-4 p-4 rounded-2xl bg-gray-50 space-y-3 border border-gray-100">
                         <div class="flex items-center justify-between text-xs font-bold">
                             <span class="text-gray-500">Realisasi Anggaran</span>
-                            <span class="{{ $rawPct > 100 ? 'text-rose-600' : 'text-indigo-600' }}">{{ $rawPct }}%</span>
+                            <span class="{{ $rawPct > 100 ? 'text-rose-600' : 'text-[#059669]' }}">{{ $rawPct }}%</span>
                         </div>
                         <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden p-0.5">
                             <div class="{{ $barColor }} h-full rounded-full transition-all duration-1000 ease-out" style="width: {{ $pct }}%"></div>
@@ -238,7 +238,7 @@
                         required
                         value="{{ old('amount', $currentBudget?->amount) }}"
                         placeholder="5000000"
-                        class="input-field text-xs md:text-sm focus:ring-2 focus:ring-[#6366F1]"
+                        class="input-field text-xs md:text-sm focus:ring-2 focus:ring-[#059669]"
                     >
                     <button type="submit" class="btn-primary w-full text-xs font-bold shadow-md hover:shadow-lg transition-all">
                         Simpan
@@ -257,7 +257,7 @@
                     <h2 class="text-base sm:text-lg lg:text-xl font-bold text-[#1A1D20]">Dompet & Rekening</h2>
                     <p class="text-xs text-gray-400">Distribusi saldo akun</p>
                 </div>
-                <a href="{{ route('accounts.index') }}" class="text-xs font-bold text-[#6366F1] hover:text-[#4F46E5] transition-colors">
+                <a href="{{ route('accounts.index') }}" class="text-xs font-bold text-[#059669] hover:text-[#066B4A] transition-colors">
                     Kelola &rarr;
                 </a>
             </div>
@@ -275,13 +275,13 @@
                         @php
                             $share = $totalBalance > 0 ? round(($account->balance / $totalBalance) * 100, 1) : 0;
                         @endphp
-                        <a href="{{ route('accounts.show', $account) }}" class="block p-3.5 rounded-2xl bg-gray-50 hover:bg-indigo-50/50 hover:border-indigo-100 border border-transparent transition-all duration-200">
+                        <a href="{{ route('accounts.show', $account) }}" class="block p-3.5 rounded-2xl bg-gray-50 hover:bg-[#D1FAE5]/50 hover:border-[#059669]/30 border border-transparent transition-all duration-200">
                             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-1">
                                 <div class="min-w-0">
                                     <p class="text-xs md:text-sm font-bold text-[#1A1D20] truncate">{{ $account->name }}</p>
                                     <p class="text-[11px] text-gray-400">{{ $account->transactions_count }} transaksi &bull; {{ $share }}%</p>
                                 </div>
-                                <p class="text-xs md:text-sm font-black text-[#6366F1] shrink-0">{{ $account->formatted_balance }}</p>
+                                <p class="text-xs md:text-sm font-black text-[#059669] shrink-0">{{ $account->formatted_balance }}</p>
                             </div>
                         </a>
                     @endforeach
@@ -310,7 +310,7 @@
                     <h2 class="text-base sm:text-lg lg:text-xl font-bold text-[#1A1D20]">Transaksi Terbaru</h2>
                     <p class="text-xs text-gray-400">Catatan mutasi pemasukan & pengeluaran</p>
                 </div>
-                <a href="{{ route('transactions.index') }}" class="text-xs font-bold text-[#6366F1] hover:text-[#4F46E5] transition-colors">
+                <a href="{{ route('transactions.index') }}" class="text-xs font-bold text-[#059669] hover:text-[#066B4A] transition-colors">
                     Lihat Semua &rarr;
                 </a>
             </div>
@@ -341,7 +341,7 @@
                                         {{ $tx->date->format('d/m/y') }}
                                     </td>
                                     <td class="py-3 px-3 min-w-0">
-                                        <a href="{{ route('transactions.show', $tx) }}" class="font-bold text-[#1A1D20] hover:text-[#6366F1] transition-colors block truncate">
+                                        <a href="{{ route('transactions.show', $tx) }}" class="font-bold text-[#1A1D20] hover:text-[#059669] transition-colors block truncate">
                                             {{ $tx->category?->name ?? '-' }}
                                         </a>
                                         <span class="text-xs text-gray-400 block truncate">

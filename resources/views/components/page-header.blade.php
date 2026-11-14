@@ -8,7 +8,7 @@
 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 lg:gap-4">
     <div class="min-w-0">
         @if ($backUrl)
-            <a href="{{ $backUrl }}" class="inline-flex items-center gap-1 text-[11px] lg:text-sm font-medium text-[#7E869E] hover:text-[#5D56F3] mb-1 transition">
+            <a href="{{ $backUrl }}" class="inline-flex items-center gap-1 text-[11px] lg:text-sm font-medium text-[#D1FAE5] hover:text-white mb-1 transition">
                 <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
