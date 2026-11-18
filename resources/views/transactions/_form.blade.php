@@ -5,11 +5,13 @@
     $selectedDate = old('date', isset($transaction) ? $transaction->date->format('Y-m-d') : now()->format('Y-m-d'));
 @endphp
 
-<div class="space-y-3.5 lg:space-y-5">
-    {{-- Pilihan Tipe Transaksi (2 Kolom di Mobile) --}}
+<div class="space-y-4 lg:space-y-5">
+    {{-- Pilihan Tipe Transaksi (2 Kolom Bento Cards) --}}
     <div>
-        <label class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1.5 lg:mb-2">Tipe Transaksi <span class="text-[#FF6B8B]">*</span></label>
-        <div class="grid grid-cols-2 gap-2.5 lg:gap-4 xs-single-col">
+        <label class="block text-[12px] lg:text-[13px] font-semibold text-[#18191B] mb-2">
+            Tipe Transaksi <span class="text-[#C23B3B]">*</span>
+        </label>
+        <div class="grid grid-cols-2 gap-3 xs-single-col">
             <label class="cursor-pointer">
                 <input
                     type="radio"
@@ -19,9 +21,9 @@
                     @checked($selectedType === 'income')
                     onchange="filterCategoriesByType(this.value)"
                 >
-                <div class="p-2.5 lg:p-3.5 rounded-[12px] border-2 border-[#F4F5F9] bg-[#F4F5F9] peer-checked:border-[#2ED47A] peer-checked:bg-[#2ED47A]/10 text-center transition">
-                    <span class="block text-xs md:text-sm lg:text-base font-bold text-[#1A1D20] peer-checked:text-[#2ED47A]">+ Pemasukan (Income)</span>
-                    <span class="text-[11px] lg:text-sm text-[#7E869E]">Menambah saldo</span>
+                <div class="p-3.5 rounded-[18px] bg-[#F9F9F8] border-2 border-transparent peer-checked:border-[#18191B] peer-checked:bg-[#ECF8C2] text-center transition">
+                    <span class="block text-[13px] lg:text-[14px] font-bold text-[#18191B]">+ Pemasukan (Income)</span>
+                    <span class="bento-meta">Menambah saldo rekening</span>
                 </div>
             </label>
 
@@ -34,36 +36,40 @@
                     @checked($selectedType === 'expense')
                     onchange="filterCategoriesByType(this.value)"
                 >
-                <div class="p-2.5 lg:p-3.5 rounded-[12px] border-2 border-[#F4F5F9] bg-[#F4F5F9] peer-checked:border-[#FF6B8B] peer-checked:bg-[#FF6B8B]/10 text-center transition">
-                    <span class="block text-xs md:text-sm lg:text-base font-bold text-[#1A1D20] peer-checked:text-[#FF6B8B]">- Pengeluaran (Expense)</span>
-                    <span class="text-[11px] lg:text-sm text-[#7E869E]">Mengurangi saldo</span>
+                <div class="p-3.5 rounded-[18px] bg-[#F9F9F8] border-2 border-transparent peer-checked:border-[#18191B] peer-checked:bg-[#FDF3D7] text-center transition">
+                    <span class="block text-[13px] lg:text-[14px] font-bold text-[#18191B]">- Pengeluaran (Expense)</span>
+                    <span class="bento-meta">Mengurangi saldo rekening</span>
                 </div>
             </label>
         </div>
         @error('type')
-            <p class="text-[11px] lg:text-sm text-[#FF6B8B] mt-1">{{ $message }}</p>
+            <p class="text-[11px] lg:text-[12px] font-semibold text-[#C23B3B] mt-1">{{ $message }}</p>
         @enderror
     </div>
 
-    {{-- Tanggal & Nominal (2 Kolom di Mobile) --}}
-    <div class="grid grid-cols-2 gap-2.5 sm:gap-3.5 lg:gap-4 xs-single-col">
+    {{-- Tanggal & Nominal (2 Kolom) --}}
+    <div class="grid grid-cols-2 gap-3 lg:gap-4 xs-single-col">
         <div>
-            <label for="date" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">Tanggal Transaksi <span class="text-[#FF6B8B]">*</span></label>
+            <label for="date" class="block text-[12px] lg:text-[13px] font-semibold text-[#18191B] mb-1.5">
+                Tanggal Transaksi <span class="text-[#C23B3B]">*</span>
+            </label>
             <input
                 type="date"
                 id="date"
                 name="date"
                 required
                 value="{{ $selectedDate }}"
-                class="input-field text-xs md:text-sm lg:text-base"
+                class="input-field"
             >
             @error('date')
-                <p class="text-[11px] lg:text-sm text-[#FF6B8B] mt-1">{{ $message }}</p>
+                <p class="text-[11px] lg:text-[12px] font-semibold text-[#C23B3B] mt-1">{{ $message }}</p>
             @enderror
         </div>
 
         <div>
-            <label for="amount" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">Nominal (Rp) <span class="text-[#FF6B8B]">*</span></label>
+            <label for="amount" class="block text-[12px] lg:text-[13px] font-semibold text-[#18191B] mb-1.5">
+                Nominal (Rp) <span class="text-[#C23B3B]">*</span>
+            </label>
             <input
                 type="number"
                 id="amount"
@@ -73,24 +79,21 @@
                 required
                 value="{{ old('amount', $transaction->amount ?? '') }}"
                 placeholder="Contoh: 150000"
-                class="input-field text-xs md:text-sm lg:text-base"
+                class="input-field"
             >
             @error('amount')
-                <p class="text-[11px] lg:text-sm text-[#FF6B8B] mt-1">{{ $message }}</p>
+                <p class="text-[11px] lg:text-[12px] font-semibold text-[#C23B3B] mt-1">{{ $message }}</p>
             @enderror
         </div>
     </div>
 
-    {{-- Kategori & Rekening/Dompet (2 Kolom di Mobile) --}}
-    <div class="grid grid-cols-2 gap-2.5 sm:gap-3.5 lg:gap-4 xs-single-col">
+    {{-- Kategori & Rekening/Dompet (2 Kolom) --}}
+    <div class="grid grid-cols-2 gap-3 lg:gap-4 xs-single-col">
         <div>
-            <label for="category_id" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">Kategori <span class="text-[#FF6B8B]">*</span></label>
-            <select
-                id="category_id"
-                name="category_id"
-                required
-                class="input-field text-xs md:text-sm lg:text-base"
-            >
+            <label for="category_id" class="block text-[12px] lg:text-[13px] font-semibold text-[#18191B] mb-1.5">
+                Kategori <span class="text-[#C23B3B]">*</span>
+            </label>
+            <select id="category_id" name="category_id" required class="input-field">
                 <option value="">-- Pilih Kategori --</option>
                 @foreach ($categories as $category)
                     <option
@@ -102,20 +105,17 @@
                     </option>
                 @endforeach
             </select>
-            <p class="text-[11px] lg:text-sm text-[#7E869E] mt-0.5">Sesuai tipe transaksi.</p>
+            <p class="bento-meta mt-1">Sesuai tipe transaksi yang dipilih.</p>
             @error('category_id')
-                <p class="text-[11px] lg:text-sm text-[#FF6B8B] mt-1">{{ $message }}</p>
+                <p class="text-[11px] lg:text-[12px] font-semibold text-[#C23B3B] mt-1">{{ $message }}</p>
             @enderror
         </div>
 
         <div>
-            <label for="account_id" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">Rekening / Dompet <span class="text-[#FF6B8B]">*</span></label>
-            <select
-                id="account_id"
-                name="account_id"
-                required
-                class="input-field text-xs md:text-sm lg:text-base"
-            >
+            <label for="account_id" class="block text-[12px] lg:text-[13px] font-semibold text-[#18191B] mb-1.5">
+                Rekening / Dompet <span class="text-[#C23B3B]">*</span>
+            </label>
+            <select id="account_id" name="account_id" required class="input-field">
                 <option value="">-- Pilih Rekening --</option>
                 @foreach ($accounts as $account)
                     <option value="{{ $account->id }}" @selected((string) $selectedAccountId === (string) $account->id)>
@@ -123,44 +123,48 @@
                     </option>
                 @endforeach
             </select>
-            <p class="text-[11px] lg:text-sm text-[#7E869E] mt-0.5">Saldo tidak boleh minus.</p>
+            <p class="bento-meta mt-1">Saldo rekening tidak boleh negatif.</p>
             @error('account_id')
-                <p class="text-[11px] lg:text-sm text-[#FF6B8B] mt-1">{{ $message }}</p>
+                <p class="text-[11px] lg:text-[12px] font-semibold text-[#C23B3B] mt-1">{{ $message }}</p>
             @enderror
         </div>
     </div>
 
-    {{-- Deskripsi Opsional (Lebar Penuh) --}}
+    {{-- Deskripsi Opsional --}}
     <div>
-        <label for="description" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">Deskripsi / Catatan (Opsional)</label>
+        <label for="description" class="block text-[12px] lg:text-[13px] font-semibold text-[#18191B] mb-1.5">
+            Deskripsi / Catatan (Opsional)
+        </label>
         <textarea
             id="description"
             name="description"
             rows="2"
             maxlength="255"
             placeholder="Tambahkan keterangan transaksi (maksimal 255 karakter)"
-            class="input-field text-xs md:text-sm lg:text-base"
+            class="input-field"
         >{{ old('description', $transaction->description ?? '') }}</textarea>
         @error('description')
-            <p class="text-[11px] lg:text-sm text-[#FF6B8B] mt-1">{{ $message }}</p>
+            <p class="text-[11px] lg:text-[12px] font-semibold text-[#C23B3B] mt-1">{{ $message }}</p>
         @enderror
     </div>
 
-    {{-- Bukti Pembayaran Opsional (Lebar Penuh) --}}
+    {{-- Bukti Pembayaran Opsional --}}
     <div>
-        <label for="proof_image" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">Bukti Pembayaran / Struk Gambar (Opsional)</label>
+        <label for="proof_image" class="block text-[12px] lg:text-[13px] font-semibold text-[#18191B] mb-1.5">
+            Bukti Pembayaran / Struk Gambar (Opsional)
+        </label>
 
         @if (isset($transaction) && $transaction->proof_image)
-            <div class="mb-2.5 p-2.5 lg:p-3.5 rounded-[12px] bg-[#F4F5F9] flex flex-wrap items-center justify-between gap-2">
-                <div class="flex items-center gap-2.5">
-                    <img src="{{ route('transactions.proof', $transaction) }}" alt="Bukti Transaksi" class="w-12 h-12 object-cover rounded-[8px]">
-                    <div class="text-[11px] lg:text-sm">
-                        <p class="font-semibold text-[#1A1D20]">Bukti pembayaran tersedia</p>
-                        <p class="text-[#7E869E]">Unggah gambar baru jika ingin mengganti bukti lama.</p>
+            <div class="mb-3 p-3 rounded-[16px] bg-[#F9F9F8] flex flex-wrap items-center justify-between gap-2.5">
+                <div class="flex items-center gap-3">
+                    <img src="{{ route('transactions.proof', $transaction) }}" alt="Bukti Transaksi" class="w-12 h-12 object-cover rounded-[10px]">
+                    <div>
+                        <p class="text-[12px] lg:text-[13px] font-semibold text-[#18191B]">Bukti pembayaran tersedia</p>
+                        <p class="bento-meta">Unggah gambar baru jika ingin mengganti bukti lama.</p>
                     </div>
                 </div>
-                <label class="inline-flex items-center gap-1.5 text-[11px] lg:text-sm font-medium text-[#FF6B8B] cursor-pointer">
-                    <input type="checkbox" name="remove_proof_image" value="1" class="rounded border-[#A3AABF] text-[#FF6B8B]">
+                <label class="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#C23B3B] cursor-pointer">
+                    <input type="checkbox" name="remove_proof_image" value="1" class="rounded border-[#D5D7DC] accent-[#1E1F21]">
                     <span>Hapus bukti</span>
                 </label>
             </div>
@@ -171,11 +175,11 @@
             id="proof_image"
             name="proof_image"
             accept="image/jpeg,image/png,image/webp,image/gif"
-            class="w-full rounded-[12px] border border-dashed border-[#059669]/40 bg-[#ECFDF5] px-3 py-2 lg:px-3.5 lg:py-2.5 text-xs md:text-sm lg:text-base text-[#64756B] file:mr-3 file:py-1 lg:file:py-1.5 file:px-3 lg:file:px-4 file:rounded-full file:border-0 file:text-[11px] lg:file:text-sm file:font-semibold file:bg-[#059669] file:text-white hover:file:bg-[#066B4A]"
+            class="w-full rounded-[16px] border-[1.5px] border-dashed border-[#D5D7DC] bg-[#F9F9F8] px-3.5 py-2.5 text-[12px] lg:text-[13px] text-[#8E9299] file:mr-3 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-[12px] file:font-semibold file:bg-[#DDF296] file:text-[#18191B] hover:file:bg-[#D2EC7B] cursor-pointer"
         >
-        <p class="text-[11px] lg:text-sm text-[#7E869E] mt-0.5">Boleh dikosongkan. Format: JPG, JPEG, PNG, WEBP, GIF (Maks. 2MB).</p>
+        <p class="bento-meta mt-1">Boleh dikosongkan. Format: JPG, JPEG, PNG, WEBP, GIF (Maks. 2MB).</p>
         @error('proof_image')
-            <p class="text-[11px] lg:text-sm text-[#FF6B8B] mt-1">{{ $message }}</p>
+            <p class="text-[11px] lg:text-[12px] font-semibold text-[#C23B3B] mt-1">{{ $message }}</p>
         @enderror
     </div>
 </div>

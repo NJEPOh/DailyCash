@@ -9,129 +9,158 @@
     @fonts
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
 </head>
-<body class="min-h-full font-sans text-xs md:text-sm lg:text-base antialiased flex flex-col justify-center py-6 lg:py-12 px-3 sm:px-6 lg:px-8 overflow-y-auto">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md lg:max-w-lg">
-        <div class="flex items-center justify-center gap-3">
-            <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-[14px] bg-[#059669] border border-[#D1FAE5]/60 flex items-center justify-center text-white font-extrabold text-sm lg:text-lg shadow-md shrink-0">
-                Rp
-            </div>
-            <div>
-                <span class="text-[18px] sm:text-xl lg:text-2xl font-bold tracking-tight text-white block leading-none">DailyCash</span>
-                <span class="text-[11px] lg:text-sm text-[#D1FAE5] block mt-0.5">Catatan Keuangan Harian Pribadi</span>
-            </div>
-        </div>
+<body class="min-h-full font-sans antialiased flex flex-col justify-center py-6 px-3 sm:px-6 lg:px-8">
+    <main class="w-full max-w-4xl mx-auto">
+        <div class="rounded-[24px] lg:rounded-[32px] bg-[#F6F6F4] p-3 sm:p-5 lg:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.04)] grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 items-stretch">
+            {{-- Panel Bento Visual Kiri --}}
+            <aside class="lg:col-span-5 bento-card-dark !rounded-[24px] flex flex-col justify-between gap-6 p-6">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-[14px] bg-[#DDF296] text-[#18191B] flex items-center justify-center shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7a2 2 0 012-2h11a3 3 0 013 3v1H5a2 2 0 01-2-2zm0 2v8a2 2 0 002 2h13a2 2 0 002-2v-6a2 2 0 00-2-2H5zm13 4h.01"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="text-[18px] font-bold tracking-tight text-white block leading-none">DailyCash</span>
+                            <span class="text-[11.5px] text-white/65 block mt-1">Catatan Keuangan Harian</span>
+                        </div>
+                    </div>
 
-        <div class="mt-5 lg:mt-7 card space-y-4 lg:space-y-5">
-            <div class="border-b border-[#F4F5F9] pb-3 lg:pb-4">
-                <h1 class="text-[18px] sm:text-xl lg:text-[30px] font-bold text-[#1A1D20] leading-tight">Registrasi Akun Baru</h1>
-                <p class="text-[11px] lg:text-sm text-[#7E869E] mt-1">Buat akun pribadi untuk mulai mencatat keuangan dengan 17 kategori default siap pakai.</p>
-            </div>
-
-            <x-alert />
-
-            <form action="{{ route('register.store') }}" method="POST" class="space-y-3.5 lg:space-y-4" novalidate>
-                @csrf
-
-                <div>
-                    <label for="name" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">
-                        Nama Lengkap <span class="text-[#FF6B8B]">*</span>
-                    </label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value="{{ old('name') }}"
-                        required
-                        autofocus
-                        autocomplete="name"
-                        placeholder="Contoh: Budi Santoso"
-                        class="input-field text-xs md:text-sm lg:text-base {{ $errors->has('name') ? '!border-[#FF6B8B] !bg-[#FF6B8B]/5' : '' }}"
-                    >
-                    @error('name')
-                        <p class="mt-1 text-[11px] lg:text-sm font-medium text-[#FF6B8B]">{{ $message }}</p>
-                    @enderror
+                    <div class="hidden lg:flex items-center justify-center rounded-[20px] bg-white/5 p-6 my-2">
+                        <svg class="w-40 h-32" viewBox="0 0 180 130" fill="none" aria-hidden="true">
+                            <rect x="18" y="22" width="66" height="82" rx="14" fill="#FFFFFF" fill-opacity="0.1"/>
+                            <rect x="30" y="38" width="42" height="10" rx="5" fill="#DDF296"/>
+                            <rect x="30" y="56" width="30" height="8" rx="4" fill="#F7C948"/>
+                            <rect x="96" y="22" width="66" height="38" rx="14" fill="#E1EFFA"/>
+                            <rect x="96" y="68" width="66" height="36" rx="14" fill="#DDF296"/>
+                            <circle cx="129" cy="86" r="8" fill="#18191B"/>
+                        </svg>
+                    </div>
                 </div>
 
-                <div>
-                    <label for="email" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">
-                        Alamat Email <span class="text-[#FF6B8B]">*</span>
-                    </label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value="{{ old('email') }}"
-                        required
-                        autocomplete="email"
-                        placeholder="nama@email.com"
-                        class="input-field text-xs md:text-sm lg:text-base {{ $errors->has('email') ? '!border-[#FF6B8B] !bg-[#FF6B8B]/5' : '' }}"
-                    >
-                    @error('email')
-                        <p class="mt-1 text-[11px] lg:text-sm font-medium text-[#FF6B8B]">{{ $message }}</p>
-                    @enderror
+                <div class="space-y-3">
+                    <span class="badge !bg-[#ECF8C2] !text-[#18191B]">17 Kategori Default Siap Pakai</span>
+                    <p class="text-[13px] text-white/75 leading-relaxed">
+                        Setiap akun baru memulai ruang data kosong dengan saldo Rp0 dan terisolasi penuh demi privasi keuangan Anda.
+                    </p>
+                </div>
+            </aside>
+
+            {{-- Panel Formulir Registrasi --}}
+            <section class="lg:col-span-7 bento-card !rounded-[24px] p-5 sm:p-7 lg:p-8 flex flex-col justify-center space-y-5">
+                <div class="space-y-1.5">
+                    <span class="badge badge-lime">Buat Akun Pribadi</span>
+                    <h1 class="bento-h1">
+                        Registrasi <span class="bento-h1-accent">Akun Baru</span>
+                    </h1>
+                    <p class="bento-meta leading-relaxed">
+                        Lengkapi data diri Anda untuk mulai mencatat transaksi keuangan harian.
+                    </p>
                 </div>
 
-                <div class="grid grid-cols-2 xs-single-col gap-2.5 lg:gap-3.5">
+                <x-alert />
+
+                <form action="{{ route('register.store') }}" method="POST" class="space-y-4" novalidate>
+                    @csrf
+
                     <div>
-                        <label for="password" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">
-                            Password <span class="text-[#FF6B8B]">*</span>
+                        <label for="name" class="block text-[12px] lg:text-[13px] font-semibold text-[#18191B] mb-1.5">
+                            Nama Lengkap <span class="text-[#C23B3B]">*</span>
                         </label>
                         <input
-                            type="password"
-                            id="password"
-                            name="password"
+                            type="text"
+                            id="name"
+                            name="name"
+                            value="{{ old('name') }}"
                             required
-                            autocomplete="new-password"
-                            placeholder="Min. 8 karakter"
-                            class="input-field text-xs md:text-sm lg:text-base {{ $errors->has('password') ? '!border-[#FF6B8B] !bg-[#FF6B8B]/5' : '' }}"
+                            autofocus
+                            autocomplete="name"
+                            placeholder="Contoh: Budi Santoso"
+                            class="input-field {{ $errors->has('name') ? '!border-[#C23B3B] !bg-[#FCEAE8]/50' : '' }}"
                         >
+                        @error('name')
+                            <p class="mt-1 text-[11px] lg:text-[12px] font-semibold text-[#C23B3B]">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
-                        <label for="password_confirmation" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">
-                            Konfirmasi Password <span class="text-[#FF6B8B]">*</span>
+                        <label for="email" class="block text-[12px] lg:text-[13px] font-semibold text-[#18191B] mb-1.5">
+                            Alamat Email <span class="text-[#C23B3B]">*</span>
                         </label>
                         <input
-                            type="password"
-                            id="password_confirmation"
-                            name="password_confirmation"
+                            type="email"
+                            id="email"
+                            name="email"
+                            value="{{ old('email') }}"
                             required
-                            autocomplete="new-password"
-                            placeholder="Ulangi password"
-                            class="input-field text-xs md:text-sm lg:text-base {{ $errors->has('password') ? '!border-[#FF6B8B] !bg-[#FF6B8B]/5' : '' }}"
+                            autocomplete="email"
+                            placeholder="nama@email.com"
+                            class="input-field {{ $errors->has('email') ? '!border-[#C23B3B] !bg-[#FCEAE8]/50' : '' }}"
                         >
+                        @error('email')
+                            <p class="mt-1 text-[11px] lg:text-[12px] font-semibold text-[#C23B3B]">{{ $message }}</p>
+                        @enderror
                     </div>
-                </div>
-                @error('password')
-                    <p class="-mt-2 text-[11px] lg:text-sm font-medium text-[#FF6B8B]">{{ $message }}</p>
-                @enderror
 
-                <div class="pt-1">
-                    <button
-                        type="submit"
-                        class="btn-primary w-full text-xs lg:text-sm"
-                    >
+                    <div class="grid grid-cols-2 xs-single-col gap-3">
+                        <div>
+                            <label for="password" class="block text-[12px] lg:text-[13px] font-semibold text-[#18191B] mb-1.5">
+                                Password <span class="text-[#C23B3B]">*</span>
+                            </label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                required
+                                autocomplete="new-password"
+                                placeholder="Min. 8 karakter"
+                                class="input-field {{ $errors->has('password') ? '!border-[#C23B3B] !bg-[#FCEAE8]/50' : '' }}"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="password_confirmation" class="block text-[12px] lg:text-[13px] font-semibold text-[#18191B] mb-1.5">
+                                Konfirmasi Password <span class="text-[#C23B3B]">*</span>
+                            </label>
+                            <input
+                                type="password"
+                                id="password_confirmation"
+                                name="password_confirmation"
+                                required
+                                autocomplete="new-password"
+                                placeholder="Ulangi password"
+                                class="input-field {{ $errors->has('password') ? '!border-[#C23B3B] !bg-[#FCEAE8]/50' : '' }}"
+                            >
+                        </div>
+                    </div>
+                    @error('password')
+                        <p class="-mt-2 text-[11px] lg:text-[12px] font-semibold text-[#C23B3B]">{{ $message }}</p>
+                    @enderror
+
+                    <button type="submit" class="btn-bento-dark w-full !py-3 text-[13.5px]">
                         <span>Buat Akun Baru</span>
                     </button>
-                </div>
-            </form>
+                </form>
 
-            <div class="pt-3 lg:pt-4 border-t border-[#D1FAE5] text-center">
-                <a href="{{ route('login') }}" class="text-xs lg:text-sm font-semibold text-[#64756B] hover:text-[#059669] hover:underline">
-                    Sudah punya akun? Kembali ke halaman login
-                </a>
-            </div>
+                <div class="pt-4 border-t border-[#ECECE9] text-center text-[12px] lg:text-[13px] text-[#8E9299]">
+                    Sudah punya akun?
+                    <a href="{{ route('login') }}" class="font-bold text-[#18191B] hover:underline ml-1">
+                        Kembali ke halaman login
+                    </a>
+                </div>
+            </section>
         </div>
 
-        <p class="mt-4 lg:mt-5 text-center text-[11px] lg:text-sm text-[#D1FAE5]">
-            &copy; {{ date('Y') }} <strong class="text-white">DailyCash</strong> &mdash; Ruang data keuangan baru dimulai dengan saldo Rp0.
-        </p>
-    </div>
+        <footer class="mt-4 text-center bento-meta">
+            &copy; {{ date('Y') }} <strong class="text-[#18191B]">DailyCash</strong> &mdash; Ruang data keuangan baru dimulai dengan saldo Rp0.
+        </footer>
+    </main>
 </body>
 </html>

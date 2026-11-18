@@ -5,27 +5,27 @@
         :backUrl="route('accounts.index')"
         backText="Kembali ke Rekening & Dompet"
     >
-        <a href="{{ route('accounts.edit', $account) }}" class="btn-secondary text-xs lg:text-sm">
+        <a href="{{ route('accounts.edit', $account) }}" class="btn-secondary">
             Ubah Nama
         </a>
-        <a href="{{ route('transactions.create', ['account_id' => $account->id]) }}" class="btn-primary text-xs lg:text-sm">
+        <a href="{{ route('transactions.create', ['account_id' => $account->id]) }}" class="btn-bento-dark">
             + Transaksi Baru
         </a>
     </x-page-header>
 
-    {{-- 2 Kolom di Mobile, 4 Kolom di Desktop --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5 lg:gap-5 xs-single-col">
+    {{-- Statistik Saldo Rekening --}}
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 xs-single-col">
         <x-stat-card
             title="Saldo Saat Ini"
             :value="$account->formatted_balance"
             subtitle="Posisi dana aktif"
-            variant="primary"
+            variant="dark"
         />
         <x-stat-card
             title="Total Pemasukan"
             :value="'Rp' . number_format($totalIncome, 0, ',', '.')"
             subtitle="Akumulasi dana masuk"
-            variant="income"
+            variant="lime"
         />
         <x-stat-card
             title="Total Pengeluaran"
@@ -41,8 +41,8 @@
         />
     </div>
 
-    <div class="card space-y-3 lg:space-y-4">
-        <h2 class="text-base sm:text-lg lg:text-2xl font-bold text-[#1A1D20]">Riwayat Mutasi Transaksi</h2>
+    <div class="bento-card space-y-4">
+        <h2 class="bento-h2">Riwayat Mutasi Transaksi</h2>
 
         @if ($transactions->isEmpty())
             <x-empty-state
@@ -55,27 +55,27 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-[#F4F5F9] text-[11px] lg:text-sm font-semibold uppercase tracking-wider text-[#A3AABF]">
-                            <th class="py-2 lg:py-3 pr-2.5">Tanggal</th>
-                            <th class="py-2 lg:py-3 px-2.5">Kategori</th>
-                            <th class="py-2 lg:py-3 px-2.5">Deskripsi</th>
-                            <th class="py-2 lg:py-3 px-2.5">Tipe</th>
-                            <th class="py-2 lg:py-3 px-2.5 text-right">Nominal</th>
-                            <th class="py-2 lg:py-3 pl-2.5 text-right">Aksi</th>
+                        <tr class="border-b border-[#ECECE9] bento-label">
+                            <th class="py-3 pr-3">Tanggal</th>
+                            <th class="py-3 px-3">Kategori</th>
+                            <th class="py-3 px-3">Deskripsi</th>
+                            <th class="py-3 px-3">Tipe</th>
+                            <th class="py-3 px-3 text-right">Nominal</th>
+                            <th class="py-3 pl-3 text-right">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-[#F4F5F9] text-xs md:text-sm lg:text-base">
+                    <tbody class="divide-y divide-[#ECECE9] text-[13px] lg:text-[14px]">
                         @foreach ($transactions as $tx)
-                            <tr class="hover:bg-[#F4F5F9]/60">
-                                <td class="py-2 lg:py-3 pr-2.5 whitespace-nowrap text-[11px] lg:text-sm text-[#7E869E]">{{ $tx->date->format('d/m/Y') }}</td>
-                                <td class="py-2 lg:py-3 px-2.5 font-semibold text-[#1A1D20]">{{ $tx->category?->name ?? '-' }}</td>
-                                <td class="py-2 lg:py-3 px-2.5 text-[#7E869E]">{{ $tx->description ?: '-' }}</td>
-                                <td class="py-2 lg:py-3 px-2.5"><x-badge-type :type="$tx->type" /></td>
-                                <td class="py-2 lg:py-3 px-2.5 text-right font-bold {{ $tx->type === 'income' ? 'text-[#2ED47A]' : 'text-[#FF6B8B]' }}">
+                            <tr class="hover:bg-[#F9F9F8] transition">
+                                <td class="py-3 pr-3 whitespace-nowrap bento-meta">{{ $tx->date->format('d/m/Y') }}</td>
+                                <td class="py-3 px-3 font-semibold text-[#18191B]">{{ $tx->category?->name ?? '-' }}</td>
+                                <td class="py-3 px-3 bento-meta">{{ $tx->description ?: '-' }}</td>
+                                <td class="py-3 px-3"><x-badge-type :type="$tx->type" /></td>
+                                <td class="py-3 px-3 text-right font-bold {{ $tx->type === 'income' ? 'text-[#4B6411]' : 'text-[#C23B3B]' }}">
                                     {{ $tx->type === 'income' ? '+' : '-' }}{{ $tx->formatted_amount }}
                                 </td>
-                                <td class="py-2 lg:py-3 pl-2.5 text-right whitespace-nowrap">
-                                    <a href="{{ route('transactions.show', $tx) }}" class="px-3 py-1 lg:px-3.5 lg:py-1.5 rounded-full bg-[#D1FAE5] text-xs lg:text-sm font-medium text-[#059669] hover:opacity-85">
+                                <td class="py-3 pl-3 text-right whitespace-nowrap">
+                                    <a href="{{ route('transactions.show', $tx) }}" class="badge badge-neutral hover:bg-[#DDF296] hover:text-[#18191B] transition">
                                         Detail
                                     </a>
                                 </td>
@@ -84,7 +84,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="pt-3">
+            <div class="pt-3 border-t border-[#ECECE9]">
                 {{ $transactions->links() }}
             </div>
         @endif

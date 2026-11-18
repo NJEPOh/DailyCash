@@ -1,26 +1,28 @@
 <x-layouts.app title="Rekening & Dompet">
     <x-page-header
-        title="Rekening & Dompet"
+        title="Rekening &"
+        accent="Dompet"
         subtitle="Kelola sumber dana dan pantau saldo setiap rekening atau dompet secara real-time."
     >
-        <a href="{{ route('accounts.create') }}" class="btn-primary text-xs lg:text-sm">
+        <a href="{{ route('accounts.create') }}" class="btn-bento-dark">
             <span>+ Tambah Rekening</span>
         </a>
     </x-page-header>
 
-    {{-- Statistik Ringkas 2 Kolom di Mobile --}}
-    <div class="grid grid-cols-2 gap-2.5 sm:gap-3.5 lg:gap-5 xs-single-col">
+    {{-- Statistik Ringkas --}}
+    <div class="grid grid-cols-2 gap-3.5 xs-single-col">
         <x-stat-card
             title="Total Saldo Seluruh Rekening"
             :value="'Rp' . number_format($totalBalance, 0, ',', '.')"
             subtitle="Dana tersedia saat ini"
-            variant="primary"
+            variant="dark"
         />
         <x-stat-card
             title="Jumlah Akun Aktif"
             :value="$accounts->count() . ' Rekening'"
             subtitle="Bank, E-Wallet, & Kas Tunai"
-            variant="default"
+            variant="lime"
+            :progress="$accounts->count() > 0 ? min(100, $accounts->count() * 25) : 0"
         />
     </div>
 
@@ -32,49 +34,58 @@
             actionText="+ Tambah Rekening Pertama"
         />
     @else
-        {{-- Grid 2 Kolom pada Mobile, 3 Kolom pada Tablet, 4 Kolom pada Desktop --}}
-        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-3.5 lg:gap-5 xs-single-col">
-            @foreach ($accounts as $account)
-                <div class="card flex flex-col justify-between space-y-3 lg:space-y-4 min-w-0">
-                    <div class="space-y-2 min-w-0">
-                        <div class="flex items-start justify-between gap-1.5">
+        {{-- Bento Grid Rekening --}}
+        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 xs-single-col">
+            @foreach ($accounts as $index => $account)
+                @php
+                    $isPrimaryCard = $index === 0;
+                    $share = $totalBalance > 0 ? round(($account->balance / $totalBalance) * 100, 1) : 0;
+                @endphp
+                <div class="{{ $isPrimaryCard ? 'bento-card-dark' : 'bento-card bento-card-hover' }} flex flex-col justify-between gap-4 min-w-0">
+                    <div class="space-y-3 min-w-0">
+                        <div class="flex items-start justify-between gap-2">
                             <div class="min-w-0">
-                                <a href="{{ route('accounts.show', $account) }}" class="text-sm sm:text-base lg:text-xl font-bold text-[#14251D] hover:text-[#059669] transition block truncate">
+                                <p class="bento-label {{ $isPrimaryCard ? 'text-white/60' : '' }}">
+                                    {{ $isPrimaryCard ? 'Rekening Utama' : 'Sumber Dana' }}
+                                </p>
+                                <a href="{{ route('accounts.show', $account) }}" class="text-[15px] lg:text-[16px] font-bold {{ $isPrimaryCard ? 'text-white' : 'text-[#18191B]' }} hover:underline block truncate mt-0.5">
                                     {{ $account->name }}
                                 </a>
-                                <p class="text-[11px] lg:text-sm text-[#64756B]">{{ $account->transactions_count }} transaksi</p>
                             </div>
+                            <span class="badge badge-yellow shrink-0">{{ $share }}%</span>
                         </div>
 
-                        <div class="pt-1">
-                            <p class="text-[11px] lg:text-sm text-[#64756B]">Saldo Saat Ini</p>
-                            <p class="text-[20px] sm:text-2xl lg:text-[28px] font-bold text-[#059669] leading-snug break-words">{{ $account->formatted_balance }}</p>
+                        <div>
+                            <p class="text-[11px] {{ $isPrimaryCard ? 'text-white/65' : 'text-[#8E9299]' }}">Saldo Saat Ini</p>
+                            <p class="text-[20px] sm:text-[22px] lg:text-[24px] font-bold tracking-tight {{ $isPrimaryCard ? 'text-[#DDF296]' : 'text-[#18191B]' }} leading-snug break-words">
+                                {{ $account->formatted_balance }}
+                            </p>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 pt-2 border-t border-[#D1FAE5] text-[11px] lg:text-sm">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-2.5 border-t {{ $isPrimaryCard ? 'border-white/10' : 'border-[#ECECE9]' }} text-[11px] lg:text-[12px]">
                             <div class="truncate">
-                                <span class="text-[#64756B]">Masuk: </span>
-                                <span class="font-semibold text-[#2ED47A]">+Rp{{ number_format((int) ($account->total_income ?? 0), 0, ',', '.') }}</span>
+                                <span class="{{ $isPrimaryCard ? 'text-white/60' : 'text-[#8E9299]' }}">Masuk: </span>
+                                <span class="font-semibold {{ $isPrimaryCard ? 'text-[#ECF8C2]' : 'text-[#4B6411]' }}">+Rp{{ number_format((int) ($account->total_income ?? 0), 0, ',', '.') }}</span>
                             </div>
                             <div class="truncate">
-                                <span class="text-[#64756B]">Keluar: </span>
-                                <span class="font-semibold text-[#FF6B8B]">-Rp{{ number_format((int) ($account->total_expense ?? 0), 0, ',', '.') }}</span>
+                                <span class="{{ $isPrimaryCard ? 'text-white/60' : 'text-[#8E9299]' }}">Keluar: </span>
+                                <span class="font-semibold {{ $isPrimaryCard ? 'text-[#FCEAE8]' : 'text-[#C23B3B]' }}">-Rp{{ number_format((int) ($account->total_expense ?? 0), 0, ',', '.') }}</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex flex-wrap items-center justify-between gap-1.5 pt-2.5 border-t border-[#D1FAE5]">
-                        <a href="{{ route('accounts.show', $account) }}" class="text-xs lg:text-sm font-semibold text-[#059669] hover:text-[#066B4A]">
-                            Detail &rarr;
+                    <div class="flex flex-wrap items-center justify-between gap-2 pt-2.5 border-t {{ $isPrimaryCard ? 'border-white/10' : 'border-[#ECECE9]' }}">
+                        <a href="{{ route('accounts.show', $account) }}" class="text-[12px] font-semibold {{ $isPrimaryCard ? 'text-white hover:text-[#DDF296]' : 'text-[#18191B] hover:underline' }}">
+                            Detail ({{ $account->transactions_count }}) &rarr;
                         </a>
-                        <div class="flex items-center gap-1 lg:gap-1.5">
-                            <a href="{{ route('accounts.edit', $account) }}" class="px-2.5 py-1 lg:px-3 lg:py-1.5 rounded-full bg-[#D1FAE5] text-xs lg:text-sm font-medium text-[#059669] hover:opacity-85">
+                        <div class="flex items-center gap-1.5">
+                            <a href="{{ route('accounts.edit', $account) }}" class="badge {{ $isPrimaryCard ? '!bg-white/15 !text-white hover:!bg-white/25' : 'badge-blue' }}">
                                 Ubah
                             </a>
                             <form action="{{ route('accounts.destroy', $account) }}" method="POST" class="inline" onsubmit="return confirm('Hapus rekening {{ addslashes($account->name) }}?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="px-2.5 py-1 lg:px-3 lg:py-1.5 rounded-full bg-[#FF6B8B]/12 text-xs lg:text-sm font-medium text-[#FF6B8B] hover:bg-[#FF6B8B]/20 cursor-pointer">
+                                <button type="submit" class="badge badge-coral cursor-pointer">
                                     Hapus
                                 </button>
                             </form>
@@ -82,6 +93,17 @@
                     </div>
                 </div>
             @endforeach
+
+            {{-- Dashed Add Wallet Card (css.md 5.B.4) --}}
+            <a href="{{ route('accounts.create') }}" class="bento-dashed-zone min-h-[200px] gap-2">
+                <span class="bento-plus-circle">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M12 5v14m-7-7h14"/>
+                    </svg>
+                </span>
+                <span class="bento-h3">Tambah Rekening</span>
+                <span class="bento-meta">Buat dompet atau bank baru</span>
+            </a>
         </div>
     @endif
 </x-layouts.app>

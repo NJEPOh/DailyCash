@@ -378,7 +378,7 @@ test('16. halaman laporan periodik dan ekspor csv berfungsi dengan benar', funct
     $csvResponse->assertHeader('Content-Type', 'text/csv; charset=UTF-8');
 });
 
-test('17. seluruh halaman menggunakan UI final tanpa wireframe dan menerapkan tipografi responsif desktop 16-18px serta mobile 12px secara konsisten', function () {
+test('17. seluruh halaman menerapkan Soft Modern Bento design system sesuai css.md tanpa wireframe atau gaya lama', function () {
     $account = Account::factory()->withBalance(1500000)->create(['name' => 'Dompet Utama']);
     $category = Category::factory()->expense()->create(['name' => 'Konsumsi']);
     $transaction = Transaction::factory()->create([
@@ -413,22 +413,23 @@ test('17. seluruh halaman menggunakan UI final tanpa wireframe dan menerapkan ti
         $response->assertDontSee('WIREFRAME:');
         $response->assertDontSee('[KARTU 1]');
         $response->assertDontSee('Low-Fidelity');
-        // Pastikan design system css.md (.dashboard-container, .sidebar, .sidebar-nav, .sidebar-icon, .card) diterapkan
-        $response->assertSee('dashboard-container', false);
-        $response->assertSee('sidebar-nav', false);
-        $response->assertSee('sidebar-icon', false);
-        $response->assertSee('card', false);
-        // Pastikan tidak ada warna ungu lama yang tersisa
+        // Pastikan design system Soft Modern Bento css.md diterapkan
+        $response->assertSee('bento-wrapper', false);
+        $response->assertSee('bento-sidebar', false);
+        $response->assertSee('bento-workspace', false);
+        $response->assertSee('bento-nav-link', false);
+        $response->assertSee('bento-help-card', false);
+        $response->assertSee('bento-h1', false);
+        // Pastikan tidak ada warna ungu atau tema emerald lama yang tersisa pada HTML view
         $response->assertDontSee('#5D56F3', false);
         $response->assertDontSee('#EEEDFE', false);
         $response->assertDontSee('#4B45D3', false);
         $response->assertDontSee('#6366F1', false);
         $response->assertDontSee('#4F46E5', false);
-        // Pastikan tipografi responsif mobile (12px: text-xs) & desktop (16px: lg:text-base, judul halaman lg:text-[30px]) diterapkan
-        $response->assertSee('text-xs md:text-sm lg:text-base', false);
-        $response->assertSee('text-[18px] sm:text-xl lg:text-[30px]', false);
+        $response->assertDontSee('#059669', false);
+        $response->assertDontSee('aura-1', false);
+        // Pastikan font Plus Jakarta Sans tetap digunakan
         $response->assertSee('Plus+Jakarta+Sans', false);
-        $response->assertSee('grid-cols-2', false);
     }
 
     // Periksa juga halaman autentikasi (login & register) saat guest
@@ -436,9 +437,48 @@ test('17. seluruh halaman menggunakan UI final tanpa wireframe dan menerapkan ti
     foreach ([route('login'), route('register')] as $authUrl) {
         $authResponse = $this->get($authUrl);
         $authResponse->assertOk();
+        $authResponse->assertSee('bento-h1', false);
+        $authResponse->assertSee('bento-card-dark', false);
         $authResponse->assertDontSee('#5D56F3', false);
-        $authResponse->assertDontSee('#EEEDFE', false);
-        $authResponse->assertDontSee('#6366F1', false);
+        $authResponse->assertDontSee('#059669', false);
         $authResponse->assertSee('Plus+Jakarta+Sans', false);
     }
+});
+
+test('18. pencarian transaksi via parameter q pada header memfilter data milik pengguna yang login saja', function () {
+    $account = Account::factory()->withBalance(1000000)->create(['name' => 'BCA']);
+    $cat = Category::factory()->expense()->create(['name' => 'Belanja']);
+
+    Transaction::factory()->create([
+        'account_id' => $account->id,
+        'category_id' => $cat->id,
+        'type' => 'expense',
+        'amount' => 75000,
+        'description' => 'Pembelian Buku Bento',
+    ]);
+
+    Transaction::factory()->create([
+        'account_id' => $account->id,
+        'category_id' => $cat->id,
+        'type' => 'expense',
+        'amount' => 25000,
+        'description' => 'Parkir Harian',
+    ]);
+
+    $otherUser = User::factory()->create();
+    $otherAccount = Account::factory()->for($otherUser)->withBalance(500000)->create();
+    $otherCat = Category::factory()->for($otherUser)->expense()->create();
+    Transaction::factory()->for($otherUser)->create([
+        'account_id' => $otherAccount->id,
+        'category_id' => $otherCat->id,
+        'type' => 'expense',
+        'amount' => 99000,
+        'description' => 'Rahasia Bento User Lain',
+    ]);
+
+    $response = $this->get(route('transactions.index', ['q' => 'Bento']));
+    $response->assertOk();
+    $response->assertSee('Pembelian Buku Bento');
+    $response->assertDontSee('Parkir Harian');
+    $response->assertDontSee('Rahasia Bento User Lain');
 });

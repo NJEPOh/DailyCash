@@ -3,13 +3,17 @@
 ])
 
 @if ($type === 'income')
-    <span class="badge badge-green">
-        <span class="w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full bg-[#2ED47A]"></span>
+    <span class="badge badge-lime">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M12 5v14m-7-7h14"/>
+        </svg>
         Pemasukan
     </span>
 @else
-    <span class="badge badge-pink">
-        <span class="w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full bg-[#FF6B8B]"></span>
+    <span class="badge badge-coral">
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M5 12h14"/>
+        </svg>
         Pengeluaran
     </span>
 @endif

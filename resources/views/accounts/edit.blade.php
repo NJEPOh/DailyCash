@@ -1,18 +1,21 @@
 <x-layouts.app title="Edit Rekening/Dompet">
     <x-page-header
-        title="Ubah Rekening: {{ $account->name }}"
-        subtitle="Perbarui nama rekening atau dompet."
+        title="Ubah Rekening:"
+        :accent="$account->name"
+        subtitle="Perbarui nama rekening atau dompet penyimpanan dana Anda."
         :backUrl="route('accounts.index')"
         backText="Kembali ke Rekening & Dompet"
     />
 
-    <div class="max-w-xl lg:max-w-2xl card">
-        <form action="{{ route('accounts.update', $account) }}" method="POST" class="space-y-3.5 lg:space-y-4">
+    <div class="max-w-2xl bento-card">
+        <form action="{{ route('accounts.update', $account) }}" method="POST" class="space-y-4">
             @csrf
             @method('PUT')
 
             <div>
-                <label for="name" class="block text-[11px] sm:text-xs lg:text-sm font-semibold text-[#1A1D20] mb-1 lg:mb-1.5">Nama Rekening / Dompet <span class="text-[#FF6B8B]">*</span></label>
+                <label for="name" class="block text-[12px] lg:text-[13px] font-semibold text-[#18191B] mb-1.5">
+                    Nama Rekening / Dompet <span class="text-[#C23B3B]">*</span>
+                </label>
                 <input
                     type="text"
                     id="name"
@@ -20,29 +23,29 @@
                     maxlength="50"
                     required
                     value="{{ old('name', $account->name) }}"
-                    class="input-field text-xs md:text-sm lg:text-base"
+                    class="input-field"
                 >
                 @error('name')
-                    <p class="text-[11px] lg:text-sm text-[#FF6B8B] mt-1">{{ $message }}</p>
+                    <p class="text-[11px] lg:text-[12px] font-semibold text-[#C23B3B] mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="grid grid-cols-2 gap-2.5 lg:gap-4 text-[11px] lg:text-sm text-[#64756B] xs-single-col">
-                <div class="p-3 lg:p-3.5 rounded-[12px] bg-[#ECFDF5]">
-                    <span class="text-[#64756B] block">Saldo Saat Ini</span>
-                    <strong class="text-xs md:text-sm lg:text-base text-[#059669]">{{ $account->formatted_balance }}</strong>
+            <div class="grid grid-cols-2 gap-3 xs-single-col">
+                <div class="p-3.5 rounded-[16px] bg-[#F9F9F8]">
+                    <span class="bento-label block">Saldo Saat Ini</span>
+                    <strong class="text-[15px] lg:text-[16px] text-[#18191B] mt-1 block">{{ $account->formatted_balance }}</strong>
                 </div>
-                <div class="p-3 lg:p-3.5 rounded-[12px] bg-[#ECFDF5]">
-                    <span class="text-[#64756B] block">Kebijakan Saldo</span>
-                    <span class="text-[#14251D]">Otomatis dari transaksi</span>
+                <div class="p-3.5 rounded-[16px] bg-[#F9F9F8]">
+                    <span class="bento-label block">Kebijakan Saldo</span>
+                    <span class="text-[13px] lg:text-[14px] font-semibold text-[#18191B] mt-1 block">Otomatis dari transaksi</span>
                 </div>
             </div>
 
-            <div class="flex items-center justify-end gap-2 lg:gap-3 pt-2.5 lg:pt-3.5 border-t border-[#F4F5F9]">
-                <a href="{{ route('accounts.index') }}" class="btn-secondary text-xs lg:text-sm">
+            <div class="flex items-center justify-end gap-2.5 pt-3.5 border-t border-[#ECECE9]">
+                <a href="{{ route('accounts.index') }}" class="btn-secondary">
                     Batal
                 </a>
-                <button type="submit" class="btn-primary text-xs lg:text-sm">
+                <button type="submit" class="btn-bento-dark">
                     Simpan Perubahan
                 </button>
             </div>

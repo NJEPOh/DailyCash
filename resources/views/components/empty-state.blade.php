@@ -5,18 +5,18 @@
     'actionText' => null,
 ])
 
-<div class="text-center py-6 lg:py-10 px-3 lg:px-6 rounded-[20px] border border-dashed border-[#059669]/30 bg-[#ECFDF5]/70">
-    <div class="w-9 h-9 lg:w-12 lg:h-12 rounded-[12px] bg-[#D1FAE5] text-[#059669] flex items-center justify-center mx-auto mb-2 lg:mb-3">
-        <svg class="w-4 h-4 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+<div class="bento-dashed-zone py-7 lg:py-10 px-4">
+    <div class="bento-plus-circle mb-2.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" d="M12 5v14m-7-7h14"/>
         </svg>
     </div>
-    <h3 class="text-sm sm:text-base lg:text-xl font-semibold text-[#1A1D20]">{{ $title }}</h3>
-    <p class="text-[11px] lg:text-sm text-[#7E869E] max-w-md lg:max-w-lg mx-auto mt-0.5 lg:mt-1">{{ $description }}</p>
+    <h3 class="bento-h3">{{ $title }}</h3>
+    <p class="bento-meta max-w-md mx-auto mt-1">{{ $description }}</p>
 
     @if ($actionUrl && $actionText)
-        <div class="mt-3 lg:mt-4">
-            <a href="{{ $actionUrl }}" class="btn-primary text-xs lg:text-sm">
+        <div class="mt-3.5">
+            <a href="{{ $actionUrl }}" class="btn-lime">
                 <span>{{ $actionText }}</span>
             </a>
         </div>

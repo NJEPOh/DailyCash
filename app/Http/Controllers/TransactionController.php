@@ -25,6 +25,7 @@ class TransactionController extends Controller
         $userId = (int) Auth::id();
 
         $filters = [
+            'q' => $request->query('q'),
             'start_date' => $request->query('start_date'),
             'end_date' => $request->query('end_date'),
             'category_id' => $request->query('category_id'),

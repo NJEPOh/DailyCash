@@ -1,28 +1,34 @@
 @props([
     'title',
+    'accent' => null,
     'subtitle' => null,
     'backUrl' => null,
     'backText' => 'Kembali',
 ])
 
-<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 lg:gap-4">
+<div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
     <div class="min-w-0">
         @if ($backUrl)
-            <a href="{{ $backUrl }}" class="inline-flex items-center gap-1 text-[11px] lg:text-sm font-medium text-[#D1FAE5] hover:text-white mb-1 transition">
-                <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href="{{ $backUrl }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-[#8E9299] hover:text-[#18191B] text-[11px] lg:text-[12px] font-semibold mb-2 shadow-xs transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
                 <span>{{ $backText }}</span>
             </a>
         @endif
-        <h1 class="text-[18px] sm:text-xl lg:text-[30px] font-bold tracking-tight text-[#1A1D20] leading-tight">{{ $title }}</h1>
+        <h1 class="bento-h1">
+            {{ $title }}
+            @if ($accent)
+                <span class="bento-h1-accent">{{ $accent }}</span>
+            @endif
+        </h1>
         @if ($subtitle)
-            <p class="text-[11px] lg:text-sm text-[#7E869E] mt-0.5 lg:mt-1 leading-normal">{{ $subtitle }}</p>
+            <p class="bento-meta mt-1.5 leading-relaxed">{{ $subtitle }}</p>
         @endif
     </div>
 
     @if (! $slot->isEmpty())
-        <div class="flex flex-wrap items-center gap-1.5 lg:gap-2.5 shrink-0">
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
             {{ $slot }}
         </div>
     @endif

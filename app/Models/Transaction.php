@@ -74,12 +74,19 @@ class Transaction extends Model
      * Scope a query to apply transaction filters.
      *
      * @param  Builder<Transaction>  $query
-     * @param  array{start_date?: ?string, end_date?: ?string, category_id?: int|string|null, type?: ?string, account_id?: int|string|null}  $filters
+     * @param  array{q?: ?string, start_date?: ?string, end_date?: ?string, category_id?: int|string|null, type?: ?string, account_id?: int|string|null}  $filters
      * @return Builder<Transaction>
      */
     public function scopeFilter(Builder $query, array $filters): Builder
     {
         return $query
+            ->when($filters['q'] ?? null, function (Builder $q, string $keyword): void {
+                $q->where(function (Builder $sub) use ($keyword): void {
+                    $sub->where('description', 'like', "%{$keyword}%")
+                        ->orWhereHas('category', fn (Builder $c) => $c->where('name', 'like', "%{$keyword}%"))
+                        ->orWhereHas('account', fn (Builder $a) => $a->where('name', 'like', "%{$keyword}%"));
+                });
+            })
             ->when($filters['start_date'] ?? null, fn (Builder $q, string $startDate) => $q->whereDate('date', '>=', $startDate))
             ->when($filters['end_date'] ?? null, fn (Builder $q, string $endDate) => $q->whereDate('date', '<=', $endDate))
             ->when($filters['category_id'] ?? null, fn (Builder $q, int|string $categoryId) => $q->where('category_id', $categoryId))
